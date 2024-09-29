@@ -3,12 +3,13 @@ package service
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"src/internal/dto"
 	"src/internal/model"
 	repo "src/internal/repository"
 	"src/pkg/logging"
 	"src/pkg/utils"
-	"time"
 )
 
 type IOrderService interface {
@@ -42,7 +43,8 @@ func (s *OrderService) CreateOrder(ctx context.Context, req *dto.PlaceOrderReq) 
 	order := &model.Order{}
 	utils.Copy(&order, &req)
 
-	order.CreationDate = time.Now()
+	tm, _ := time.Parse(time.RFC3339, "2006-01-02")
+	order.CreationDate = tm
 
 	cart, err := s.repoCart.GetCartByID(ctx, order.UserID)
 

@@ -42,6 +42,14 @@ func TestRunner(t *testing.T) {
 		},
 		&FeedbackSuite{},
 		&CartSuite{},
+		&OrderSuite{
+			orderService: service.NewOrderService(
+				utils.NewMockLogger(),
+				mypostgres.NewOrderRepository(db),
+				mypostgres.NewCartRepository(db),
+				mypostgres.NewRacketRepository(db),
+			),
+		},
 	}
 	wg.Add(len(suites))
 

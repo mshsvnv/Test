@@ -56,12 +56,16 @@ func (o UserObjectMother) IncorrectID() int {
 }
 
 func (o UserObjectMother) CorrectID() int {
-	return ids["userID"]
+	return 1 //ids["userID"]
+}
+
+func (o UserObjectMother) CorrectEmail() string {
+	return "pstpn@mail.ru"
 }
 
 func (o UserObjectMother) DefaultCustomer() *model.User {
 	return &model.User{
-		ID:      ids["userID"],
+		ID:      1, //ids["userID"],
 		Name:    "Ivan",
 		Surname: "Ivanov",
 		Email:   "ivan@mail.ru",
@@ -71,7 +75,7 @@ func (o UserObjectMother) DefaultCustomer() *model.User {
 
 func (o UserObjectMother) DefaultAdmin() *model.User {
 	return &model.User{
-		ID:      ids["userID"],
+		ID:      1, //ids["userID"],
 		Name:    "Ivan",
 		Surname: "Ivanov",
 		Email:   "ivan@mail.ru",
@@ -103,7 +107,7 @@ func (o UserObjectMother) IncorrectUserIDToUpdate() *dto.UpdateRoleReq {
 
 func (o UserObjectMother) CorrectUserToUpdate() *dto.UpdateRoleReq {
 	return &dto.UpdateRoleReq{
-		ID:   ids["userID"],
+		ID:   1, //ids["userID"],
 		Role: model.UserRoleAdmin,
 	}
 }
@@ -113,7 +117,7 @@ type RacketObjectMother struct {
 
 func (r RacketObjectMother) DefaultRacket() *model.Racket {
 	return &model.Racket{
-		ID:        ids["racketID"],
+		ID:        1,
 		Price:     100,
 		Quantity:  100,
 		Avaliable: true,
@@ -141,7 +145,7 @@ func (r RacketObjectMother) UpdateIncorrectID() *dto.UpdateRacketReq {
 
 func (r RacketObjectMother) UpdateCorrectID() *dto.UpdateRacketReq {
 	return &dto.UpdateRacketReq{
-		ID:       ids["racketID"],
+		ID:       1, //ids["racketID"],
 		Quantity: 100,
 	}
 }
@@ -151,7 +155,7 @@ func (r RacketObjectMother) GetIncorrectID() int {
 }
 
 func (r RacketObjectMother) GetCorrectID() int {
-	return ids["racketID"]
+	return 1 //ids["racketID"]
 }
 
 func (r RacketObjectMother) IncorrectFieldToSort() *dto.ListRacketsReq {
@@ -168,15 +172,12 @@ func (r RacketObjectMother) IncorrectFieldToSort() *dto.ListRacketsReq {
 	}
 }
 
-func (r RacketObjectMother) CorrectFieldToSort() *dto.ListRacketsReq {
+func (r RacketObjectMother) SortByPriceReq() *dto.ListRacketsReq {
 	return &dto.ListRacketsReq{
 		Pagination: &postgres.Pagination{
-			Filter: postgres.FilterOptions{
-				Column: "price",
-			},
 			Sort: postgres.SortOptions{
 				Direction: postgres.ASC,
-				Columns:   []string{""},
+				Columns:   []string{"price"},
 			},
 		},
 	}

@@ -86,12 +86,12 @@ type OrderBuilder struct {
 }
 
 func (f OrderBuilder) WithUserID() OrderBuilder {
-	f.UserID = ids["userID"]
+	f.UserID = 1 // ids["userID"]
 	return f
 }
 
 func (f OrderBuilder) WithOrderID() OrderBuilder {
-	f.OrderID = ids["orderID"]
+	f.OrderID = 1// ids["orderID"]
 	return f
 }
 

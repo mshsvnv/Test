@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"time"
 
 	"src/internal/model"
 	"src/internal/repository"
@@ -24,8 +25,7 @@ func NewTestStorage() (*postgres.Postgres, map[string]int) {
 	ids = map[string]int{}
 	ids["userID"] = initUserRepository(mypostgres.NewUserRepository(conn))
 	ids["racketID"] = initRacketRepository(mypostgres.NewRacketRepository(conn))
-	ids["cartID"] = initCartRepository(mypostgres.NewCartRepository(conn))
-
+	ids["orderID"] = initOrderRepository(mypostgres.NewOrderRepository(conn))
 	return conn, ids
 }
 
@@ -46,19 +46,6 @@ func DropTestStorage(testDB *postgres.Postgres) {
 	if err != nil {
 		panic(err)
 	}
-
-	// err = mypostgres.NewOrderRepository(testDB).Delete(context.TODO(), ids["orderID"])
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// err = mypostgres.NewFeedbackRepository(testDB).Delete(context.TODO(), &dto.RemoveFeedbackReq{
-	// 	RacketID: ids["racketID"],
-	// 	UserID:   ids["userID"],
-	// })
-	// if err != nil {
-	// 	panic(err)
-	// }
 }
 
 func initUserRepository(repo repository.IUserRepository) int {
@@ -101,78 +88,28 @@ func initRacketRepository(repo repository.IRacketRepository) int {
 	return racket.ID
 }
 
-func initCartRepository(repo repository.ICartRepository) int {
+func initOrderRepository(repo repository.IOrderRepository) int {
 
-	quantity := 1
-	price := float32(1000)
-
-	cart := &model.Cart{
-		UserID:     ids["userID"],
-		TotalPrice: price,
-		Quantity:   quantity,
-		Lines: []*model.CartLine{{
-			RacketID: ids["racketID"],
-			Quantity: quantity,
-			Price:    price,
-		}},
+	tm, _ := time.Parse(time.RFC3339, "2006-01-02")
+	order := &model.Order{
+		UserID:        ids["userID"],
+		CreationDate:  tm,
+		Address:       "Moscow",
+		RecepientName: "Stepan Postnov",
+		Status:        model.OrderStatusInProgress,
+		Lines: []*model.OrderLine{
+			{
+				RacketID: ids["racketID"],
+				Quantity: 1,
+			},
+		},
 	}
 
-	err := repo.Create(context.TODO(), cart)
+	err := repo.Create(context.TODO(), order)
 
 	if err != nil {
 		panic(err)
 	}
 
-	return ids["userID"]
+	return order.ID
 }
-
-// func initRacketRepository(repo mypostgres.UserRepository) int {
-
-// 	user := &model.User{
-// 		Name:     "Ivan",
-// 		Surname:  "Ivanov",
-// 		Email:    "ivan@mail.ru",
-// 		Password: "ivan",
-// 	}
-// 	err := repo.Create(context.TODO(), user)
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	return user.ID
-// }
-
-// func initOrderRepository(repo mypostgres.UserRepository) int {
-
-// 	user := &model.User{
-// 		Name:     "Ivan",
-// 		Surname:  "Ivanov",
-// 		Email:    "ivan@mail.ru",
-// 		Password: "ivan",
-// 	}
-// 	err := repo.Create(context.TODO(), user)
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	return user.ID
-// }
-
-// func initFeedbackRepository(repo mypostgres.UserRepository) int {
-
-// 	user := &model.User{
-// 		Name:     "Ivan",
-// 		Surname:  "Ivanov",
-// 		Email:    "ivan@mail.ru",
-// 		Password: "ivan",
-// 	}
-// 	err := repo.Create(context.TODO(), user)
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	return user.ID
-// }

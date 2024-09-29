@@ -36,31 +36,45 @@ func (s *CartService) UpdateRacket(ctx context.Context, req *dto.UpdateRacketCar
 
 	cart, _ := s.repo.GetCartByID(ctx, req.UserID)
 
-	for _, lines := range cart.Lines {
+	if cart != nil {
 
-		if lines.RacketID == req.RacketID {
+		for _, lines := range cart.Lines {
 
-			racket, _ := s.repoRacket.GetRacketByID(ctx, req.RacketID)
+			if lines.RacketID == req.RacketID {
 
-			curQuantity := lines.Quantity + req.Quantity
-			if curQuantity == -1 {
+				racket, _ := s.repoRacket.GetRacketByID(ctx, req.RacketID)
+
+				curQuantity := lines.Quantity + req.Quantity
+				if curQuantity == -1 {
+					return cart, nil
+				} else if curQuantity >= racket.Quantity {
+					curQuantity = racket.Quantity
+				}
+
+				lines.Quantity = curQuantity
+				cart.Quantity += req.Quantity
+				cart.TotalPrice += float32(req.Quantity) * lines.Price
+
+				err := s.repo.Update(ctx, cart)
+				if err != nil {
+					s.logger.Errorf("UpdateRacket fail, error %s", err.Error())
+					return nil, fmt.Errorf("UpdateRacket fail, error %s", err)
+				}
+
 				return cart, nil
-			} else if curQuantity >= racket.Quantity {
-				curQuantity = racket.Quantity
 			}
-
-			lines.Quantity = curQuantity
-			cart.Quantity += req.Quantity
-			cart.TotalPrice += float32(req.Quantity) * lines.Price
-
-			err := s.repo.Update(ctx, cart)
-			if err != nil {
-				s.logger.Errorf("UpdateRacket fail, error %s", err.Error())
-				return nil, fmt.Errorf("UpdateRacket fail, error %s", err)
-			}
-
-			return cart, nil
 		}
+	}
+
+	cart = &model.Cart{
+		UserID: req.UserID,
+	}
+
+	err := s.repo.Create(ctx, cart)
+
+	if err != nil {
+		s.logger.Errorf("create cart fail, error %s", err.Error())
+		return nil, fmt.Errorf("create cart fail, error %s", err)
 	}
 
 	return cart, nil
@@ -158,13 +172,6 @@ func (s *CartService) AddRacket(ctx context.Context, req *dto.AddRacketCartReq) 
 		s.logger.Errorf("add racket fail, error %s", err.Error())
 		return nil, fmt.Errorf("add racket fail, error %s", err)
 	}
-
-	// err = s.repoRacket.Update(ctx, racket)
-
-	// if err != nil {
-	// 	s.logger.Errorf("update racket fail, error %s", err.Error())
-	// 	return nil, fmt.Errorf("update racket fail, error %s", err)
-	// }
 
 	cart.Lines = append(cart.Lines,
 		&model.CartLine{

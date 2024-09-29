@@ -7,6 +7,7 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
+	"src/internal/model"
 	"src/internal/repository/mocks"
 	"src/internal/service"
 	"src/internal/service/utils"
@@ -17,11 +18,11 @@ type CartSuite struct {
 }
 
 // AddRacket
-func (s *CartSuite) TestAddRacket(t provider.T) {
-	t.Title("[AddRacket] Success")
+func (s *CartSuite) TestAddRacket1(t provider.T) {
+	t.Title("[AddRacket] No racket")
 	t.Tags("cart", "add_racket")
 	t.Parallel()
-	t.WithNewStep("Success", func(sCtx provider.StepCtx) {
+	t.WithNewStep("Incorrect: no racket", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
 		req := utils.CartObjectMother{UserID: 1, RacketID: 1}.AddCartRacketReq()
@@ -30,25 +31,68 @@ func (s *CartSuite) TestAddRacket(t provider.T) {
 		racketMockRepo := mocks.NewIRacketRepository(t)
 
 		cartMockRepo.
-			On("GetCartByID", ctx).
+			On("GetCartByID", ctx, req.UserID).
 			Return(nil, fmt.Errorf("get cart fails, cart doesn't exist")).
 			Once()
 
-		// racket := &model.Racket{
-		// 	ID: req.RacketID,
-		// }
+		racketMockRepo.
+			On("GetRacketByID", ctx, req.RacketID).
+			Return(nil, fmt.Errorf("getRacketByID fail")).
+			Once()
 
-		// racketMockRepo.
-		// 	On("GetRacketByID", ctx, 1).
-		// 	Return(racket, nil).
-		// 	Once()
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).AddRacket(ctx, req)
 
-		// cartMockRepo.
-		// 	On("Update", ctx, expCart).
-		// 	Return(nil).
-		// 	Once()
+		sCtx.Assert().Nil(cart)
+		sCtx.Assert().Error(err)
+	})
+}
 
-		// sCtx.WithNewParameters("ctx", ctx, "request", req)
+func (s *CartSuite) TestAddRacket2(t provider.T) {
+	t.Title("[AddRacket] Create cart")
+	t.Tags("cart", "add_racket")
+	t.Parallel()
+	t.WithNewStep("Success: create cart", func(sCtx provider.StepCtx) {
+
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1, RacketID: 1, Quantity: 1}.AddCartRacketReq()
+
+		cartMockRepo := mocks.NewICartRepository(t)
+		racketMockRepo := mocks.NewIRacketRepository(t)
+
+		cartMockRepo.
+			On("GetCartByID", ctx, req.UserID).
+			Return(nil, fmt.Errorf("get cart fails, cart doesn't exist")).
+			Once()
+
+		racket := &model.Racket{
+			ID:        req.RacketID,
+			Avaliable: true,
+			Quantity:  100,
+			Price:     100,
+		}
+
+		racketMockRepo.
+			On("GetRacketByID", ctx, req.RacketID).
+			Return(racket, nil).
+			Once()
+
+		expCart := &model.Cart{
+			UserID:     req.UserID,
+			TotalPrice: float32(racket.Price),
+			Quantity:   req.Quantity,
+			Lines: []*model.CartLine{
+				{
+					RacketID: racket.ID,
+					Quantity: req.Quantity,
+					Price:    float32(racket.Price),
+				},
+			},
+		}
+
+		cartMockRepo.
+			On("Create", ctx, expCart).
+			Return(nil).
+			Once()
 
 		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).AddRacket(ctx, req)
 
@@ -57,74 +101,418 @@ func (s *CartSuite) TestAddRacket(t provider.T) {
 	})
 }
 
-// func (s *AuthSuite) TestRemoveRacket(t provider.T) {
-// 	t.Title("[RemoveRacket] User already exists")
-// 	t.Tags("cart", "remove_racket")
-// 	t.Parallel()
-// 	t.WithNewStep("Incorrect: user already exists", func(sCtx provider.StepCtx) {
+func (s *CartSuite) TestAddRacket3(t provider.T) {
+	t.Title("[AddRacket] add new racket")
+	t.Tags("cart", "add_racket")
+	t.Parallel()
+	t.WithNewStep("Success: add new racket", func(sCtx provider.StepCtx) {
 
-// 		ctx := context.TODO()
-// 		req := utils.AuthObjectMother{}.DefaultUserReq()
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1, RacketID: 1, Quantity: 1}.AddCartRacketReq()
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
+		cartMockRepo := mocks.NewICartRepository(t)
+		racketMockRepo := mocks.NewIRacketRepository(t)
 
-// 		token, err := s.authService.Register(ctx, req)
+		expCart := &model.Cart{
+			UserID:     req.UserID,
+			TotalPrice: 0,
+			Quantity:   0,
+			Lines:      nil,
+		}
 
-// 		sCtx.Assert().Empty(token)
-// 		sCtx.Assert().Error(err)
-// 	})
-// }
+		cartMockRepo.
+			On("GetCartByID", ctx, req.UserID).
+			Return(expCart, nil).
+			Once()
 
-// func (s *AuthSuite) TestUpdateRacket(t provider.T) {
-// 	t.Title("[RemoveRacket] User already exists")
-// 	t.Tags("cart", "remove_racket")
-// 	t.Parallel()
-// 	t.WithNewStep("Incorrect: user already exists", func(sCtx provider.StepCtx) {
+		racket := &model.Racket{
+			ID:        req.RacketID,
+			Avaliable: true,
+			Quantity:  100,
+			Price:     100,
+		}
 
-// 		ctx := context.TODO()
-// 		req := utils.AuthObjectMother{}.DefaultUserReq()
+		racketMockRepo.
+			On("GetRacketByID", ctx, req.RacketID).
+			Return(racket, nil).
+			Once()
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
+		cartMockRepo.
+			On("AddRacket", ctx, req).
+			Return(nil).
+			Once()
 
-// 		token, err := s.authService.Register(ctx, req)
+		cartMockRepo.
+			On("Update", ctx, expCart).
+			Return(nil).
+			Once()
 
-// 		sCtx.Assert().Empty(token)
-// 		sCtx.Assert().Error(err)
-// 	})
-// }
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).AddRacket(ctx, req)
 
-// func (s *AuthSuite) TestUpdateRacket(t provider.T) {
-// 	t.Title("[UpdateRacket] User already exists")
-// 	t.Tags("cart", "update_racket")
-// 	t.Parallel()
-// 	t.WithNewStep("Incorrect: user already exists", func(sCtx provider.StepCtx) {
+		sCtx.Assert().NotEmpty(cart)
+		sCtx.Assert().Nil(err)
+		sCtx.Assert().Equal(cart, expCart)
+	})
+}
 
-// 		ctx := context.TODO()
-// 		req := utils.AuthObjectMother{}.DefaultUserReq()
+func (s *CartSuite) TestRemoveRacket1(t provider.T) {
+	t.Title("[RemoveRacket] no cart yet")
+	t.Tags("cart", "remove_racket")
+	t.Parallel()
+	t.WithNewStep("Incorrect: no cart yet", func(sCtx provider.StepCtx) {
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1, RacketID: 1, Quantity: 1}.RemoveRacketReq()
 
-// 		token, err := s.authService.Register(ctx, req)
+		cartMockRepo := mocks.NewICartRepository(t)
+		racketMockRepo := mocks.NewIRacketRepository(t)
 
-// 		sCtx.Assert().Empty(token)
-// 		sCtx.Assert().Error(err)
-// 	})
-// }
+		cartMockRepo.
+			On("GetCartByID", ctx, req.UserID).
+			Return(nil, fmt.Errorf("get cart by id fail")).
+			Once()
 
-// func (s *AuthSuite) TestGetCartByID(t provider.T) {
-// 	t.Title("[GetCartByID] User already exists")
-// 	t.Tags("cart", "get_cart_by_id")
-// 	t.Parallel()
-// 	t.WithNewStep("Incorrect: user already exists", func(sCtx provider.StepCtx) {
+		expCart := &model.Cart{
+			UserID: req.UserID,
+		}
 
-// 		ctx := context.TODO()
-// 		req := utils.AuthObjectMother{}.DefaultUserReq()
+		cartMockRepo.
+			On("Create", ctx, expCart).
+			Return(nil).
+			Once()
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-// 		token, err := s.authService.Register(ctx, req)
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).RemoveRacket(ctx, req)
 
-// 		sCtx.Assert().Empty(token)
-// 		sCtx.Assert().Error(err)
-// 	})
-// }
+		sCtx.Assert().NotEmpty(cart)
+		sCtx.Assert().Nil(err)
+	})
+}
+
+func (s *CartSuite) TestRemoveRacket2(t provider.T) {
+	t.Title("[RemoveRacket] remove not existed racket")
+	t.Tags("cart", "remove_racket")
+	t.Parallel()
+	t.WithNewStep("Incorrect: remove not existed racket", func(sCtx provider.StepCtx) {
+
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1, RacketID: 1, Quantity: 1}.RemoveRacketReq()
+
+		cartMockRepo := mocks.NewICartRepository(t)
+		racketMockRepo := mocks.NewIRacketRepository(t)
+
+		racket := &model.Racket{
+			ID:    req.RacketID,
+			Price: 100,
+		}
+
+		expCart := &model.Cart{
+			UserID:     req.UserID,
+			TotalPrice: float32(racket.Price),
+			Quantity:   1,
+			Lines: []*model.CartLine{
+				{
+					RacketID: racket.ID,
+					Quantity: 1,
+				},
+			},
+		}
+
+		cartMockRepo.
+			On("GetCartByID", ctx, req.UserID).
+			Return(expCart, nil).
+			Once()
+
+		racketMockRepo.
+			On("GetRacketByID", ctx, req.RacketID).
+			Return(nil, fmt.Errorf("get racket by id fail")).
+			Once()
+
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
+
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).RemoveRacket(ctx, req)
+
+		sCtx.Assert().Nil(cart)
+		sCtx.Assert().Error(err)
+	})
+}
+
+func (s *CartSuite) TestRemoveRacket3(t provider.T) {
+	t.Title("[RemoveRacket] remove existed racket")
+	t.Tags("cart", "remove_racket")
+	t.Parallel()
+	t.WithNewStep("Success: remove existed racket", func(sCtx provider.StepCtx) {
+
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1, RacketID: 1, Quantity: 1}.RemoveRacketReq()
+
+		cartMockRepo := mocks.NewICartRepository(t)
+		racketMockRepo := mocks.NewIRacketRepository(t)
+
+		racket := &model.Racket{
+			ID:       req.RacketID,
+			Price:    100,
+			Quantity: 100,
+		}
+
+		expCart := &model.Cart{
+			UserID:     req.UserID,
+			TotalPrice: float32(racket.Price),
+			Quantity:   1,
+			Lines: []*model.CartLine{
+				{
+					RacketID: req.RacketID,
+					Quantity: 1,
+					Price:    float32(racket.Price),
+				},
+			},
+		}
+
+		cartMockRepo.
+			On("GetCartByID", ctx, req.UserID).
+			Return(expCart, nil).
+			Once()
+
+		racketMockRepo.
+			On("GetRacketByID", ctx, req.RacketID).
+			Return(racket, nil).
+			Once()
+
+		cartMockRepo.
+			On("RemoveRacket", ctx, req).
+			Return(nil).
+			Once()
+
+		cartMockRepo.
+			On("Update", ctx, expCart).
+			Return(nil).
+			Once()
+
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
+
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).RemoveRacket(ctx, req)
+
+		sCtx.Assert().NotEmpty(cart)
+		sCtx.Assert().Nil(err)
+	})
+}
+
+func (s *CartSuite) TestUpdateRacket1(t provider.T) {
+	t.Title("[UpdateRacket] no cart yet")
+	t.Tags("cart", "update_racket")
+	t.Parallel()
+	t.WithNewStep("Incorrect: no cart yet", func(sCtx provider.StepCtx) {
+
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1, RacketID: 1, Quantity: 1}.UpdatePlusRacketReq()
+
+		cartMockRepo := mocks.NewICartRepository(t)
+		racketMockRepo := mocks.NewIRacketRepository(t)
+
+		cartMockRepo.
+			On("GetCartByID", ctx, req.UserID).
+			Return(nil, fmt.Errorf("get cart by id fail")).
+			Once()
+
+		expCart := &model.Cart{
+			UserID: req.UserID,
+		}
+
+		cartMockRepo.
+			On("Create", ctx, expCart).
+			Return(nil).
+			Once()
+
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
+
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).UpdateRacket(ctx, req)
+
+		sCtx.Assert().NotEmpty(cart)
+		sCtx.Assert().Nil(err)
+	})
+}
+
+func (s *CartSuite) TestUpdateRacket2(t provider.T) {
+	t.Title("[UpdateRacket] add racket quantity")
+	t.Tags("cart", "update_racket")
+	t.Parallel()
+	t.WithNewStep("Success: add racket quantity", func(sCtx provider.StepCtx) {
+
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1, RacketID: 1, Quantity: 1}.UpdatePlusRacketReq()
+
+		cartMockRepo := mocks.NewICartRepository(t)
+		racketMockRepo := mocks.NewIRacketRepository(t)
+
+		racket := &model.Racket{
+			ID:       req.RacketID,
+			Price:    100,
+			Quantity: 100,
+		}
+
+		expCart := &model.Cart{
+			UserID:     req.UserID,
+			TotalPrice: float32(racket.Price),
+			Quantity:   1,
+			Lines: []*model.CartLine{
+				{
+					RacketID: req.RacketID,
+					Quantity: 1,
+					Price:    float32(racket.Price),
+				},
+			},
+		}
+
+		cartMockRepo.
+			On("GetCartByID", ctx, req.UserID).
+			Return(expCart, nil).
+			Once()
+
+		racketMockRepo.
+			On("GetRacketByID", ctx, req.RacketID).
+			Return(racket, nil).
+			Once()
+
+		cartMockRepo.
+			On("Update", ctx, expCart).
+			Return(nil).
+			Once()
+
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
+
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).UpdateRacket(ctx, req)
+
+		sCtx.Assert().NotEmpty(cart)
+		sCtx.Assert().Nil(err)
+		sCtx.Assert().Equal(cart.Quantity, 2)
+	})
+}
+
+func (s *CartSuite) TestUpdateRacket3(t provider.T) {
+	t.Title("[UpdateRacket] subtract racket quantity")
+	t.Tags("cart", "update_racket")
+	t.Parallel()
+	t.WithNewStep("Success: subtract racket quantity", func(sCtx provider.StepCtx) {
+
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1, RacketID: 1, Quantity: 1}.UpdateRacketMinusReq()
+
+		cartMockRepo := mocks.NewICartRepository(t)
+		racketMockRepo := mocks.NewIRacketRepository(t)
+
+		racket := &model.Racket{
+			ID:       req.RacketID,
+			Price:    100,
+			Quantity: 100,
+		}
+
+		expCart := &model.Cart{
+			UserID:     req.UserID,
+			TotalPrice: float32(racket.Price),
+			Quantity:   1,
+			Lines: []*model.CartLine{
+				{
+					RacketID: req.RacketID,
+					Quantity: 1,
+					Price:    float32(racket.Price),
+				},
+			},
+		}
+
+		cartMockRepo.
+			On("GetCartByID", ctx, req.UserID).
+			Return(expCart, nil).
+			Once()
+
+		racketMockRepo.
+			On("GetRacketByID", ctx, req.RacketID).
+			Return(racket, nil).
+			Once()
+
+		cartMockRepo.
+			On("Update", ctx, expCart).
+			Return(nil).
+			Once()
+
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
+
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).UpdateRacket(ctx, req)
+
+		sCtx.Assert().NotEmpty(cart)
+		sCtx.Assert().Nil(err)
+		sCtx.Assert().Equal(cart.Quantity, 0)
+	})
+}
+
+// GetCartByID
+func (s *AuthSuite) TestGetCartByID1(t provider.T) {
+	t.Title("[GetCartByID] no existed cart")
+	t.Tags("cart", "get_cart_by_id")
+	t.Parallel()
+	t.WithNewStep("Incorrect: no existed cart", func(sCtx provider.StepCtx) {
+
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1}.GetCartByID()
+
+		cartMockRepo := mocks.NewICartRepository(t)
+
+		cartMockRepo.
+			On("GetCartByID", ctx, req).
+			Return(nil, fmt.Errorf("get cart by id fail")).
+			Once()
+
+		expCart := &model.Cart{
+			UserID: req,
+		}
+
+		cartMockRepo.
+			On("Create", ctx, expCart).
+			Return(nil).
+			Once()
+
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
+
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, nil).GetCartByID(ctx, req)
+
+		sCtx.Assert().NotEmpty(cart)
+		sCtx.Assert().Nil(err)
+	})
+}
+
+func (s *AuthSuite) TestGetCartByID2(t provider.T) {
+	t.Title("[GetCartByID] existed cart")
+	t.Tags("cart", "get_cart_by_id")
+	t.Parallel()
+	t.WithNewStep("Success: existed cart", func(sCtx provider.StepCtx) {
+
+		ctx := context.TODO()
+		req := utils.CartObjectMother{UserID: 1}.GetCartByID()
+
+		cartMockRepo := mocks.NewICartRepository(t)
+
+		expCart := &model.Cart{
+			UserID:     req,
+			TotalPrice: 0,
+			Quantity:   0,
+			Lines:      nil,
+		}
+
+		cartMockRepo.
+			On("GetCartByID", ctx, req).
+			Return(expCart, nil).
+			Once()
+
+		cartMockRepo.
+			On("Update", ctx, expCart).
+			Return(nil).
+			Once()
+
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
+
+		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, nil).GetCartByID(ctx, req)
+
+		sCtx.Assert().NotEmpty(cart)
+		sCtx.Assert().Nil(err)
+	})
+}

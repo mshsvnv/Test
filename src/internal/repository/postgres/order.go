@@ -153,27 +153,6 @@ func (r *OrderRepository) Delete(ctx context.Context, orderID int) error {
 	return nil
 }
 
-func (r *OrderRepository) Remove(ctx context.Context, orderID int) error {
-
-	query := r.Builder.
-		Delete(orderTable).
-		Where(squirrel.Eq{idField: orderID})
-
-	sql, args, err := query.ToSql()
-
-	if err != nil {
-		return err
-	}
-
-	_, err = r.Pool.Exec(ctx, sql, args...)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (r *OrderRepository) GetAllOrders(ctx context.Context, req *dto.ListOrdersReq) ([]*model.Order, error) {
 
 	ordersID, err := r.getAllOrders(ctx, req)
