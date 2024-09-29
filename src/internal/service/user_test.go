@@ -12,14 +12,14 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
 
-type UserSuite struct {
+type UserServiceSuite struct {
 	suite.Suite
 }
 
 // GetUserByID
-func (s *UserSuite) TestGetUserByID1(t provider.T) {
+func (s *UserServiceSuite) TestUserServiceGetByID1(t provider.T) {
 	t.Title("[GetUserByID] Incorrect ID")
-	t.Tags("user", "get_user_by_id")
+	t.Tags("user", "service", "service", "get_user_by_id")
 	t.Parallel()
 	t.WithNewStep("Incorrect: not existed user", func(sCtx provider.StepCtx) {
 
@@ -41,9 +41,9 @@ func (s *UserSuite) TestGetUserByID1(t provider.T) {
 	})
 }
 
-func (s *UserSuite) TestGetUserByID2(t provider.T) {
+func (s *UserServiceSuite) TestUserServiceGetUserByID2(t provider.T) {
 	t.Title("[GetUserByID] Correct ID")
-	t.Tags("user", "get_user_by_id")
+	t.Tags("user", "service", "service", "get_user_by_id")
 	t.Parallel()
 	t.WithNewStep("Correct: existed user", func(sCtx provider.StepCtx) {
 
@@ -73,9 +73,9 @@ func (s *UserSuite) TestGetUserByID2(t provider.T) {
 }
 
 // GetAllUsers
-func (s *UserSuite) TestGetAllUsers1(t provider.T) {
+func (s *UserServiceSuite) TestUserServiceGetAllUsers1(t provider.T) {
 	t.Title("[GetAllUsers] Repository error")
-	t.Tags("user", "get_all_users")
+	t.Tags("user", "service", "service", "get_all_users")
 	t.Parallel()
 	t.WithNewStep("Incorrect: repository error", func(sCtx provider.StepCtx) {
 
@@ -96,9 +96,9 @@ func (s *UserSuite) TestGetAllUsers1(t provider.T) {
 	})
 }
 
-func (s *UserSuite) TestGetAllUsers2(t provider.T) {
+func (s *UserServiceSuite) TestUserServiceGetAllUsers2(t provider.T) {
 	t.Title("[GetAllUsers] Correct")
-	t.Tags("user", "get_all_users")
+	t.Tags("user", "service", "service", "get_all_users")
 	t.Parallel()
 	t.WithNewStep("Correct", func(sCtx provider.StepCtx) {
 
@@ -122,9 +122,9 @@ func (s *UserSuite) TestGetAllUsers2(t provider.T) {
 }
 
 // UpdateUser
-func (s *UserSuite) TestGetUpdateUser1(t provider.T) {
+func (s *UserServiceSuite) TestUserServiceGetUpdateUser1(t provider.T) {
 	t.Title("[UpdateUser] Incorrrect ID")
-	t.Tags("user", "update_user")
+	t.Tags("user", "service", "update_user")
 	t.Parallel()
 	t.WithNewStep("Incorrect: incorrect ID", func(sCtx provider.StepCtx) {
 
@@ -146,9 +146,9 @@ func (s *UserSuite) TestGetUpdateUser1(t provider.T) {
 	})
 }
 
-func (s *UserSuite) TestGetUpdateUser2(t provider.T) {
+func (s *UserServiceSuite) TestUserServiceGetUpdateUser2(t provider.T) {
 	t.Title("[UpdateUser] Correct")
-	t.Tags("user", "update_user")
+	t.Tags("user", "service", "update_user")
 	t.Parallel()
 	t.WithNewStep("Correct: correct request", func(sCtx provider.StepCtx) {
 

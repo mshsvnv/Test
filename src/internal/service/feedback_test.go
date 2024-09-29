@@ -14,14 +14,14 @@ import (
 	"src/internal/service/utils"
 )
 
-type FeedbackSuite struct {
+type FeedbackServiceSuite struct {
 	suite.Suite
 }
 
 // CreateFeedback
-func (s *FeedbackSuite) TestCreateFeedback1(t provider.T) {
+func (s *FeedbackServiceSuite) TestFeedbackServiceCreateFeedback1(t provider.T) {
 	t.Title("[CreateFeedback] Incorrect")
-	t.Tags("feedback", "create_feedback")
+	t.Tags("feedback", "service", "create_feedback")
 	t.Parallel()
 	t.WithNewStep("Incorrect: repository error", func(sCtx provider.StepCtx) {
 
@@ -56,9 +56,9 @@ func (s *FeedbackSuite) TestCreateFeedback1(t provider.T) {
 	})
 }
 
-func (s *FeedbackSuite) TestCreateFeedback2(t provider.T) {
+func (s *FeedbackServiceSuite) TestFeedbackServiceCreateFeedback2(t provider.T) {
 	t.Title("[CreateFeedback] Correct")
-	t.Tags("feedback", "create_feedback")
+	t.Tags("feedback", "service", "create_feedback")
 	t.Parallel()
 	t.WithNewStep("Success", func(sCtx provider.StepCtx) {
 
@@ -95,9 +95,9 @@ func (s *FeedbackSuite) TestCreateFeedback2(t provider.T) {
 }
 
 // DeleteFeedback
-func (s *FeedbackSuite) TestDeleteFeedback1(t provider.T) {
+func (s *FeedbackServiceSuite) TestFeedbackServiceDeleteFeedback1(t provider.T) {
 	t.Title("[DeleteFeedback] not existed feedback")
-	t.Tags("feedback", "delete_feedback")
+	t.Tags("feedback", "service", "delete_feedback")
 	t.Parallel()
 	t.WithNewStep("Incorrect: not existed feedback", func(sCtx provider.StepCtx) {
 
@@ -124,9 +124,9 @@ func (s *FeedbackSuite) TestDeleteFeedback1(t provider.T) {
 	})
 }
 
-func (s *FeedbackSuite) TestDeleteFeedback2(t provider.T) {
+func (s *FeedbackServiceSuite) TestFeedbackServiceDeleteFeedback2(t provider.T) {
 	t.Title("[DeleteFeedback] repository error")
-	t.Tags("feedback", "delete_feedback")
+	t.Tags("feedback", "service", "delete_feedback")
 	t.Parallel()
 	t.WithNewStep("Incorrect: repository error", func(sCtx provider.StepCtx) {
 
@@ -166,9 +166,9 @@ func (s *FeedbackSuite) TestDeleteFeedback2(t provider.T) {
 	})
 }
 
-func (s *FeedbackSuite) TestDeleteFeedback3(t provider.T) {
+func (s *FeedbackServiceSuite) TestFeedbackServiceDeleteFeedback3(t provider.T) {
 	t.Title("[DeleteFeedback] success")
-	t.Tags("feedback", "delete_feedback")
+	t.Tags("feedback", "service", "delete_feedback")
 	t.Parallel()
 	t.WithNewStep("Success", func(sCtx provider.StepCtx) {
 
@@ -209,7 +209,7 @@ func (s *FeedbackSuite) TestDeleteFeedback3(t provider.T) {
 }
 
 // GetFeedbacksByRacketID
-func (s *FeedbackSuite) TestGetFeedbacksByRacketID1(t provider.T) {
+func (s *FeedbackServiceSuite) TestFeedbackServiceGetFeedbacksByRacketID1(t provider.T) {
 	t.Title("[GetFeedbacksByRacketID] Incorrect racket ID")
 	t.Tags("feedbacks", "get_feedbacks_by_racket_id")
 	t.Parallel()
@@ -233,7 +233,7 @@ func (s *FeedbackSuite) TestGetFeedbacksByRacketID1(t provider.T) {
 	})
 }
 
-func (s *FeedbackSuite) TestGetFeedbacksByRacketID2(t provider.T) {
+func (s *FeedbackServiceSuite) TestFeedbackServiceGetFeedbacksByRacketID2(t provider.T) {
 	t.Title("[GetFeedbacksByRacketID] success")
 	t.Tags("feedbacks", "get_feedbacks_by_racket_id")
 	t.Parallel()
@@ -266,7 +266,7 @@ func (s *FeedbackSuite) TestGetFeedbacksByRacketID2(t provider.T) {
 }
 
 // GetFeedbacksByUserID
-func (s *FeedbackSuite) TestGetFeedbacksByUserID1(t provider.T) {
+func (s *FeedbackServiceSuite) TestFeedbackServiceGetFeedbacksByUserID1(t provider.T) {
 	t.Title("[GetFeedbacksByUserID] Incorrect user ID")
 	t.Tags("feedbacks", "get_feedbacks_by_user_id")
 	t.Parallel()
@@ -290,7 +290,7 @@ func (s *FeedbackSuite) TestGetFeedbacksByUserID1(t provider.T) {
 	})
 }
 
-func (s *FeedbackSuite) TestGetFeedbacksByUserID2(t provider.T) {
+func (s *FeedbackServiceSuite) TestFeedbackServiceGetFeedbacksByUserID2(t provider.T) {
 	t.Title("[GetFeedbacksByUserID] Incorrect user ID")
 	t.Tags("user", "get_feedbacks_by_user_id")
 	t.Parallel()

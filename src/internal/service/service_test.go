@@ -25,7 +25,7 @@ func TestRunner(t *testing.T) {
 
 	wg := &sync.WaitGroup{}
 	suites := []runner.TestSuite{
-		&AuthSuite{
+		&AuthServiceSuite{
 			authService: service.NewAuthService(
 				utils.NewMockLogger(),
 				mypostgres.NewUserRepository(db),
@@ -33,16 +33,16 @@ func TestRunner(t *testing.T) {
 				accessTokenTTL,
 			),
 		},
-		&UserSuite{},
-		&RacketSuite{
+		&UserServiceSuite{},
+		&RacketServiceSuite{
 			racketService: service.NewRacketService(
 				utils.NewMockLogger(),
 				mypostgres.NewRacketRepository(db),
 			),
 		},
-		&FeedbackSuite{},
-		&CartSuite{},
-		&OrderSuite{
+		&FeedbackServiceSuite{},
+		&CartServiceSuite{},
+		&OrderServiceSuite{
 			orderService: service.NewOrderService(
 				utils.NewMockLogger(),
 				mypostgres.NewOrderRepository(db),

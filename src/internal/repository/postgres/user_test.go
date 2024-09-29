@@ -25,7 +25,7 @@ func (u *UserRepoSuite) BeforeAll(t provider.T) {
 
 func (u *UserRepoSuite) TestUserRepoCreate(t provider.T) {
 	t.Title("[Create] Create user")
-	t.Tags("user repository", "postgres")
+	t.Tags("user", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Create user", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -46,7 +46,7 @@ func (u *UserRepoSuite) TestUserRepoCreate(t provider.T) {
 
 func (u *UserRepoSuite) TestUserRepoUpdateRole(t provider.T) {
 	t.Title("[Update] Update user role")
-	t.Tags("user repository", "postgres")
+	t.Tags("user", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Update user role", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -67,7 +67,7 @@ func (u *UserRepoSuite) TestUserRepoUpdateRole(t provider.T) {
 
 func (u *UserRepoSuite) TestUserRepoGetAllUsers(t provider.T) {
 	t.Title("[GetAllUsers] Get all users")
-	t.Tags("user repository", "postgres")
+	t.Tags("user", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get all users", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -100,7 +100,7 @@ func (u *UserRepoSuite) TestUserRepoGetAllUsers(t provider.T) {
 
 func (u *UserRepoSuite) TestUserRepoGetUserByID(t provider.T) {
 	t.Title("[GetUserByID] Get user by id")
-	t.Tags("user repository", "postgres")
+	t.Tags("user", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get user by id", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -132,7 +132,7 @@ func (u *UserRepoSuite) TestUserRepoGetUserByID(t provider.T) {
 
 func (u *UserRepoSuite) TestUserRepoGetUserByEmail(t provider.T) {
 	t.Title("[GetUserByEmail] Get user by email")
-	t.Tags("user repository", "postgres")
+	t.Tags("user", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get user by email", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -164,7 +164,7 @@ func (u *UserRepoSuite) TestUserRepoGetUserByEmail(t provider.T) {
 
 func (u *UserRepoSuite) TestUserRepoDelete(t provider.T) {
 	t.Title("[Delete] Delete user")
-	t.Tags("user repository", "postgres")
+	t.Tags("user", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Delete user", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()

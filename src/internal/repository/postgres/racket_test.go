@@ -25,7 +25,7 @@ func (r *RacketRepoSuite) BeforeAll(t provider.T) {
 
 func (r *RacketRepoSuite) TestRacketRepoCreate(t provider.T) {
 	t.Title("[Create] Create racket")
-	t.Tags("racket repository", "postgres")
+	t.Tags("racket", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Create racket", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -46,7 +46,7 @@ func (r *RacketRepoSuite) TestRacketRepoCreate(t provider.T) {
 
 func (r *RacketRepoSuite) TestRacketRepoUpdate(t provider.T) {
 	t.Title("[Update] Update racket")
-	t.Tags("racket repository", "postgres")
+	t.Tags("racket", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Update racket", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -67,7 +67,7 @@ func (r *RacketRepoSuite) TestRacketRepoUpdate(t provider.T) {
 
 func (r *RacketRepoSuite) TestRacketRepoDelete(t provider.T) {
 	t.Title("[Delete] Delete racket")
-	t.Tags("racket repository", "postgres")
+	t.Tags("racket", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Delete racket", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -88,7 +88,7 @@ func (r *RacketRepoSuite) TestRacketRepoDelete(t provider.T) {
 
 func (r *RacketRepoSuite) TestRacketRepoGetRacketByID(t provider.T) {
 	t.Title("[GetRacketByID] Get racket by ID")
-	t.Tags("racket repository", "postgres")
+	t.Tags("racket", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get racket by ID", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -118,7 +118,7 @@ func (r *RacketRepoSuite) TestRacketRepoGetRacketByID(t provider.T) {
 
 func (r *RacketRepoSuite) TestRacketRepoGetAllRackets(t provider.T) {
 	t.Title("[GetAllRackets] Get all rackets")
-	t.Tags("racket repository", "postgres")
+	t.Tags("racket", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get all rackets", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()

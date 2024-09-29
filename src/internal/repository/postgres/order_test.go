@@ -26,7 +26,7 @@ func (o *OrderRepoSuite) BeforeAll(t provider.T) {
 
 func (o *OrderRepoSuite) TestOrderRepoCreate(t provider.T) {
 	t.Title("[Create] Create order")
-	t.Tags("order repository", "postgres")
+	t.Tags("order", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Create order", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -63,7 +63,7 @@ func (o *OrderRepoSuite) TestOrderRepoCreate(t provider.T) {
 
 func (o *OrderRepoSuite) TestOrderRepoUpdate(t provider.T) {
 	t.Title("[Update] Update order")
-	t.Tags("order repository", "postgres")
+	t.Tags("order", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Update order", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -100,7 +100,7 @@ func (o *OrderRepoSuite) TestOrderRepoUpdate(t provider.T) {
 
 func (o *OrderRepoSuite) TestOrderRepoDelete(t provider.T) {
 	t.Title("[Delete] Update order")
-	t.Tags("order repository", "postgres")
+	t.Tags("order", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Delete order", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -122,7 +122,7 @@ func (o *OrderRepoSuite) TestOrderRepoDelete(t provider.T) {
 
 func (o *OrderRepoSuite) TestOrderRepoGetAllOrders(t provider.T) {
 	t.Title("[GetAllOrders] Get all orders")
-	t.Tags("order repository", "postgres")
+	t.Tags("order", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get all orders", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -169,7 +169,7 @@ func (o *OrderRepoSuite) TestOrderRepoGetAllOrders(t provider.T) {
 
 func (o *OrderRepoSuite) TestOrderRepoGetOrderByID(t provider.T) {
 	t.Title("[GetOrderByID] Get order by id")
-	t.Tags("order repository", "postgres")
+	t.Tags("order", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get order by id", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -202,7 +202,7 @@ func (o *OrderRepoSuite) TestOrderRepoGetOrderByID(t provider.T) {
 
 func (o *OrderRepoSuite) TestOrderRepoGetMyOrders(t provider.T) {
 	t.Title("[GetMyOrders] Get my orders")
-	t.Tags("order repository", "postgres")
+	t.Tags("order", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get my orders", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()

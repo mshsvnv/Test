@@ -14,16 +14,16 @@ import (
 	"src/internal/service/utils"
 )
 
-type OrderSuite struct {
+type OrderServiceSuite struct {
 	suite.Suite
 
 	orderService service.IOrderService
 }
 
 // CreateOrder
-func (s *OrderSuite) TestCreateOrder1(t provider.T) {
+func (s *OrderServiceSuite) TestOrderServiceCreateOrder1(t provider.T) {
 	t.Title("[CreateOrder1] no existed cart")
-	t.Tags("order", "create_order")
+	t.Tags("order", "service", "create_order")
 	t.Parallel()
 	t.WithNewStep("Incorrect: no existed cart", func(sCtx provider.StepCtx) {
 
@@ -58,9 +58,9 @@ func (s *OrderSuite) TestCreateOrder1(t provider.T) {
 	})
 }
 
-func (s *OrderSuite) TestCreateOrder2(t provider.T) {
+func (s *OrderServiceSuite) TestOrderServiceCreateOrder2(t provider.T) {
 	t.Title("[CreateOrder2] create order")
-	t.Tags("order", "create_order")
+	t.Tags("order", "service", "create_order")
 	t.Parallel()
 	t.WithNewStep("Success: create order", func(sCtx provider.StepCtx) {
 
@@ -125,9 +125,9 @@ func (s *OrderSuite) TestCreateOrder2(t provider.T) {
 }
 
 // GetMyOrders
-func (s *OrderSuite) TestGetMyOrders1(t provider.T) {
+func (s *OrderServiceSuite) TestOrderServiceGetMyOrders1(t provider.T) {
 	t.Title("[GetMyOrders1] wrong user id")
-	t.Tags("order", "get_my_orders")
+	t.Tags("order", "service", "get_my_orders")
 	t.Parallel()
 	t.WithNewStep("Incorrect: wrong user id", func(sCtx provider.StepCtx) {
 
@@ -143,9 +143,9 @@ func (s *OrderSuite) TestGetMyOrders1(t provider.T) {
 	})
 }
 
-func (s *OrderSuite) TestGetMyOrders2(t provider.T) {
+func (s *OrderServiceSuite) TestOrderServiceGetMyOrders2(t provider.T) {
 	t.Title("[GetMyOrders2] correct user id")
-	t.Tags("order", "get_my_orders")
+	t.Tags("order", "service", "get_my_orders")
 	t.Parallel()
 	t.WithNewStep("Success: correct user id", func(sCtx provider.StepCtx) {
 
@@ -162,9 +162,9 @@ func (s *OrderSuite) TestGetMyOrders2(t provider.T) {
 }
 
 // GetAllOrders
-func (s *OrderSuite) TestGetAllOrders1(t provider.T) {
+func (s *OrderServiceSuite) TestOrderServiceGetAllOrders1(t provider.T) {
 	t.Title("[GetAllOrders1] get all orders")
-	t.Tags("order", "get_all_orders")
+	t.Tags("order", "service", "get_all_orders")
 	t.Parallel()
 	t.WithNewStep("Success: get all orders", func(sCtx provider.StepCtx) {
 
@@ -180,9 +180,9 @@ func (s *OrderSuite) TestGetAllOrders1(t provider.T) {
 	})
 }
 
-func (s *OrderSuite) TestGetAllOrders2(t provider.T) {
+func (s *OrderServiceSuite) TestOrderServiceGetAllOrders2(t provider.T) {
 	t.Title("[GetAllOrders2] wrong column name")
-	t.Tags("order", "get_all_orders")
+	t.Tags("order", "service", "get_all_orders")
 	t.Parallel()
 	t.WithNewStep("Incorrect: wrong column name", func(sCtx provider.StepCtx) {
 
@@ -199,9 +199,9 @@ func (s *OrderSuite) TestGetAllOrders2(t provider.T) {
 }
 
 // GetOrderByID
-func (s *OrderSuite) TestGetOrderByID1(t provider.T) {
+func (s *OrderServiceSuite) TestOrderServiceGetOrderByID1(t provider.T) {
 	t.Title("[GetOrderByID1] wrong order id")
-	t.Tags("order", "get_order_by_id")
+	t.Tags("order", "service", "get_order_by_id")
 	t.Parallel()
 	t.WithNewStep("Incorrect: wrong order id", func(sCtx provider.StepCtx) {
 
@@ -217,9 +217,9 @@ func (s *OrderSuite) TestGetOrderByID1(t provider.T) {
 	})
 }
 
-func (s *OrderSuite) TestGetOrderByID2(t provider.T) {
+func (s *OrderServiceSuite) TestOrderServiceGetOrderByID2(t provider.T) {
 	t.Title("[GetOrderByID2] correct order id")
-	t.Tags("order", "get_order_by_id")
+	t.Tags("order", "service", "get_order_by_id")
 	t.Parallel()
 	t.WithNewStep("Success: correct order id", func(sCtx provider.StepCtx) {
 
@@ -236,9 +236,9 @@ func (s *OrderSuite) TestGetOrderByID2(t provider.T) {
 }
 
 // UpdateOrderStatus
-func (s *OrderSuite) TestUpdateOrderStatus(t provider.T) {
+func (s *OrderServiceSuite) TestOrderServiceUpdateOrderStatus(t provider.T) {
 	t.Title("[UpdateOrderStatus] correct order id")
-	t.Tags("order", "get_order_by_id")
+	t.Tags("order", "service", "get_order_by_id")
 	t.Parallel()
 	t.WithNewStep("Success: correct order id", func(sCtx provider.StepCtx) {
 

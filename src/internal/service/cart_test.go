@@ -13,14 +13,14 @@ import (
 	"src/internal/service/utils"
 )
 
-type CartSuite struct {
+type CartServiceSuite struct {
 	suite.Suite
 }
 
 // AddRacket
-func (s *CartSuite) TestAddRacket1(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceAddRacket1(t provider.T) {
 	t.Title("[AddRacket] No racket")
-	t.Tags("cart", "add_racket")
+	t.Tags("cart", "service", "add_racket")
 	t.Parallel()
 	t.WithNewStep("Incorrect: no racket", func(sCtx provider.StepCtx) {
 
@@ -47,9 +47,9 @@ func (s *CartSuite) TestAddRacket1(t provider.T) {
 	})
 }
 
-func (s *CartSuite) TestAddRacket2(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceAddRacket2(t provider.T) {
 	t.Title("[AddRacket] Create cart")
-	t.Tags("cart", "add_racket")
+	t.Tags("cart", "service", "add_racket")
 	t.Parallel()
 	t.WithNewStep("Success: create cart", func(sCtx provider.StepCtx) {
 
@@ -101,9 +101,9 @@ func (s *CartSuite) TestAddRacket2(t provider.T) {
 	})
 }
 
-func (s *CartSuite) TestAddRacket3(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceAddRacket3(t provider.T) {
 	t.Title("[AddRacket] add new racket")
-	t.Tags("cart", "add_racket")
+	t.Tags("cart", "service", "add_racket")
 	t.Parallel()
 	t.WithNewStep("Success: add new racket", func(sCtx provider.StepCtx) {
 
@@ -155,9 +155,9 @@ func (s *CartSuite) TestAddRacket3(t provider.T) {
 	})
 }
 
-func (s *CartSuite) TestRemoveRacket1(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceRemoveRacket1(t provider.T) {
 	t.Title("[RemoveRacket] no cart yet")
-	t.Tags("cart", "remove_racket")
+	t.Tags("cart", "service", "remove_racket")
 	t.Parallel()
 	t.WithNewStep("Incorrect: no cart yet", func(sCtx provider.StepCtx) {
 
@@ -190,9 +190,9 @@ func (s *CartSuite) TestRemoveRacket1(t provider.T) {
 	})
 }
 
-func (s *CartSuite) TestRemoveRacket2(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceRemoveRacket2(t provider.T) {
 	t.Title("[RemoveRacket] remove not existed racket")
-	t.Tags("cart", "remove_racket")
+	t.Tags("cart", "service", "remove_racket")
 	t.Parallel()
 	t.WithNewStep("Incorrect: remove not existed racket", func(sCtx provider.StepCtx) {
 
@@ -238,9 +238,9 @@ func (s *CartSuite) TestRemoveRacket2(t provider.T) {
 	})
 }
 
-func (s *CartSuite) TestRemoveRacket3(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceRemoveRacket3(t provider.T) {
 	t.Title("[RemoveRacket] remove existed racket")
-	t.Tags("cart", "remove_racket")
+	t.Tags("cart", "service", "remove_racket")
 	t.Parallel()
 	t.WithNewStep("Success: remove existed racket", func(sCtx provider.StepCtx) {
 
@@ -298,9 +298,9 @@ func (s *CartSuite) TestRemoveRacket3(t provider.T) {
 	})
 }
 
-func (s *CartSuite) TestUpdateRacket1(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceUpdateRacket1(t provider.T) {
 	t.Title("[UpdateRacket] no cart yet")
-	t.Tags("cart", "update_racket")
+	t.Tags("cart", "service", "update_racket")
 	t.Parallel()
 	t.WithNewStep("Incorrect: no cart yet", func(sCtx provider.StepCtx) {
 
@@ -333,9 +333,9 @@ func (s *CartSuite) TestUpdateRacket1(t provider.T) {
 	})
 }
 
-func (s *CartSuite) TestUpdateRacket2(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceUpdateRacket2(t provider.T) {
 	t.Title("[UpdateRacket] add racket quantity")
-	t.Tags("cart", "update_racket")
+	t.Tags("cart", "service", "update_racket")
 	t.Parallel()
 	t.WithNewStep("Success: add racket quantity", func(sCtx provider.StepCtx) {
 
@@ -389,9 +389,9 @@ func (s *CartSuite) TestUpdateRacket2(t provider.T) {
 	})
 }
 
-func (s *CartSuite) TestUpdateRacket3(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceUpdateRacket3(t provider.T) {
 	t.Title("[UpdateRacket] subtract racket quantity")
-	t.Tags("cart", "update_racket")
+	t.Tags("cart", "service", "update_racket")
 	t.Parallel()
 	t.WithNewStep("Success: subtract racket quantity", func(sCtx provider.StepCtx) {
 
@@ -446,9 +446,9 @@ func (s *CartSuite) TestUpdateRacket3(t provider.T) {
 }
 
 // GetCartByID
-func (s *AuthSuite) TestGetCartByID1(t provider.T) {
+func (s *AuthServiceSuite) TestCartServiceGetCartByID1(t provider.T) {
 	t.Title("[GetCartByID] no existed cart")
-	t.Tags("cart", "get_cart_by_id")
+	t.Tags("cart", "service", "get_cart_by_id")
 	t.Parallel()
 	t.WithNewStep("Incorrect: no existed cart", func(sCtx provider.StepCtx) {
 
@@ -480,9 +480,9 @@ func (s *AuthSuite) TestGetCartByID1(t provider.T) {
 	})
 }
 
-func (s *AuthSuite) TestGetCartByID2(t provider.T) {
+func (s *AuthServiceSuite) TestCartServiceGetCartByID2(t provider.T) {
 	t.Title("[GetCartByID] existed cart")
-	t.Tags("cart", "get_cart_by_id")
+	t.Tags("cart", "service", "get_cart_by_id")
 	t.Parallel()
 	t.WithNewStep("Success: existed cart", func(sCtx provider.StepCtx) {
 

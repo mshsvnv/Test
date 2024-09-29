@@ -10,34 +10,33 @@ import (
 	"src/internal/service/utils"
 )
 
-type AuthSuite struct {
+type AuthServiceSuite struct {
 	suite.Suite
 
 	authService service.IAuthService
 }
 
-// TODO
-// func (s *AuthSuite) TestAuthRegister1(t provider.T) {
-// 	t.Title("[Register] Successfully registered")
-// 	t.Tags("auth", "register")
-// 	t.Parallel()
-// 	t.WithNewStep("Correct: successfully registered", func(sCtx provider.StepCtx) {
+func (s *AuthServiceSuite) TestAuthServiceRegister1(t provider.T) {
+	t.Title("[Register] Successfully registered")
+	t.Tags("auth", "service", "register")
+	t.Parallel()
+	t.WithNewStep("Correct: successfully registered", func(sCtx provider.StepCtx) {
 
-// 		ctx := context.TODO()
-// 		req := utils.AuthObjectMother{}.RegisterNewUserReq()
+		ctx := context.TODO()
+		req := utils.AuthObjectMother{}.RegisterNewUserReq()
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-// 		token, err := s.authService.Register(ctx, req)
+		token, err := s.authService.Register(ctx, req)
 
-// 		sCtx.Assert().NotEmpty(token)
-// 		sCtx.Assert().Nil(err)
-// 	})
-// }
+		sCtx.Assert().NotEmpty(token)
+		sCtx.Assert().Nil(err)
+	})
+}
 
-func (s *AuthSuite) TestAuthRegister2(t provider.T) {
+func (s *AuthServiceSuite) TestAuthServiceRegister2(t provider.T) {
 	t.Title("[Register] User already exists")
-	t.Tags("auth", "register")
+	t.Tags("auth", "service", "register")
 	t.Parallel()
 	t.WithNewStep("Incorrect: user already exists", func(sCtx provider.StepCtx) {
 
@@ -53,9 +52,9 @@ func (s *AuthSuite) TestAuthRegister2(t provider.T) {
 	})
 }
 
-func (s *AuthSuite) TestAuthLogin1(t provider.T) {
+func (s *AuthServiceSuite) TestAuthServiceLogin1(t provider.T) {
 	t.Title("[Login] Correct password")
-	t.Tags("auth", "login")
+	t.Tags("auth", "service", "login")
 	t.Parallel()
 	t.WithNewStep("Correct: correct password", func(sCtx provider.StepCtx) {
 
@@ -71,9 +70,9 @@ func (s *AuthSuite) TestAuthLogin1(t provider.T) {
 	})
 }
 
-func (s *AuthSuite) TestAuthLogin2(t provider.T) {
+func (s *AuthServiceSuite) TestAuthServiceLogin2(t provider.T) {
 	t.Title("[Login] User doesn't exist")
-	t.Tags("auth", "login")
+	t.Tags("auth", "service", "login")
 	t.Parallel()
 	t.WithNewStep("Incorrect: user doesn't exist", func(sCtx provider.StepCtx) {
 
@@ -89,9 +88,9 @@ func (s *AuthSuite) TestAuthLogin2(t provider.T) {
 	})
 }
 
-func (s *AuthSuite) TestAuthLogin3(t provider.T) {
+func (s *AuthServiceSuite) TestAuthServiceLogin3(t provider.T) {
 	t.Title("[Login] Incorrect password")
-	t.Tags("auth", "login")
+	t.Tags("auth", "service", "login")
 	t.Parallel()
 	t.WithNewStep("Incorrect: incorrect password", func(sCtx provider.StepCtx) {
 

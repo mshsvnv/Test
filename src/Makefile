@@ -8,8 +8,10 @@ delete_db:
 	$(delete_db_command)
 
 test:
+	go clean -testcache
 	rm -rf ../allure-results
 	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && go test ./... --race --parallel 11
+	cp ../environment.properties ../allure-results
 
 allure:
 	cp -R ../allure-reports/history ../allure-results

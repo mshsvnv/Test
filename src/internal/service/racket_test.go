@@ -13,16 +13,16 @@ import (
 	"src/internal/service/utils"
 )
 
-type RacketSuite struct {
+type RacketServiceSuite struct {
 	suite.Suite
 
 	racketService service.IRacketService
 }
 
 // CreateRacket
-func (s *RacketSuite) TestCreateRacket1(t provider.T) {
+func (s *RacketServiceSuite) TestRacketServiceCreateRacket1(t provider.T) {
 	t.Title("[CreateRacket] wrong amount")
-	t.Tags("racket", "create_racket")
+	t.Tags("racket", "service", "create_racket")
 	t.Parallel()
 	t.WithNewStep("Incorrect: wrong amount", func(sCtx provider.StepCtx) {
 
@@ -38,9 +38,9 @@ func (s *RacketSuite) TestCreateRacket1(t provider.T) {
 	})
 }
 
-func (s *RacketSuite) TestCreateRacket2(t provider.T) {
+func (s *RacketServiceSuite) TestRacketServiceCreateRacket2(t provider.T) {
 	t.Title("[CreateRacket] correct request")
-	t.Tags("racket", "create_racket")
+	t.Tags("racket", "service", "create_racket")
 	t.Parallel()
 	t.WithNewStep("Success: correct request", func(sCtx provider.StepCtx) {
 
@@ -57,9 +57,9 @@ func (s *RacketSuite) TestCreateRacket2(t provider.T) {
 }
 
 // UpdateRacket
-func (s *RacketSuite) TestUpdateRacket1(t provider.T) {
+func (s *RacketServiceSuite) TestRacketServiceUpdateRacket1(t provider.T) {
 	t.Title("[UpdateRacket] wrong ID")
-	t.Tags("racket", "update_racket")
+	t.Tags("racket", "service", "update_racket")
 	t.Parallel()
 	t.WithNewStep("Incorrect: wrong ID", func(sCtx provider.StepCtx) {
 
@@ -74,9 +74,9 @@ func (s *RacketSuite) TestUpdateRacket1(t provider.T) {
 	})
 }
 
-func (s *RacketSuite) TestUpdateRacket2(t provider.T) {
+func (s *RacketServiceSuite) TestRacketServiceUpdateRacket2(t provider.T) {
 	t.Title("[UpdateRacket] correct request")
-	t.Tags("racket", "update_racket")
+	t.Tags("racket", "service", "update_racket")
 	t.Parallel()
 	t.WithNewStep("Success: correct request", func(sCtx provider.StepCtx) {
 
@@ -92,9 +92,9 @@ func (s *RacketSuite) TestUpdateRacket2(t provider.T) {
 }
 
 // GetRacketByID
-func (s *RacketSuite) TestGetRacketByID1(t provider.T) {
+func (s *RacketServiceSuite) TestRacketServiceGetRacketByID1(t provider.T) {
 	t.Title("[GetRacketByID] wrong id")
-	t.Tags("racket", "get_racket_by_id")
+	t.Tags("racket", "service", "get_racket_by_id")
 	t.Parallel()
 	t.WithNewStep("Incorrect: wrong id", func(sCtx provider.StepCtx) {
 
@@ -110,9 +110,9 @@ func (s *RacketSuite) TestGetRacketByID1(t provider.T) {
 	})
 }
 
-func (s *RacketSuite) TestGetRacketByID2(t provider.T) {
+func (s *RacketServiceSuite) TestRacketServiceGetRacketByID2(t provider.T) {
 	t.Title("[GetRacketByID] correct id")
-	t.Tags("racket", "get_racket_by_id")
+	t.Tags("racket", "service", "get_racket_by_id")
 	t.Parallel()
 	t.WithNewStep("Incorrect: correct id", func(sCtx provider.StepCtx) {
 
@@ -129,9 +129,9 @@ func (s *RacketSuite) TestGetRacketByID2(t provider.T) {
 }
 
 // GetAllRackets
-func (s *RacketSuite) TestGetAllRackets1(t provider.T) {
+func (s *RacketServiceSuite) TestRacketServiceGetAllRackets1(t provider.T) {
 	t.Title("[GetAllRackets] no rackets")
-	t.Tags("racket", "get_all_rackets")
+	t.Tags("racket", "service", "get_all_rackets")
 	t.Parallel()
 	t.WithNewStep("Incorrect: no rackets", func(sCtx provider.StepCtx) {
 
@@ -153,9 +153,9 @@ func (s *RacketSuite) TestGetAllRackets1(t provider.T) {
 	})
 }
 
-func (s *RacketSuite) TestGetAllRackets2(t provider.T) {
+func (s *RacketServiceSuite) TestRacketServiceGetAllRackets2(t provider.T) {
 	t.Title("[GetAllRackets] get rackets")
-	t.Tags("racket", "get_all_rackets")
+	t.Tags("racket", "service", "get_all_rackets")
 	t.Parallel()
 	t.WithNewStep("Success: get rackets", func(sCtx provider.StepCtx) {
 
