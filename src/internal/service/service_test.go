@@ -58,6 +58,7 @@ func TestRunner(t *testing.T) {
 			suite.RunSuite(t, s)
 			wg.Done()
 		}()
-		suite.RunSuite(t, s)
 	}
+
+	wg.Wait()
 }

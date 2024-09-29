@@ -26,7 +26,7 @@ func (r *FeedbackRepoSuite) BeforeAll(t provider.T) {
 
 func (f *FeedbackRepoSuite) TestFeedbackRepoCreate(t provider.T) {
 	t.Title("[Create] Create feedback")
-	t.Tags("feedback repository", "postgres", "")
+	t.Tags("feedback repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Create feedback", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -55,7 +55,7 @@ func (f *FeedbackRepoSuite) TestFeedbackRepoCreate(t provider.T) {
 
 func (f *FeedbackRepoSuite) TestFeedbackRepoUpdate(t provider.T) {
 	t.Title("[Update] Update feedback")
-	t.Tags("feedback repository", "postgres", "")
+	t.Tags("feedback repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Update feedback", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -84,7 +84,7 @@ func (f *FeedbackRepoSuite) TestFeedbackRepoUpdate(t provider.T) {
 
 func (f *FeedbackRepoSuite) TestFeedbackRepoDelete(t provider.T) {
 	t.Title("[Delete] Delete feedback")
-	t.Tags("feedback repository", "postgres", "")
+	t.Tags("feedback repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Delete feedback", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -108,7 +108,7 @@ func (f *FeedbackRepoSuite) TestFeedbackRepoDelete(t provider.T) {
 
 func (f *FeedbackRepoSuite) TestFeedbackRepoGetFeedback(t provider.T) {
 	t.Title("[GetFeedback] Get feedback")
-	t.Tags("feedback repository", "postgres", "")
+	t.Tags("feedback repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get feedback", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -140,7 +140,7 @@ func (f *FeedbackRepoSuite) TestFeedbackRepoGetFeedback(t provider.T) {
 
 func (f *FeedbackRepoSuite) TestFeedbackRepoGetFeedbacksByRacketID(t provider.T) {
 	t.Title("[GetFeedbacksByRacketID] Get feedbacks by racket id")
-	t.Tags("feedback repository", "postgres", "")
+	t.Tags("feedback repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get feedbacks by racket id", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -174,7 +174,7 @@ func (f *FeedbackRepoSuite) TestFeedbackRepoGetFeedbacksByRacketID(t provider.T)
 
 func (f *FeedbackRepoSuite) TestFeedbackRepoGetFeedbacksByUserID(t provider.T) {
 	t.Title("[GetFeedbacksByUserID] Get feedback feedback")
-	t.Tags("feedback repository", "postgres", "")
+	t.Tags("feedback repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get feedback feedback", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()

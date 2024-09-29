@@ -9,4 +9,14 @@ delete_db:
 
 test:
 	rm -rf ../allure-results
-	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && go test -v ./...
+	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && go test ./... --race --parallel 11
+
+allure:
+	cp -R ../allure-reports/history ../allure-results
+	rm -rf ../allure-reports
+	allure generate ../allure-results -o ../allure-reports
+	allure serve ../allure-results -p 4000
+
+report: test allure
+
+.PHONY: create_db delete_db test allure report

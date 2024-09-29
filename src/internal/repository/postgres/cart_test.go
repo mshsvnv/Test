@@ -24,7 +24,7 @@ func (c *CartRepoSuite) BeforeAll(t provider.T) {
 
 func (c *CartRepoSuite) TestCartRepoCreate(t provider.T) {
 	t.Title("[Create] Create cart")
-	t.Tags("order repository", "postgres", "")
+	t.Tags("order repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Create cart", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -49,7 +49,7 @@ func (c *CartRepoSuite) TestCartRepoCreate(t provider.T) {
 
 func (c *CartRepoSuite) TestCartRepoAddRacket(t provider.T) {
 	t.Title("[AddRacket] Add racket to cart")
-	t.Tags("order repository", "postgres", "")
+	t.Tags("order repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Add racket to cart", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -74,7 +74,7 @@ func (c *CartRepoSuite) TestCartRepoAddRacket(t provider.T) {
 
 func (c *CartRepoSuite) TestCartRepoRemoveRacket(t provider.T) {
 	t.Title("[RemoveRacket] Remove racket to cart")
-	t.Tags("order repository", "postgres", "")
+	t.Tags("order repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Remove racket to cart", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -99,7 +99,7 @@ func (c *CartRepoSuite) TestCartRepoRemoveRacket(t provider.T) {
 
 func (c *CartRepoSuite) TestCartRepoUpdate(t provider.T) {
 	t.Title("[Update] Update cart")
-	t.Tags("order repository", "postgres", "")
+	t.Tags("order repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Update cart", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -124,7 +124,7 @@ func (c *CartRepoSuite) TestCartRepoUpdate(t provider.T) {
 
 func (c *CartRepoSuite) TestCartRepoGetCartByID(t provider.T) {
 	t.Title("[GetCartByID] Get cart by id")
-	t.Tags("order repository", "postgres", "")
+	t.Tags("order repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get cart by id", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
@@ -135,9 +135,10 @@ func (c *CartRepoSuite) TestCartRepoGetCartByID(t provider.T) {
 			RacketID: 1,
 			Quantity: 100,
 		}.DefaultCart()
+
 		c.cartMockRepo.
 			On("GetCartByID", ctx, request).
-			Return(nil).
+			Return(expCart, nil).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", request)
@@ -152,7 +153,7 @@ func (c *CartRepoSuite) TestCartRepoGetCartByID(t provider.T) {
 
 func (c *CartRepoSuite) Delete(t provider.T) {
 	t.Title("[Delete] Get cart by id")
-	t.Tags("order repository", "postgres", "")
+	t.Tags("order repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Get cart by id", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
