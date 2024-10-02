@@ -54,8 +54,8 @@ func (s *AuthService) Register(ctx context.Context, req *dto.RegisterReq) (strin
 	user, _ := s.repo.GetUserByEmail(ctx, req.Email)
 
 	if user != nil {
-		s.logger.Errorf("get user by email fail, error already existes")
-		return "", fmt.Errorf("get user by email fail, error already existes")
+		s.logger.Errorf("get user by email fail, error already exists")
+		return "", fmt.Errorf("get user by email fail, error already exists")
 	}
 
 	user = &model.User{

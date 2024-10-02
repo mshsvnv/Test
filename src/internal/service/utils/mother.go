@@ -4,6 +4,7 @@ import (
 	"src/internal/dto"
 	"src/internal/model"
 	"src/pkg/storage/postgres"
+	"src/pkg/utils"
 )
 
 type AuthObjectMother struct {
@@ -24,6 +25,16 @@ func (o AuthObjectMother) RegisterNewUserReq() *dto.RegisterReq {
 		Surname:  "Petrov",
 		Email:    "peter@mail.ru",
 		Password: "peter",
+	}
+}
+
+func (o AuthObjectMother) RegisterNewUserModel(req *dto.RegisterReq) *model.User {
+	return &model.User{
+		Name:     req.Name,
+		Surname:  req.Surname,
+		Email:    req.Email,
+		Role:     model.UserRoleCustomer,
+		Password: utils.HashAndSalt([]byte(req.Password)),
 	}
 }
 

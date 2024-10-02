@@ -8,6 +8,7 @@ import (
 	"src/internal/service"
 	"src/internal/service/utils"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 )
@@ -29,7 +30,7 @@ func (s *UserServiceSuite) TestUserServiceGetByID1(t provider.T) {
 
 		userMockRepo.
 			On("GetUserByID", ctx, req).
-			Return(nil, fmt.Errorf("incorrect user ID")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
@@ -38,6 +39,7 @@ func (s *UserServiceSuite) TestUserServiceGetByID1(t provider.T) {
 
 		sCtx.Assert().Nil(user)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 
@@ -84,7 +86,7 @@ func (s *UserServiceSuite) TestUserServiceGetAllUsers1(t provider.T) {
 
 		userMockRepo.
 			On("GetAllUsers", ctx).
-			Return(nil, fmt.Errorf("get all users fail")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx)
@@ -93,6 +95,7 @@ func (s *UserServiceSuite) TestUserServiceGetAllUsers1(t provider.T) {
 
 		sCtx.Assert().Nil(users)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 
@@ -134,7 +137,7 @@ func (s *UserServiceSuite) TestUserServiceGetUpdateUser1(t provider.T) {
 
 		userMockRepo.
 			On("GetUserByID", ctx, req.ID).
-			Return(nil, fmt.Errorf("get user by id fail")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
@@ -143,6 +146,7 @@ func (s *UserServiceSuite) TestUserServiceGetUpdateUser1(t provider.T) {
 
 		sCtx.Assert().Nil(user)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 

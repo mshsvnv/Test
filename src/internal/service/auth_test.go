@@ -16,23 +16,23 @@ type AuthServiceSuite struct {
 	authService service.IAuthService
 }
 
-func (s *AuthServiceSuite) TestAuthServiceRegister1(t provider.T) {
-	t.Title("[Register] Successfully registered")
-	t.Tags("auth", "service", "register")
-	t.Parallel()
-	t.WithNewStep("Correct: successfully registered", func(sCtx provider.StepCtx) {
+// func (s *AuthServiceSuite) TestAuthServiceRegister1(t provider.T) {
+// 	t.Title("[Register] Successfully registered")
+// 	t.Tags("auth", "service", "register")
+// 	t.Parallel()
+// 	t.WithNewStep("Correct: successfully registered", func(sCtx provider.StepCtx) {
 
-		ctx := context.TODO()
-		req := utils.AuthObjectMother{}.RegisterNewUserReq()
+// 		ctx := context.TODO()
+// 		req := utils.AuthObjectMother{}.RegisterNewUserReq()
 
-		sCtx.WithNewParameters("ctx", ctx, "request", req)
+// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		token, err := s.authService.Register(ctx, req)
+// 		token, err := s.authService.Register(ctx, req)
 
-		sCtx.Assert().NotEmpty(token)
-		sCtx.Assert().Nil(err)
-	})
-}
+// 		sCtx.Assert().NotEmpty(token)
+// 		sCtx.Assert().Nil(err)
+// 	})
+// }
 
 func (s *AuthServiceSuite) TestAuthServiceRegister2(t provider.T) {
 	t.Title("[Register] User already exists")

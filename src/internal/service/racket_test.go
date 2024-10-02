@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
@@ -107,6 +108,7 @@ func (s *RacketServiceSuite) TestRacketServiceGetRacketByID1(t provider.T) {
 
 		sCtx.Assert().Nil(racket)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 
@@ -114,7 +116,7 @@ func (s *RacketServiceSuite) TestRacketServiceGetRacketByID2(t provider.T) {
 	t.Title("[GetRacketByID] correct id")
 	t.Tags("racket", "service", "get_racket_by_id")
 	t.Parallel()
-	t.WithNewStep("Incorrect: correct id", func(sCtx provider.StepCtx) {
+	t.WithNewStep("Success: correct id", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
 		req := utils.RacketObjectMother{}.GetCorrectID()
@@ -141,7 +143,7 @@ func (s *RacketServiceSuite) TestRacketServiceGetAllRackets1(t provider.T) {
 		racketMockRepo := mocks.NewIRacketRepository(t)
 		racketMockRepo.
 			On("GetAllRackets", ctx, req).
-			Return(nil, fmt.Errorf("get all fail")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
@@ -150,6 +152,7 @@ func (s *RacketServiceSuite) TestRacketServiceGetAllRackets1(t provider.T) {
 
 		sCtx.Assert().Nil(rackets)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
@@ -44,7 +45,7 @@ func (s *FeedbackServiceSuite) TestFeedbackServiceCreateFeedback1(t provider.T) 
 
 		feedbackMockRepo.
 			On("Create", ctx, expFeedback).
-			Return(fmt.Errorf("create feedback fail")).
+			Return(fmt.Errorf("no rows in result set")).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
@@ -53,6 +54,7 @@ func (s *FeedbackServiceSuite) TestFeedbackServiceCreateFeedback1(t provider.T) 
 
 		sCtx.Assert().Nil(feedback)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 
@@ -113,7 +115,7 @@ func (s *FeedbackServiceSuite) TestFeedbackServiceDeleteFeedback1(t provider.T) 
 
 		feedbackMockRepo.
 			On("GetFeedback", ctx, reqGet).
-			Return(nil, fmt.Errorf("get feedback fail")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", reqDelete)
@@ -121,6 +123,7 @@ func (s *FeedbackServiceSuite) TestFeedbackServiceDeleteFeedback1(t provider.T) 
 		err := service.NewFeedbackService(utils.NewMockLogger(), feedbackMockRepo).DeleteFeedback(ctx, reqDelete)
 
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 
@@ -221,7 +224,7 @@ func (s *FeedbackServiceSuite) TestFeedbackServiceGetFeedbacksByRacketID1(t prov
 
 		feedbackMockRepo.
 			On("GetFeedbacksByRacketID", ctx, req).
-			Return(nil, fmt.Errorf("get feedback by racket id fail")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
@@ -230,6 +233,7 @@ func (s *FeedbackServiceSuite) TestFeedbackServiceGetFeedbacksByRacketID1(t prov
 
 		sCtx.Assert().Nil(feedbacks)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 
@@ -278,7 +282,7 @@ func (s *FeedbackServiceSuite) TestFeedbackServiceGetFeedbacksByUserID1(t provid
 
 		feedbackMockRepo.
 			On("GetFeedbacksByUserID", ctx, req).
-			Return(nil, fmt.Errorf("get feedback by user id fail")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
@@ -287,6 +291,7 @@ func (s *FeedbackServiceSuite) TestFeedbackServiceGetFeedbacksByUserID1(t provid
 
 		sCtx.Assert().Nil(feedbacks)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 

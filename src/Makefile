@@ -10,7 +10,7 @@ delete_db:
 test:
 	go clean -testcache
 	rm -rf ../allure-results
-	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && go test ./... --race --parallel 11
+	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && go test -v ./... -shuffle=on --race --parallel 6
 	cp ../environment.properties ../allure-results
 
 allure:

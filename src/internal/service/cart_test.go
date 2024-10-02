@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
@@ -32,18 +33,19 @@ func (s *CartServiceSuite) TestCartServiceAddRacket1(t provider.T) {
 
 		cartMockRepo.
 			On("GetCartByID", ctx, req.UserID).
-			Return(nil, fmt.Errorf("get cart fails, cart doesn't exist")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		racketMockRepo.
 			On("GetRacketByID", ctx, req.RacketID).
-			Return(nil, fmt.Errorf("getRacketByID fail")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		cart, err := service.NewCartService(utils.NewMockLogger(), cartMockRepo, racketMockRepo).AddRacket(ctx, req)
 
 		sCtx.Assert().Nil(cart)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 
@@ -61,7 +63,7 @@ func (s *CartServiceSuite) TestCartServiceAddRacket2(t provider.T) {
 
 		cartMockRepo.
 			On("GetCartByID", ctx, req.UserID).
-			Return(nil, fmt.Errorf("get cart fails, cart doesn't exist")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		racket := &model.Racket{
@@ -169,7 +171,7 @@ func (s *CartServiceSuite) TestCartServiceRemoveRacket1(t provider.T) {
 
 		cartMockRepo.
 			On("GetCartByID", ctx, req.UserID).
-			Return(nil, fmt.Errorf("get cart by id fail")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		expCart := &model.Cart{
@@ -226,7 +228,7 @@ func (s *CartServiceSuite) TestCartServiceRemoveRacket2(t provider.T) {
 
 		racketMockRepo.
 			On("GetRacketByID", ctx, req.RacketID).
-			Return(nil, fmt.Errorf("get racket by id fail")).
+			Return(nil, fmt.Errorf("no rows in result set")).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
@@ -235,6 +237,7 @@ func (s *CartServiceSuite) TestCartServiceRemoveRacket2(t provider.T) {
 
 		sCtx.Assert().Nil(cart)
 		sCtx.Assert().Error(err)
+		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
 	})
 }
 
