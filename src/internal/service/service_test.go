@@ -7,10 +7,6 @@ import (
 
 	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
-
-	mypostgres "src/internal/repository/postgres"
-	"src/internal/service"
-	"src/internal/service/utils"
 )
 
 var signingKey = "racket_shop"
@@ -18,38 +14,16 @@ var accessTokenTTL time.Duration = time.Duration(12 * time.Hour.Hours())
 
 func TestRunner(t *testing.T) {
 
-	db, _ := utils.NewTestStorage()
-	defer utils.DropTestStorage(db)
-
 	t.Parallel()
 
 	wg := &sync.WaitGroup{}
 	suites := []runner.TestSuite{
-		&AuthServiceSuite{
-			authService: service.NewAuthService(
-				utils.NewMockLogger(),
-				mypostgres.NewUserRepository(db),
-				signingKey,
-				accessTokenTTL,
-			),
-		},
+		&AuthServiceSuite{},
 		&UserServiceSuite{},
-		&RacketServiceSuite{
-			racketService: service.NewRacketService(
-				utils.NewMockLogger(),
-				mypostgres.NewRacketRepository(db),
-			),
-		},
+		&RacketServiceSuite{},
 		&FeedbackServiceSuite{},
 		&CartServiceSuite{},
-		&OrderServiceSuite{
-			orderService: service.NewOrderService(
-				utils.NewMockLogger(),
-				mypostgres.NewOrderRepository(db),
-				mypostgres.NewCartRepository(db),
-				mypostgres.NewRacketRepository(db),
-			),
-		},
+		&OrderServiceSuite{},
 	}
 	wg.Add(len(suites))
 

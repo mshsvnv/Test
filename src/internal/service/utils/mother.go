@@ -19,6 +19,16 @@ func (o AuthObjectMother) DefaultUserReq() *dto.RegisterReq {
 	}
 }
 
+func (o AuthObjectMother) DefaultUserModel() *model.User {
+	return &model.User{
+		Name:     "Ivan",
+		Surname:  "Ivanov",
+		Email:    "ivan@mail.ru",
+		Password: utils.HashAndSalt([]byte("ivan")),
+		Role:     model.UserRoleCustomer,
+	}
+}
+
 func (o AuthObjectMother) RegisterNewUserReq() *dto.RegisterReq {
 	return &dto.RegisterReq{
 		Name:     "Peter",
@@ -139,7 +149,7 @@ func (r RacketObjectMother) IncorrectCount() *dto.CreateRacketReq {
 
 func (r RacketObjectMother) CorrectCount() *dto.CreateRacketReq {
 	return &dto.CreateRacketReq{
-		Quantity: 10,
+		Quantity: 100,
 	}
 }
 

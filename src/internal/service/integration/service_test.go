@@ -3,16 +3,12 @@ package service_test
 import (
 	"sync"
 	"testing"
-	"time"
 
 	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
 	"src/internal/service/utils"
 )
-
-var signingKey = "racket_shop"
-var accessTokenTTL time.Duration = time.Duration(12 * time.Hour.Hours())
 
 func TestRunner(t *testing.T) {
 
@@ -38,7 +34,12 @@ func TestRunner(t *testing.T) {
 		// 		mypostgres.NewRacketRepository(db),
 		// 	),
 		// },
-		// &FeedbackServiceSuite{},
+		// &FeedbackSuite{
+		// 	feedbackService: service.NewFeedbackService(
+		// 		utils.NewMockLogger(),
+		// 		mypostgres.NewFeedbackRepository(db),
+		// 	),
+		// },
 		// &CartServiceSuite{},
 		// &OrderServiceSuite{
 		// 	orderService: service.NewOrderService(

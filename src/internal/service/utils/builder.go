@@ -15,8 +15,18 @@ type FeedbackBuilder struct {
 	Date     time.Time
 }
 
+func (f FeedbackBuilder) WithDefaultRacketID() FeedbackBuilder {
+	f.RacketID = ids["racketID"]
+	return f
+}
+
 func (f FeedbackBuilder) WithRacketID(racketID int) FeedbackBuilder {
 	f.RacketID = racketID
+	return f
+}
+
+func (f FeedbackBuilder) WithDefaultUserID() FeedbackBuilder {
+	f.UserID = ids["userID"]
 	return f
 }
 

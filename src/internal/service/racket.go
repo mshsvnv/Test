@@ -54,7 +54,6 @@ func (s *RacketService) CreateRacket(ctx context.Context, req *dto.CreateRacketR
 	}
 
 	return &racket, nil
-
 }
 
 func (s *RacketService) UpdateRacket(ctx context.Context, req *dto.UpdateRacketReq) error {

@@ -8,16 +8,16 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
+	"src/internal/dto"
 	"src/internal/model"
 	"src/internal/repository/mocks"
 	"src/internal/service"
 	"src/internal/service/utils"
+	utils1 "src/pkg/utils"
 )
 
 type RacketServiceSuite struct {
 	suite.Suite
-
-	racketService service.IRacketService
 }
 
 // CreateRacket
@@ -32,7 +32,7 @@ func (s *RacketServiceSuite) TestRacketServiceCreateRacket1(t provider.T) {
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		racket, err := s.racketService.CreateRacket(ctx, req)
+		racket, err := service.NewRacketService(utils.NewMockLogger(), nil).CreateRacket(ctx, req)
 
 		sCtx.Assert().Nil(racket)
 		sCtx.Assert().Error(err)
@@ -46,14 +46,23 @@ func (s *RacketServiceSuite) TestRacketServiceCreateRacket2(t provider.T) {
 	t.WithNewStep("Success: correct request", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
-		req := utils.RacketObjectMother{}.CorrectCount()
+		racket := utils.RacketObjectMother{}.DefaultRacket()
+		var req dto.CreateRacketReq
+
+		utils1.Copy(&req, racket)
+
+		racketMockRepo := mocks.NewIRacketRepository(t)
+		racketMockRepo.
+			On("Create", ctx, racket).
+			Return(nil).
+			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		racket, err := s.racketService.CreateRacket(ctx, req)
+		racket, err := service.NewRacketService(utils.NewMockLogger(), racketMockRepo).CreateRacket(ctx, &req)
 
 		sCtx.Assert().NotEmpty(racket)
-		sCtx.Assert().Nil(err)
+		sCtx.Assert().NoError(err)
 	})
 }
 
@@ -67,9 +76,15 @@ func (s *RacketServiceSuite) TestRacketServiceUpdateRacket1(t provider.T) {
 		ctx := context.TODO()
 		req := utils.RacketObjectMother{}.UpdateIncorrectID()
 
+		racketMockRepo := mocks.NewIRacketRepository(t)
+		racketMockRepo.
+			On("GetRacketByID", ctx, req.ID).
+			Return(nil, fmt.Errorf("get racket by id")).
+			Once()
+
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		err := s.racketService.UpdateRacket(ctx, req)
+		err := service.NewRacketService(utils.NewMockLogger(), racketMockRepo).UpdateRacket(ctx, req)
 
 		sCtx.Assert().Error(err)
 	})
@@ -83,12 +98,24 @@ func (s *RacketServiceSuite) TestRacketServiceUpdateRacket2(t provider.T) {
 
 		ctx := context.TODO()
 		req := utils.RacketObjectMother{}.UpdateCorrectID()
+		racket := utils.RacketObjectMother{}.DefaultRacket()
+
+		racketMockRepo := mocks.NewIRacketRepository(t)
+		racketMockRepo.
+			On("GetRacketByID", ctx, req.ID).
+			Return(racket, nil).
+			Once()
+
+		racketMockRepo.
+			On("Update", ctx, racket).
+			Return(nil).
+			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		err := s.racketService.UpdateRacket(ctx, req)
+		err := service.NewRacketService(utils.NewMockLogger(), racketMockRepo).UpdateRacket(ctx, req)
 
-		sCtx.Assert().Nil(err)
+		sCtx.Assert().NoError(err)
 	})
 }
 
@@ -102,13 +129,19 @@ func (s *RacketServiceSuite) TestRacketServiceGetRacketByID1(t provider.T) {
 		ctx := context.TODO()
 		req := utils.RacketObjectMother{}.GetIncorrectID()
 
+		racketMockRepo := mocks.NewIRacketRepository(t)
+		racketMockRepo.
+			On("GetRacketByID", ctx, req).
+			Return(nil, fmt.Errorf("get racket by id fail")).
+			Once()
+
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		racket, err := s.racketService.GetRacketByID(ctx, req)
+		racket, err := service.NewRacketService(utils.NewMockLogger(), racketMockRepo).GetRacketByID(ctx, req)
 
 		sCtx.Assert().Nil(racket)
 		sCtx.Assert().Error(err)
-		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
+		sCtx.Assert().Contains(err.Error(), "get racket by id fail")
 	})
 }
 
@@ -119,14 +152,21 @@ func (s *RacketServiceSuite) TestRacketServiceGetRacketByID2(t provider.T) {
 	t.WithNewStep("Success: correct id", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
-		req := utils.RacketObjectMother{}.GetCorrectID()
+		req := utils.RacketObjectMother{}.GetIncorrectID()
+		racketTmp := utils.RacketObjectMother{}.DefaultRacket()
+
+		racketMockRepo := mocks.NewIRacketRepository(t)
+		racketMockRepo.
+			On("GetRacketByID", ctx, req).
+			Return(racketTmp, nil).
+			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		racket, err := s.racketService.GetRacketByID(ctx, req)
+		racket, err := service.NewRacketService(utils.NewMockLogger(), racketMockRepo).GetRacketByID(ctx, req)
 
 		sCtx.Assert().NotEmpty(racket)
-		sCtx.Assert().Nil(err)
+		sCtx.Assert().NoError(err)
 	})
 }
 

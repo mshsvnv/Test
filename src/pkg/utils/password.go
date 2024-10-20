@@ -6,7 +6,7 @@ import (
 
 func HashAndSalt(pass []byte) string {
 
-	hashed, err := bcrypt.GenerateFromPassword(pass, bcrypt.MinCost)
+	hashed, err := bcrypt.GenerateFromPassword(pass, bcrypt.DefaultCost)
 
 	if err != nil {
 		// fmt.Errorf("Failed to generate password: %v", err)
