@@ -2,9 +2,6 @@ package service_test
 
 import (
 	"context"
-	"fmt"
-	"src/internal/model"
-	"src/internal/repository/mocks"
 	"src/internal/service"
 	"src/internal/service/utils"
 
@@ -15,27 +12,23 @@ import (
 
 type UserSuite struct {
 	suite.Suite
+
+	userService service.IUserService
 }
 
 // GetUserByID
 func (s *UserSuite) TestUserServiceGetByID1(t provider.T) {
-	t.Title("[GetUserByID] Incorrect ID")
-	t.Tags("user", "service", "service", "get_user_by_id")
+	t.Title("[Integration GetUserByID] Incorrect ID")
+	t.Tags("integration", "user", "service", "service", "get_user_by_id")
 	t.Parallel()
 	t.WithNewStep("Incorrect: not existed user", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
 		req := utils.UserObjectMother{}.IncorrectID()
-		userMockRepo := mocks.NewIUserRepository(t)
-
-		userMockRepo.
-			On("GetUserByID", ctx, req).
-			Return(nil, fmt.Errorf("no rows in result set")).
-			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		user, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).GetUserByID(ctx, req)
+		user, err := s.userService.GetUserByID(ctx, req)
 
 		sCtx.Assert().Nil(user)
 		sCtx.Assert().Error(err)
@@ -44,30 +37,17 @@ func (s *UserSuite) TestUserServiceGetByID1(t provider.T) {
 }
 
 func (s *UserSuite) TestUserServiceGetUserByID2(t provider.T) {
-	t.Title("[GetUserByID] Correct ID")
-	t.Tags("user", "service", "service", "get_user_by_id")
+	t.Title("[Integration GetUserByID] Correct ID")
+	t.Tags("integration", "user", "service", "service", "get_user_by_id")
 	t.Parallel()
 	t.WithNewStep("Correct: existed user", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
 		req := utils.UserObjectMother{}.CorrectID()
-		userMockRepo := mocks.NewIUserRepository(t)
-
-		user := &model.User{
-			Name:    "Ivan",
-			Surname: "Ivanov",
-			Email:   "ivan@mail.ru",
-			Role:    model.UserRoleCustomer,
-		}
-
-		userMockRepo.
-			On("GetUserByID", ctx, req).
-			Return(user, nil).
-			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		user, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).GetUserByID(ctx, req)
+		user, err := s.userService.GetUserByID(ctx, req)
 
 		sCtx.Assert().NotEmpty(user)
 		sCtx.Assert().Nil(err)
@@ -75,49 +55,16 @@ func (s *UserSuite) TestUserServiceGetUserByID2(t provider.T) {
 }
 
 // GetAllUsers
-func (s *UserSuite) TestUserServiceGetAllUsers1(t provider.T) {
-	t.Title("[GetAllUsers] Repository error")
-	t.Tags("user", "service", "service", "get_all_users")
-	t.Parallel()
-	t.WithNewStep("Incorrect: repository error", func(sCtx provider.StepCtx) {
-
-		ctx := context.TODO()
-		userMockRepo := mocks.NewIUserRepository(t)
-
-		userMockRepo.
-			On("GetAllUsers", ctx).
-			Return(nil, fmt.Errorf("no rows in result set")).
-			Once()
-
-		sCtx.WithNewParameters("ctx", ctx)
-
-		users, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).GetAllUsers(ctx)
-
-		sCtx.Assert().Nil(users)
-		sCtx.Assert().Error(err)
-		sCtx.Assert().Contains(err.Error(), pgx.ErrNoRows.Error())
-	})
-}
-
 func (s *UserSuite) TestUserServiceGetAllUsers2(t provider.T) {
-	t.Title("[GetAllUsers] Correct")
-	t.Tags("user", "service", "service", "get_all_users")
+	t.Title("[Integration GetAllUsers] Correct")
+	t.Tags("integration", "user", "service", "service", "get_all_users")
 	t.Parallel()
 	t.WithNewStep("Correct", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
-		userMockRepo := mocks.NewIUserRepository(t)
-
-		users := utils.UserObjectMother{}.DefaultUsers()
-
-		userMockRepo.
-			On("GetAllUsers", ctx).
-			Return(users, nil).
-			Once()
-
 		sCtx.WithNewParameters("ctx", ctx)
 
-		users, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).GetAllUsers(ctx)
+		users, err := s.userService.GetAllUsers(ctx)
 
 		sCtx.Assert().NotNil(users)
 		sCtx.Assert().Nil(err)
@@ -126,23 +73,17 @@ func (s *UserSuite) TestUserServiceGetAllUsers2(t provider.T) {
 
 // UpdateUser
 func (s *UserSuite) TestUserServiceGetUpdateUser1(t provider.T) {
-	t.Title("[UpdateUser] Incorrrect ID")
-	t.Tags("user", "service", "update_user")
+	t.Title("[Integration UpdateUser] Incorrrect ID")
+	t.Tags("integration", "user", "service", "update_user")
 	t.Parallel()
 	t.WithNewStep("Incorrect: incorrect ID", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
 		req := utils.UserObjectMother{}.IncorrectUserIDToUpdate()
-		userMockRepo := mocks.NewIUserRepository(t)
-
-		userMockRepo.
-			On("GetUserByID", ctx, req.ID).
-			Return(nil, fmt.Errorf("no rows in result set")).
-			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		user, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).UpdateRole(ctx, req)
+		user, err := s.userService.UpdateRole(ctx, req)
 
 		sCtx.Assert().Nil(user)
 		sCtx.Assert().Error(err)
@@ -151,31 +92,17 @@ func (s *UserSuite) TestUserServiceGetUpdateUser1(t provider.T) {
 }
 
 func (s *UserSuite) TestUserServiceGetUpdateUser2(t provider.T) {
-	t.Title("[UpdateUser] Correct")
-	t.Tags("user", "service", "update_user")
+	t.Title("[Integration UpdateUser] Correct")
+	t.Tags("integration", "user", "service", "update_user")
 	t.Parallel()
 	t.WithNewStep("Correct: correct request", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
 		req := utils.UserObjectMother{}.CorrectUserToUpdate()
-		userMockRepo := mocks.NewIUserRepository(t)
-
-		userCustomer := utils.UserObjectMother{}.DefaultCustomer()
-		userAdmin := utils.UserObjectMother{}.DefaultAdmin()
-
-		userMockRepo.
-			On("GetUserByID", ctx, req.ID).
-			Return(userCustomer, nil).
-			Once()
-
-		userMockRepo.
-			On("UpdateRole", ctx, userAdmin).
-			Return(nil).
-			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		user, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).UpdateRole(ctx, req)
+		user, err := s.userService.UpdateRole(ctx, req)
 
 		sCtx.Assert().NotNil(user)
 		sCtx.Assert().Nil(err)

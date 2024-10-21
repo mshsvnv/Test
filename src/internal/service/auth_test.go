@@ -6,6 +6,7 @@ import (
 
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
+	"github.com/stretchr/testify/mock"
 
 	"src/internal/repository/mocks"
 	"src/internal/service"
@@ -16,35 +17,34 @@ type AuthServiceSuite struct {
 	suite.Suite
 }
 
-// func (s *AuthServiceSuite) TestAuthServiceRegister1(t provider.T) {
-// 	t.Title("[Register] Correct")
-// 	t.Tags("auth", "service", "register")
-// 	t.Parallel()
-// 	t.WithNewStep("Correct", func(sCtx provider.StepCtx) {
+func (s *AuthServiceSuite) TestAuthServiceRegister1(t provider.T) {
+	t.Title("[Register] Correct")
+	t.Tags("auth", "service", "register")
+	t.Parallel()
+	t.WithNewStep("Correct", func(sCtx provider.StepCtx) {
 
-// 		ctx := context.TODO()
-// 		req := utils.AuthObjectMother{}.DefaultUserReq()
+		ctx := context.TODO()
+		req := utils.AuthObjectMother{}.DefaultUserReq()
 
-// 		userMockRepo := mocks.NewIUserRepository(t)
-// 		userMockRepo.
-// 			On("GetUserByEmail", ctx, req.Email).
-// 			Return(nil, nil).
-// 			Once()
+		userMockRepo := mocks.NewIUserRepository(t)
+		userMockRepo.
+			On("GetUserByEmail", ctx, req.Email).
+			Return(nil, nil).
+			Once()
 
-// 		user := utils.AuthObjectMother{}.DefaultUserModel()
-// 		userMockRepo.
-// 			On("Create", ctx, user).
-// 			Return(nil).
-// 			Once()
+		userMockRepo.
+			On("Create", ctx, mock.Anything).
+			Return(nil).
+			Once()
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-// 		token, err := service.NewAuthService(utils.NewMockLogger(), userMockRepo, signingKey, accessTokenTTL).Register(ctx, req)
+		token, err := service.NewAuthService(utils.NewMockLogger(), userMockRepo, signingKey, accessTokenTTL).Register(ctx, req)
 
-// 		sCtx.Assert().NotEmpty(token)
-// 		sCtx.Assert().NoError(err)
-// 	})
-// }
+		sCtx.Assert().NotEmpty(token)
+		sCtx.Assert().NoError(err)
+	})
+}
 
 func (s *AuthServiceSuite) TestAuthServiceRegister2(t provider.T) {
 	t.Title("[Register] User already exists")

@@ -11,7 +11,6 @@ import (
 
 var signingKey = "racket_shop"
 var accessTokenTTL time.Duration = time.Duration(12 * time.Hour.Hours())
-
 func TestRunner(t *testing.T) {
 
 	t.Parallel()

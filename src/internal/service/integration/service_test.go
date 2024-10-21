@@ -3,12 +3,18 @@ package service_test
 import (
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
+	mypostgres "src/internal/repository/postgres"
+	"src/internal/service"
 	"src/internal/service/utils"
 )
+
+var signingKey = "racket_shop"
+var accessTokenTTL time.Duration = time.Duration(12 * time.Hour.Hours())
 
 func TestRunner(t *testing.T) {
 
@@ -19,21 +25,26 @@ func TestRunner(t *testing.T) {
 
 	wg := &sync.WaitGroup{}
 	suites := []runner.TestSuite{
-		// &AuthSuite{
-		// 	authService: service.NewAuthService(
-		// 		utils.NewMockLogger(),
-		// 		mypostgres.NewUserRepository(db),
-		// 		signingKey,
-		// 		accessTokenTTL,
-		// 	),
-		// },
-		// &UserServiceSuite{},
-		// &RacketServiceSuite{
-		// 	racketService: service.NewRacketService(
-		// 		utils.NewMockLogger(),
-		// 		mypostgres.NewRacketRepository(db),
-		// 	),
-		// },
+		&AuthSuite{
+			authService: service.NewAuthService(
+				utils.NewMockLogger(),
+				mypostgres.NewUserRepository(db),
+				signingKey,
+				accessTokenTTL,
+			),
+		},
+		&UserSuite{
+			userService: service.NewUserService(
+				utils.NewMockLogger(),
+				mypostgres.NewUserRepository(db),
+			),
+		},
+		&RacketSuite{
+			racketService: service.NewRacketService(
+				utils.NewMockLogger(),
+				mypostgres.NewRacketRepository(db),
+			),
+		},
 		// &FeedbackSuite{
 		// 	feedbackService: service.NewFeedbackService(
 		// 		utils.NewMockLogger(),

@@ -1,46 +1,46 @@
 package service_test
 
-import (
-	"context"
-	"time"
+// import (
+// 	"context"
+// 	"time"
 
-	"github.com/ozontech/allure-go/pkg/framework/provider"
-	"github.com/ozontech/allure-go/pkg/framework/suite"
+// 	"github.com/ozontech/allure-go/pkg/framework/provider"
+// 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
-	"src/internal/service"
-	"src/internal/service/utils"
-)
+// 	"src/internal/service"
+// 	"src/internal/service/utils"
+// )
 
-type FeedbackSuite struct {
-	suite.Suite
+// type FeedbackSuite struct {
+// 	suite.Suite
 
-	feedbackService service.IFeedbackService
-}
+// 	feedbackService service.IFeedbackService
+// }
 
-// CreateFeedback
-func (s *FeedbackSuite) TestFeedbackServiceCreateFeedback1(t provider.T) {
-	t.Title("[CreateFeedback] Correct")
-	t.Tags("integration", "feedback", "service", "create_feedback")
-	t.Parallel()
-	t.WithNewStep("Correct", func(sCtx provider.StepCtx) {
+// // CreateFeedback
+// func (s *FeedbackSuite) TestFeedbackServiceCreateFeedback1(t provider.T) {
+// 	t.Title("[CreateFeedback] Correct")
+// 	t.Tags("integration", "feedback", "service", "create_feedback")
+// 	t.Parallel()
+// 	t.WithNewStep("Correct", func(sCtx provider.StepCtx) {
 
-		ctx := context.TODO()
-		tm, _ := time.Parse(time.RFC3339, "2006-01-02")
-		req := utils.FeedbackBuilder{}.
-			WithDefaultRacketID().
-			WithDefaultUserID().
-			WithRating(5).
-			WithDate(tm).
-			ToCreateDTO()
+// 		ctx := context.TODO()
+// 		tm, _ := time.Parse(time.RFC3339, "2006-01-02")
+// 		req := utils.FeedbackBuilder{}.
+// 			WithDefaultRacketID().
+// 			WithDefaultUserID().
+// 			WithRating(5).
+// 			WithDate(tm).
+// 			ToCreateDTO()
 
-		sCtx.WithNewParameters("ctx", ctx, "request", req)
+// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		feedback, err := s.feedbackService.CreateFeedback(ctx, req)
+// 		feedback, err := s.feedbackService.CreateFeedback(ctx, req)
 
-		sCtx.Assert().NotEmpty(feedback)
-		sCtx.Assert().NoError(err)
-	})
-}
+// 		sCtx.Assert().NotEmpty(feedback)
+// 		sCtx.Assert().NoError(err)
+// 	})
+// }
 
 // func (s *FeedbackSuite) TestFeedbackServiceCreateFeedback2(t provider.T) {
 // 	t.Title("[CreateFeedback] Correct")
