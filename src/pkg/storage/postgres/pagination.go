@@ -42,16 +42,26 @@ func (s SortOptions) Format() string {
 }
 
 type FilterOptions struct {
+	Pattern string
 	Column  string
 }
 
 type Pagination struct {
-	Filter     FilterOptions
-	Sort       SortOptions
+	Filter FilterOptions
+	Sort   SortOptions
 }
 
 func (p *Pagination) ToSQL(s squirrel.SelectBuilder) squirrel.SelectBuilder {
+
+	if len(p.Sort.Columns[0]) == 0 {
+		return s
+	}
+
 	s = s.OrderBy(p.Sort.Format())
+
+	if p.Filter.Column != "" {
+		s = s.Where(squirrel.ILike{p.Filter.Column + "::text": fmt.Sprintf("%%%s%%", p.Filter.Pattern)})
+	}
 
 	return s
 }

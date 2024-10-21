@@ -1,1 +1,3 @@
-package postgres_test
+//go:build integration
+
+package mypostgres_test

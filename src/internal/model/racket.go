@@ -9,4 +9,5 @@ type Racket struct {
 	Avaliable bool    `json:"avaliable"`
 	Quantity  int     `json:"quantity"`
 	Price     int     `json:"price"`
+	Image     []byte  `json:"image"`
 }

@@ -9,7 +9,7 @@ import (
 type AuthObjectMother struct {
 }
 
-func (o AuthObjectMother) DefaultUserReq() *dto.RegisterReq {
+func (a AuthObjectMother) DefaultUserReq() *dto.RegisterReq {
 	return &dto.RegisterReq{
 		Name:     "Ivan",
 		Surname:  "Ivanov",
@@ -18,7 +18,7 @@ func (o AuthObjectMother) DefaultUserReq() *dto.RegisterReq {
 	}
 }
 
-func (o AuthObjectMother) RegisterNewUserReq() *dto.RegisterReq {
+func (a AuthObjectMother) RegisterNewUserReq() *dto.RegisterReq {
 	return &dto.RegisterReq{
 		Name:     "Peter",
 		Surname:  "Petrov",
@@ -27,21 +27,21 @@ func (o AuthObjectMother) RegisterNewUserReq() *dto.RegisterReq {
 	}
 }
 
-func (o AuthObjectMother) UnRegisterUserReq() *dto.LoginReq {
+func (a AuthObjectMother) UnRegisterUserReq() *dto.LoginReq {
 	return &dto.LoginReq{
 		Email:    "vasya@mail.ru",
 		Password: "vasya",
 	}
 }
 
-func (o AuthObjectMother) IncorrectPasswordReq() *dto.LoginReq {
+func (a AuthObjectMother) IncorrectPasswordReq() *dto.LoginReq {
 	return &dto.LoginReq{
 		Email:    "ivan@mail.ru",
 		Password: "peter",
 	}
 }
 
-func (o AuthObjectMother) CorrectPasswordReq() *dto.LoginReq {
+func (a AuthObjectMother) CorrectPasswordReq() *dto.LoginReq {
 	return &dto.LoginReq{
 		Email:    "ivan@mail.ru",
 		Password: "ivan",
@@ -49,23 +49,46 @@ func (o AuthObjectMother) CorrectPasswordReq() *dto.LoginReq {
 }
 
 type UserObjectMother struct {
+	Name     string
+	Surname  string
+	Password string
+	Role     model.UserRole
 }
 
-func (o UserObjectMother) IncorrectID() int {
+func (u UserObjectMother) WithName(name string) UserObjectMother {
+	u.Name = name
+	return u
+}
+
+func (u UserObjectMother) WithSurname(surname string) UserObjectMother {
+	u.Surname = surname
+	return u
+}
+
+func (u UserObjectMother) WithPassword(password string) UserObjectMother {
+	u.Password = password
+	return u
+}
+
+func (u UserObjectMother) WithRole(role model.UserRole) UserObjectMother {
+	u.Role = role
+	return u
+}
+
+func (u UserObjectMother) IncorrectID() int {
 	return 0
 }
 
-func (o UserObjectMother) CorrectID() int {
+func (u UserObjectMother) CorrectID() int {
 	return 1 //ids["userID"]
 }
 
-func (o UserObjectMother) CorrectEmail() string {
+func (u UserObjectMother) CorrectEmail() string {
 	return "pstpn@mail.ru"
 }
 
-func (o UserObjectMother) DefaultCustomer() *model.User {
+func (u UserObjectMother) DefaultCustomer() *model.User {
 	return &model.User{
-		ID:      1, //ids["userID"],
 		Name:    "Ivan",
 		Surname: "Ivanov",
 		Email:   "ivan@mail.ru",
@@ -73,7 +96,7 @@ func (o UserObjectMother) DefaultCustomer() *model.User {
 	}
 }
 
-func (o UserObjectMother) DefaultAdmin() *model.User {
+func (u UserObjectMother) DefaultAdmin() *model.User {
 	return &model.User{
 		ID:      1, //ids["userID"],
 		Name:    "Ivan",
@@ -83,7 +106,7 @@ func (o UserObjectMother) DefaultAdmin() *model.User {
 	}
 }
 
-func (o UserObjectMother) DefaultUsers() []*model.User {
+func (u UserObjectMother) DefaultUsers() []*model.User {
 	return []*model.User{
 		{
 			Name:    "Ivan",
@@ -98,17 +121,26 @@ func (o UserObjectMother) DefaultUsers() []*model.User {
 	}
 }
 
-func (o UserObjectMother) IncorrectUserIDToUpdate() *dto.UpdateRoleReq {
+func (u UserObjectMother) IncorrectUserIDToUpdate() *dto.UpdateRoleReq {
 	return &dto.UpdateRoleReq{
 		ID:   0,
 		Role: model.UserRoleAdmin,
 	}
 }
 
-func (o UserObjectMother) CorrectUserToUpdate() *dto.UpdateRoleReq {
+func (u UserObjectMother) CorrectUserToUpdate() *dto.UpdateRoleReq {
 	return &dto.UpdateRoleReq{
 		ID:   1, //ids["userID"],
 		Role: model.UserRoleAdmin,
+	}
+}
+
+func (u UserObjectMother) ToModel() *model.User {
+	return &model.User{
+		Name:     u.Name,
+		Surname:  u.Surname,
+		Password: u.Password,
+		Role:     u.Role,
 	}
 }
 

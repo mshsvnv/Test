@@ -1,13 +1,16 @@
+// go:build integration
+
 package service_test
 
 import (
 	"context"
-	"src/internal/service"
-	"src/internal/service/utils"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
+
+	"src/internal/service"
+	"src/internal/service/utils"
 )
 
 type UserSuite struct {

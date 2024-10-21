@@ -43,6 +43,7 @@ const (
 	phoneField         = "phone"
 	substruptionField  = "subscription"
 	avaliableField     = "avaliable"
+	imageField         = "image"
 )
 
 func on(baseTable, targetTable, baseColumn, targetColumn string) string {

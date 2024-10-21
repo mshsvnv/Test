@@ -30,7 +30,8 @@ func (r *RacketRepository) Create(ctx context.Context, racket *model.Racket) err
 			headSizeField,
 			quantityField,
 			priceField,
-			avaliableField).
+			avaliableField,
+			imageField).
 		Values(
 			racket.Brand,
 			racket.Weight,
@@ -38,7 +39,8 @@ func (r *RacketRepository) Create(ctx context.Context, racket *model.Racket) err
 			racket.HeadSize,
 			racket.Quantity,
 			racket.Price,
-			racket.Avaliable).
+			racket.Avaliable,
+			racket.Image).
 		Suffix("returning id")
 
 	sql, ars, err := query.ToSql()
@@ -171,6 +173,7 @@ func (r *RacketRepository) rowToModel(row pgx.Row) (*model.Racket, error) {
 		&racket.Avaliable,
 		&racket.Price,
 		&racket.Quantity,
+		&racket.Image,
 	)
 
 	if err != nil {

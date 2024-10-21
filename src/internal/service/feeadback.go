@@ -16,7 +16,6 @@ import (
 type IFeedbackService interface {
 	CreateFeedback(ctx context.Context, req *dto.CreateFeedbackReq) (*model.Feedback, error)
 	DeleteFeedback(ctx context.Context, req *dto.DeleteFeedbackReq) error
-	// UpdateFeedback(ctx context.Context, req *dto.UpdateFeedbackReq) error
 	GetFeedbacksByUserID(ctx context.Context, userID int) ([]*model.Feedback, error)
 	GetFeedbacksByRacketID(ctx context.Context, racketID int) ([]*model.Feedback, error)
 }
