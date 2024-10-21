@@ -14,10 +14,10 @@ jobs:
                 go-version: '1.23.1'
 
             - name: Run unit tests
-              run: make ci-unit
+              run: cd src && make ci-unit
 
             - name: Processing report data
-              run: make ci-concat-reports -i
+              run: cd src && make ci-concat-reports -i
               if: always()
               continue-on-error: true
       
