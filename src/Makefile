@@ -39,7 +39,7 @@ ci-integration:
 	go clean -testcache
 	export ALLURE_OUTPUT_PATH="${GITHUB_WORKSPACE}" && \
 	export ALLURE_OUTPUT_FOLDER="integration-allure" && \
- 	export DB_INIT_PATH="${GITHUB_WORKSPACE}/internal/sql/init/init.sql" && \
+ 	export DB_INIT_PATH="${GITHUB_WORKSPACE}/src/internal/sql/init/init.sql" && \
 	go test -v -tags=integration ./... --race
 
 local-integration:
