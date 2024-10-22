@@ -1,5 +1,7 @@
 {
-    "gopls.env": {
-        "GOFLAGS": "-tags=unit "
+    "gopls": {
+        "build.buildFlags": [
+            "-tags=unit integration",
+        ],
     }
 }

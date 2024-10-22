@@ -19,7 +19,7 @@ import (
 const (
 	pgImage    = "docker.io/postgres:16-alpine"
 	dbName     = "tests"
-	dbUserName = "postgres"
+	dbUsername = "postgres"
 	dbPassword = "admin"
 )
 
@@ -32,7 +32,7 @@ func NewTestStorage() (*postgres.Postgres, *container.PostgresContainer, map[str
 		pgImage,
 		container.WithInitScripts(os.Getenv("DB_INIT_PATH")),
 		container.WithDatabase(dbName),
-		container.WithUsername(dbUserName),
+		container.WithUsername(dbUsername),
 		container.WithPassword(dbPassword),
 		testcontainers.WithWaitStrategy(
 			wait.ForLog("database system is ready to accept connections").
@@ -58,6 +58,8 @@ func NewTestStorage() (*postgres.Postgres, *container.PostgresContainer, map[str
 	ids["userID"] = initUserRepository(mypostgres.NewUserRepository(conn))
 	ids["racketID"] = initRacketRepository(mypostgres.NewRacketRepository(conn))
 	ids["orderID"] = initOrderRepository(mypostgres.NewOrderRepository(conn))
+	ids["cartID"] = initCartRepository(mypostgres.NewCartRepository(conn))
+
 	return conn, ctr, ids
 }
 
@@ -125,7 +127,7 @@ func initRacketRepository(repo repository.IRacketRepository) int {
 
 func initOrderRepository(repo repository.IOrderRepository) int {
 
-	tm, _ := time.Parse(time.RFC3339, "2006-01-02")
+	tm, _ := time.Parse(time.RFC3339, "2006-01-02T15:07:00Z")
 	order := &model.Order{
 		UserID:        ids["userID"],
 		CreationDate:  tm,
@@ -147,4 +149,27 @@ func initOrderRepository(repo repository.IOrderRepository) int {
 	}
 
 	return order.ID
+}
+
+func initCartRepository(repo repository.ICartRepository) int {
+
+	cart := &model.Cart{
+		UserID:     ids["userID"],
+		TotalPrice: 100,
+		Quantity:   1,
+		Lines: []*model.CartLine{
+			{
+				RacketID: ids["racketID"],
+				Quantity: 1,
+			},
+		},
+	}
+
+	err := repo.Create(context.TODO(), cart)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return cart.UserID
 }

@@ -2,7 +2,12 @@ package utils
 
 import (
 	"context"
+	"os"
 	"time"
+
+	"github.com/testcontainers/testcontainers-go"
+	container "github.com/testcontainers/testcontainers-go/modules/postgres"
+	"github.com/testcontainers/testcontainers-go/wait"
 
 	"src/internal/model"
 	"src/internal/repository"
@@ -11,13 +16,40 @@ import (
 	"src/pkg/utils"
 )
 
-const connURL = "postgresql://postgres:admin@localhost:5432/tests"
+const (
+	pgImage    = "docker.io/postgres:16-alpine"
+	dbName     = "tests"
+	dbUsername = "postgres"
+	dbPassword = "admin"
+)
 
 var ids map[string]int
 
-func NewTestStorage() (*postgres.Postgres, map[string]int) {
+func NewTestStorage() (*postgres.Postgres, *container.PostgresContainer, map[string]int) {
 
-	conn, err := postgres.New(connURL)
+	ctr, err := container.Run(
+		context.TODO(),
+		pgImage,
+		container.WithInitScripts(os.Getenv("DB_INIT_PATH")),
+		container.WithDatabase(dbName),
+		container.WithUsername(dbUsername),
+		container.WithPassword(dbPassword),
+		testcontainers.WithWaitStrategy(
+			wait.ForLog("database system is ready to accept connections").
+				WithOccurrence(2).
+				WithStartupTimeout(5*time.Second)),
+	)
+
+	if err != nil {
+		panic(err)
+	}
+
+	connString, err := ctr.ConnectionString(context.TODO(), "sslmode=disable")
+	if err != nil {
+		panic(err)
+	}
+
+	conn, err := postgres.New(connString)
 	if err != nil {
 		panic(err)
 	}
@@ -26,11 +58,16 @@ func NewTestStorage() (*postgres.Postgres, map[string]int) {
 	ids["userID"] = initUserRepository(mypostgres.NewUserRepository(conn))
 	ids["racketID"] = initRacketRepository(mypostgres.NewRacketRepository(conn))
 	ids["orderID"] = initOrderRepository(mypostgres.NewOrderRepository(conn))
-	return conn, ids
+	ids["cartID"] = initCartRepository(mypostgres.NewCartRepository(conn))
+
+	return conn, ctr, ids
 }
 
-func DropTestStorage(testDB *postgres.Postgres) {
-	defer testDB.Close()
+func DropTestStorage(testDB *postgres.Postgres, ctr *container.PostgresContainer) {
+	defer func() {
+		testDB.Close()
+		ctr.Terminate(context.TODO())
+	}()
 
 	err := mypostgres.NewUserRepository(testDB).Delete(context.TODO(), ids["userID"])
 	if err != nil {
@@ -46,16 +83,21 @@ func DropTestStorage(testDB *postgres.Postgres) {
 	if err != nil {
 		panic(err)
 	}
+
+	err = mypostgres.NewCartRepository(testDB).Delete(context.TODO(), ids["racketID"])
+	if err != nil {
+		panic(err)
+	}
 }
 
 func initUserRepository(repo repository.IUserRepository) int {
 
 	user := &model.User{
-		Name:     "Ivan",
-		Surname:  "Ivanov",
-		Email:    "ivan@mail.ru",
+		Name:     "Peter",
+		Surname:  "Petrov",
+		Email:    "peter@mail.ru",
 		Role:     model.UserRoleCustomer,
-		Password: utils.HashAndSalt([]byte("ivan")),
+		Password: utils.HashAndSalt([]byte("peter")),
 	}
 
 	err := repo.Create(context.TODO(), user)
@@ -70,13 +112,13 @@ func initUserRepository(repo repository.IUserRepository) int {
 func initRacketRepository(repo repository.IRacketRepository) int {
 
 	racket := &model.Racket{
-		Brand:     "head",
-		Weight:    100,
-		Balance:   100,
-		HeadSize:  100,
+		Brand:     "babolat",
+		Weight:    300,
+		Balance:   300,
+		HeadSize:  300,
 		Avaliable: true,
-		Quantity:  100,
-		Price:     100,
+		Quantity:  300,
+		Price:     300,
 	}
 
 	err := repo.Create(context.TODO(), racket)
@@ -90,12 +132,12 @@ func initRacketRepository(repo repository.IRacketRepository) int {
 
 func initOrderRepository(repo repository.IOrderRepository) int {
 
-	tm, _ := time.Parse(time.RFC3339, "2006-01-02")
+	tm, _ := time.Parse(time.RFC3339, "2006-01-02T15:07:00Z")
 	order := &model.Order{
 		UserID:        ids["userID"],
 		CreationDate:  tm,
 		Address:       "Moscow",
-		RecepientName: "Stepan Postnov",
+		RecepientName: "Ivan Ivanov",
 		Status:        model.OrderStatusInProgress,
 		Lines: []*model.OrderLine{
 			{
@@ -112,4 +154,27 @@ func initOrderRepository(repo repository.IOrderRepository) int {
 	}
 
 	return order.ID
+}
+
+func initCartRepository(repo repository.ICartRepository) int {
+
+	cart := &model.Cart{
+		UserID:     ids["userID"],
+		TotalPrice: 300,
+		Quantity:   1,
+		Lines: []*model.CartLine{
+			{
+				RacketID: ids["racketID"],
+				Quantity: 1,
+			},
+		},
+	}
+
+	err := repo.Create(context.TODO(), cart)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return cart.UserID
 }

@@ -20,8 +20,8 @@ var accessTokenTTL time.Duration = time.Duration(12 * time.Hour.Hours())
 
 func TestRunner(t *testing.T) {
 
-	db, _ := utils.NewTestStorage()
-	defer utils.DropTestStorage(db)
+	db, ctr, ids := utils.NewTestStorage()
+	defer utils.DropTestStorage(db, ctr)
 
 	t.Parallel()
 
@@ -34,31 +34,17 @@ func TestRunner(t *testing.T) {
 				signingKey,
 				accessTokenTTL,
 			),
+			userID: ids["userID"],
 		},
-		&UserSuite{
-			userService: service.NewUserService(
-				utils.NewMockLogger(),
-				mypostgres.NewUserRepository(db),
-			),
-		},
-		&RacketSuite{
-			racketService: service.NewRacketService(
-				utils.NewMockLogger(),
-				mypostgres.NewRacketRepository(db),
-			),
-		},
-		// &FeedbackSuite{
-		// 	feedbackService: service.NewFeedbackService(
+		// &UserSuite{
+		// 	userService: service.NewUserService(
 		// 		utils.NewMockLogger(),
-		// 		mypostgres.NewFeedbackRepository(db),
+		// 		mypostgres.NewUserRepository(db),
 		// 	),
 		// },
-		// &CartServiceSuite{},
-		// &OrderServiceSuite{
-		// 	orderService: service.NewOrderService(
+		// &RacketSuite{
+		// 	racketService: service.NewRacketService(
 		// 		utils.NewMockLogger(),
-		// 		mypostgres.NewOrderRepository(db),
-		// 		mypostgres.NewCartRepository(db),
 		// 		mypostgres.NewRacketRepository(db),
 		// 	),
 		// },

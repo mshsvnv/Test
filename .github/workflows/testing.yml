@@ -16,6 +16,9 @@ jobs:
             - name: Run unit tests
               run: cd src && make ci-unit
 
+            - name: Run integration tests
+              run: cd src && make ci-integration
+
             - name: Processing report data
               run: cd src && make ci-concat-reports
               if: always()

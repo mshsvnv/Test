@@ -8,6 +8,7 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
+	"src/internal/model"
 	repo "src/internal/repository"
 	"src/internal/repository/utils"
 )
@@ -16,18 +17,22 @@ type UserRepoSuite struct {
 	suite.Suite
 
 	userRepo repo.IUserRepository
+	userID   int
 }
 
 func (u *UserRepoSuite) TestIntegrationUserRepoCreate(t provider.T) {
 	t.Title("[Create] Create user")
-	t.Tags("user", "repository", "postgres")
+	t.Tags("integration", "user", "repository", "postgres")
 	t.Parallel()
 	t.WithNewStep("Create user", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
 		request := utils.UserObjectMother{}.
-			WithName("Ivan").
-			WithSurname("Ivanov").
+			WithName("Dmitriy").
+			WithSurname("Dmitrov").
+			WithPassword("dmitry").
+			WithEmail("dmitry@mail.ru").
+			WithRole(model.UserRoleCustomer).
 			ToModel()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", request)
@@ -40,141 +45,98 @@ func (u *UserRepoSuite) TestIntegrationUserRepoCreate(t provider.T) {
 	})
 }
 
-// func (u *UserRepoSuite) TestIntegrationUserRepoUpdateRole(t provider.T) {
-// 	t.Title("[Update] Update user role")
-// 	t.Tags("user", "repository", "postgres")
-// 	t.Parallel()
-// 	t.WithNewStep("Update user role", func(sCtx provider.StepCtx) {
-// 		ctx := context.TODO()
-// 		request := utils.UserObjectMother{}.DefaultCustomer()
+func (u *UserRepoSuite) TestIntegrationUserRepoUpdateRole(t provider.T) {
+	t.Title("[Update] Update user role")
+	t.Tags("integration", "user", "repository", "postgres")
+	t.Parallel()
+	t.WithNewStep("Update user role", func(sCtx provider.StepCtx) {
+		ctx := context.TODO()
+		request, _ := u.userRepo.GetUserByID(ctx, u.userID)
 
-// 		u.userMockRepo.
-// 			On("UpdateRole", ctx, request).
-// 			Return(nil).
-// 			Once()
+		sCtx.WithNewParameters("ctx", ctx, "request", request)
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", request)
+		err := u.userRepo.UpdateRole(ctx, request)
 
-// 		err := u.userMockRepo.UpdateRole(ctx, request)
+		sCtx.Assert().NoError(err)
+	})
+}
 
-// 		sCtx.Assert().NoError(err)
-// 	})
-// }
+func (u *UserRepoSuite) TestIntegrationUserRepoGetAllUsers(t provider.T) {
+	t.Title("[GetAllUsers] Get all users")
+	t.Tags("integration", "user", "repository", "postgres")
+	t.Parallel()
+	t.WithNewStep("Get all users", func(sCtx provider.StepCtx) {
+		ctx := context.TODO()
+		user, _ := u.userRepo.GetUserByID(ctx, u.userID)
 
-// func (u *UserRepoSuite) TestIntegrationUserRepoGetAllUsers(t provider.T) {
-// 	t.Title("[GetAllUsers] Get all users")
-// 	t.Tags("user", "repository", "postgres")
-// 	t.Parallel()
-// 	t.WithNewStep("Get all users", func(sCtx provider.StepCtx) {
-// 		ctx := context.TODO()
+		sCtx.WithNewParameters("ctx", ctx)
 
-// 		expUsers := []*model.User{
-// 			{
-// 				ID:       1,
-// 				Name:     "Stepan",
-// 				Surname:  "Postnov",
-// 				Email:    "pstpn@gmail.com",
-// 				Password: "1",
-// 				Role:     model.UserRoleAdmin,
-// 			},
-// 		}
+		users, err := u.userRepo.GetAllUsers(ctx)
 
-// 		u.userMockRepo.
-// 			On("GetAllUsers", ctx).
-// 			Return(expUsers, nil).
-// 			Once()
+		sCtx.Assert().NotEmpty(users)
+		sCtx.Assert().NoError(err)
+		sCtx.Assert().Equal(users[0], user)
+	})
+}
 
-// 		sCtx.WithNewParameters("ctx", ctx)
+func (u *UserRepoSuite) TestIntegrationUserRepoGetUserByID(t provider.T) {
+	t.Title("[GetUserByID] Get user by id")
+	t.Tags("integration", "user", "repository", "postgres")
+	t.Parallel()
+	t.WithNewStep("Get user by id", func(sCtx provider.StepCtx) {
+		ctx := context.TODO()
 
-// 		users, err := u.userMockRepo.GetAllUsers(ctx)
+		sCtx.WithNewParameters("ctx", ctx, "request", u.userID)
 
-// 		sCtx.Assert().NotEmpty(users)
-// 		sCtx.Assert().NoError(err)
-// 		sCtx.Assert().Equal(users, expUsers)
-// 	})
-// }
+		user, err := u.userRepo.GetUserByID(ctx, u.userID)
 
-// func (u *UserRepoSuite) TestIntegrationUserRepoGetUserByID(t provider.T) {
-// 	t.Title("[GetUserByID] Get user by id")
-// 	t.Tags("user", "repository", "postgres")
-// 	t.Parallel()
-// 	t.WithNewStep("Get user by id", func(sCtx provider.StepCtx) {
-// 		ctx := context.TODO()
+		sCtx.Assert().NotEmpty(user)
+		sCtx.Assert().NoError(err)
+		sCtx.Assert().Equal(user.ID, u.userID)
+		sCtx.Assert().Equal(user.Name, "Ivan")
+		sCtx.Assert().Equal(user.Surname, "Ivanov")
+		sCtx.Assert().Equal(user.Email, "ivan@mail.ru")
+	})
+}
 
-// 		req := utils.UserObjectMother{}.CorrectID()
-// 		expUser := &model.User{
-// 			ID:       req,
-// 			Name:     "Stepan",
-// 			Surname:  "Postnov",
-// 			Email:    "pstpn@gmail.com",
-// 			Password: "1",
-// 			Role:     model.UserRoleAdmin,
-// 		}
+func (u *UserRepoSuite) TestIntegrationUserRepoGetUserByEmail(t provider.T) {
+	t.Title("[GetUserByEmail] Get user by email")
+	t.Tags("integration", "user", "repository", "postgres")
+	t.Parallel()
+	t.WithNewStep("Get user by email", func(sCtx provider.StepCtx) {
+		ctx := context.TODO()
 
-// 		u.userMockRepo.
-// 			On("GetUserByID", ctx, req).
-// 			Return(expUser, nil).
-// 			Once()
+		req := utils.UserObjectMother{}.CorrectEmail()
+		userTmp, _ := u.userRepo.GetUserByID(ctx, u.userID)
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-// 		user, err := u.userMockRepo.GetUserByID(ctx, req)
+		user, err := u.userRepo.GetUserByEmail(ctx, req)
 
-// 		sCtx.Assert().NotEmpty(user)
-// 		sCtx.Assert().NoError(err)
-// 		sCtx.Assert().Equal(user, expUser)
-// 	})
-// }
+		sCtx.Assert().NotEmpty(user)
+		sCtx.Assert().NoError(err)
+		sCtx.Assert().Equal(user, userTmp)
+	})
+}
 
-// func (u *UserRepoSuite) TestIntegrationUserRepoGetUserByEmail(t provider.T) {
-// 	t.Title("[GetUserByEmail] Get user by email")
-// 	t.Tags("user", "repository", "postgres")
-// 	t.Parallel()
-// 	t.WithNewStep("Get user by email", func(sCtx provider.StepCtx) {
-// 		ctx := context.TODO()
+func (u *UserRepoSuite) TestIntegrationUserRepoDelete(t provider.T) {
+	t.Title("[Delete] Delete user")
+	t.Tags("integration", "user", "repository", "postgres")
+	t.Parallel()
+	t.WithNewStep("Delete user", func(sCtx provider.StepCtx) {
+		ctx := context.TODO()
+		user := utils.UserObjectMother{}.
+			WithName("Misha").
+			WithSurname("Mihailov").
+			ToModel()
 
-// 		req := utils.UserObjectMother{}.CorrectEmail()
-// 		expUser := &model.User{
-// 			ID:       1,
-// 			Name:     "Stepan",
-// 			Surname:  "Postnov",
-// 			Email:    req,
-// 			Password: "1",
-// 			Role:     model.UserRoleAdmin,
-// 		}
+		u.userRepo.Create(ctx, user)
+		req := user.ID
 
-// 		u.userMockRepo.
-// 			On("GetUserByEmail", ctx, req).
-// 			Return(expUser, nil).
-// 			Once()
+		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
+		err := u.userRepo.Delete(ctx, req)
 
-// 		user, err := u.userMockRepo.GetUserByEmail(ctx, req)
-
-// 		sCtx.Assert().NotEmpty(user)
-// 		sCtx.Assert().NoError(err)
-// 		sCtx.Assert().Equal(user, expUser)
-// 	})
-// }
-
-// func (u *UserRepoSuite) TestIntegrationUserRepoDelete(t provider.T) {
-// 	t.Title("[Delete] Delete user")
-// 	t.Tags("user", "repository", "postgres")
-// 	t.Parallel()
-// 	t.WithNewStep("Delete user", func(sCtx provider.StepCtx) {
-// 		ctx := context.TODO()
-
-// 		req := utils.UserObjectMother{}.CorrectID()
-// 		u.userMockRepo.
-// 			On("Delete", ctx, req).
-// 			Return(nil).
-// 			Once()
-
-// 		sCtx.WithNewParameters("ctx", ctx, "request", req)
-
-// 		err := u.userMockRepo.Delete(ctx, req)
-
-// 		sCtx.Assert().NoError(err)
-// 	})
-// }
+		sCtx.Assert().NoError(err)
+	})
+}

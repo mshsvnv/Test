@@ -3,17 +3,18 @@
 package mypostgres_test
 
 import (
-	mypostgres "src/internal/repository/postgres"
-	"src/internal/repository/postgres/utils"
 	"sync"
 	"testing"
 
 	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
+
+	mypostgres "src/internal/repository/postgres"
+	"src/internal/repository/postgres/utils"
 )
 
 func TestRunner(t *testing.T) {
-	db, ctr, _ := utils.NewTestStorage()
+	db, ctr, ids := utils.NewTestStorage()
 	defer utils.DropTestStorage(db, ctr)
 
 	t.Parallel()
@@ -22,8 +23,12 @@ func TestRunner(t *testing.T) {
 	suites := []runner.TestSuite{
 		&UserRepoSuite{
 			userRepo: mypostgres.NewUserRepository(db),
+			userID:   ids["userID"],
 		},
-		// &RacketRepoSuite{},
+		&RacketRepoSuite{
+			racketRepo: mypostgres.NewRacketRepository(db),
+			racketID:   ids["racketID"],
+		},
 		// &FeedbackRepoSuite{},
 		// &CartRepoSuite{},
 		// &OrderRepoSuite{},

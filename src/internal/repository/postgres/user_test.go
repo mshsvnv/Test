@@ -31,7 +31,7 @@ func (u *UserRepoSuite) TestUserRepoCreate(t provider.T) {
 	t.Parallel()
 	t.WithNewStep("Create user", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
-		request := utils.UserObjectMother{}.DefaultCustomer()
+		request := utils.UserObjectMother{}.DefaultCustomer(1)
 
 		u.userMockRepo.
 			On("Create", ctx, request).
@@ -52,7 +52,7 @@ func (u *UserRepoSuite) TestUserRepoUpdateRole(t provider.T) {
 	t.Parallel()
 	t.WithNewStep("Update user role", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
-		request := utils.UserObjectMother{}.DefaultCustomer()
+		request := utils.UserObjectMother{}.DefaultCustomer(1)
 
 		u.userMockRepo.
 			On("UpdateRole", ctx, request).

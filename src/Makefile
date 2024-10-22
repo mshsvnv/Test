@@ -28,12 +28,25 @@ ci-unit:
 	go clean -testcache
 	export ALLURE_OUTPUT_PATH="${GITHUB_WORKSPACE}" && \
 	export ALLURE_OUTPUT_FOLDER="unit-allure" && \
-	go test -tags=unit ./... --race
+	go test -v -tags=unit ./... --race
 
 local-unit:
 	go clean -testcache
 	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && \
-	go test -tags=unit ./... --race
+	go test -v -tags=unit ./... --race
+
+ci-integration:
+	go clean -testcache
+	export ALLURE_OUTPUT_PATH="${GITHUB_WORKSPACE}" && \
+	export ALLURE_OUTPUT_FOLDER="integration-allure" && \
+ 	export DB_INIT_PATH="${GITHUB_WORKSPACE}/src/init/init.sql" && \
+	go test -v -tags=integration ./... --race
+
+local-integration:
+	go clean -testcache
+	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && \
+ 	export DB_INIT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test/src/sql/init/init.sql" && \
+	go test -v -tags=integration ./... --race
 
 ci-concat-reports:
 	mkdir ../allure-results
@@ -41,15 +54,5 @@ ci-concat-reports:
 	# cp integration-allure/* ../allure-results/
 	# cp e2e-allure/* allure-results/
 	cp environment.properties allure-results
-
-# ci-integration:
-# 	echo ci-integration
-# 	# че-то
-# 	go test -tags=integration ./... --race
-
-# local-integration:
-# 	echo local-integration
-# 	# че-то
-# 	go test -tags=integration ./... --race
 
 .PHONY: create_db delete_db test allure report

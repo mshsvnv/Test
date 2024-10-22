@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "user" (
     surname TEXT,
     email TEXT unique,
     password TEXT,
-    role TEXT,
+    role TEXT
 );
 
 CREATE TABLE IF NOT EXISTS racket (

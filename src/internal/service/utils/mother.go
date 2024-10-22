@@ -12,29 +12,28 @@ type AuthObjectMother struct {
 
 func (o AuthObjectMother) DefaultUserReq() *dto.RegisterReq {
 	return &dto.RegisterReq{
-		Name:     "Ivan",
-		Surname:  "Ivanov",
-		Email:    "ivan@mail.ru",
-		Password: "ivan",
+		Name:    "Peter",
+		Surname: "Petrov",
+		Email:   "peter@mail.ru",
 	}
 }
 
 func (o AuthObjectMother) DefaultUserModel() *model.User {
 	return &model.User{
-		Name:     "Ivan",
-		Surname:  "Ivanov",
-		Email:    "ivan@mail.ru",
-		Password: utils.HashAndSalt([]byte("ivan")),
+		Name:     "Peter",
+		Surname:  "Petrov",
+		Email:    "peter@mail.ru",
+		Password: utils.HashAndSalt([]byte("peter")),
 		Role:     model.UserRoleCustomer,
 	}
 }
 
 func (o AuthObjectMother) RegisterNewUserReq() *dto.RegisterReq {
 	return &dto.RegisterReq{
-		Name:     "Peter",
-		Surname:  "Petrov",
-		Email:    "peter@mail.ru",
-		Password: "peter",
+		Name:     "Vasya",
+		Surname:  "Vasiliev",
+		Email:    "vasya@mail.ru",
+		Password: "vasya",
 	}
 }
 
@@ -50,22 +49,22 @@ func (o AuthObjectMother) RegisterNewUserModel(req *dto.RegisterReq) *model.User
 
 func (o AuthObjectMother) UnRegisterUserReq() *dto.LoginReq {
 	return &dto.LoginReq{
-		Email:    "vasya@mail.ru",
-		Password: "vasya",
+		Email:    "misha@mail.ru",
+		Password: "misha",
 	}
 }
 
 func (o AuthObjectMother) IncorrectPasswordReq() *dto.LoginReq {
 	return &dto.LoginReq{
-		Email:    "ivan@mail.ru",
-		Password: "peter",
+		Email:    "peter@mail.ru",
+		Password: "peterrr",
 	}
 }
 
 func (o AuthObjectMother) CorrectPasswordReq() *dto.LoginReq {
 	return &dto.LoginReq{
-		Email:    "ivan@mail.ru",
-		Password: "ivan",
+		Email:    "peter@mail.ru",
+		Password: "peter",
 	}
 }
 
@@ -83,9 +82,9 @@ func (o UserObjectMother) CorrectID() int {
 func (o UserObjectMother) DefaultCustomer() *model.User {
 	return &model.User{
 		ID:      ids["userID"],
-		Name:    "Ivan",
-		Surname: "Ivanov",
-		Email:   "ivan@mail.ru",
+		Name:    "Pete",
+		Surname: "Petrov",
+		Email:   "peter@mail.ru",
 		Role:    model.UserRoleCustomer,
 	}
 }
@@ -93,9 +92,9 @@ func (o UserObjectMother) DefaultCustomer() *model.User {
 func (o UserObjectMother) DefaultAdmin() *model.User {
 	return &model.User{
 		ID:      ids["userID"],
-		Name:    "Ivan",
-		Surname: "Ivanov",
-		Email:   "ivan@mail.ru",
+		Name:    "Pete",
+		Surname: "Petrov",
+		Email:   "peter@mail.ru",
 		Role:    model.UserRoleAdmin,
 	}
 }
@@ -163,7 +162,7 @@ func (r RacketObjectMother) UpdateIncorrectID() *dto.UpdateRacketReq {
 func (r RacketObjectMother) UpdateCorrectID() *dto.UpdateRacketReq {
 	return &dto.UpdateRacketReq{
 		ID:       ids["racketID"],
-		Quantity: 100,
+		Quantity: 1000,
 	}
 }
 

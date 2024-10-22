@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "user" (
     surname TEXT,
     email TEXT unique,
     password TEXT,
-    role TEXT
+    role TEXT,
 );
 
 CREATE TABLE IF NOT EXISTS racket (
@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS racket (
     head_size FLOAT,
     avaliable BOOLEAN,
     price FLOAT,
-    quantity INT
+    quantity INT,
+    image BYTEA
 );
 
 CREATE TABLE IF NOT EXISTS cart (

@@ -49,9 +49,11 @@ func (a AuthObjectMother) CorrectPasswordReq() *dto.LoginReq {
 }
 
 type UserObjectMother struct {
+	ID       int
 	Name     string
 	Surname  string
 	Password string
+	Email    string
 	Role     model.UserRole
 }
 
@@ -75,6 +77,11 @@ func (u UserObjectMother) WithRole(role model.UserRole) UserObjectMother {
 	return u
 }
 
+func (u UserObjectMother) WithEmail(email string) UserObjectMother {
+	u.Email = email
+	return u
+}
+
 func (u UserObjectMother) IncorrectID() int {
 	return 0
 }
@@ -84,11 +91,12 @@ func (u UserObjectMother) CorrectID() int {
 }
 
 func (u UserObjectMother) CorrectEmail() string {
-	return "pstpn@mail.ru"
+	return "ivan@mail.ru"
 }
 
-func (u UserObjectMother) DefaultCustomer() *model.User {
+func (u UserObjectMother) DefaultCustomer(id int) *model.User {
 	return &model.User{
+		ID:      id,
 		Name:    "Ivan",
 		Surname: "Ivanov",
 		Email:   "ivan@mail.ru",
@@ -96,9 +104,9 @@ func (u UserObjectMother) DefaultCustomer() *model.User {
 	}
 }
 
-func (u UserObjectMother) DefaultAdmin() *model.User {
+func (u UserObjectMother) DefaultAdmin(id int) *model.User {
 	return &model.User{
-		ID:      1, //ids["userID"],
+		ID:      id,
 		Name:    "Ivan",
 		Surname: "Ivanov",
 		Email:   "ivan@mail.ru",
