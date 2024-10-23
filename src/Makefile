@@ -74,5 +74,3 @@ ci-concat-reports:
 	cp ../integration-allure/* ../allure-results
 	cp ../e2e-allure/* ../allure-results
 	cp ../environment.properties ../allure-results
-
-.PHONY: create_db delete_db test allure report
