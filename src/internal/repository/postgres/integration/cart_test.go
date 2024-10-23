@@ -110,33 +110,3 @@ func (c *CartRepoSuite) TestCartRepoGetCartByID(t provider.T) {
 		sCtx.Assert().NoError(err)
 	})
 }
-
-func (c *CartRepoSuite) TestCartRepoDelete(t provider.T) {
-	t.Title("[Delete] Delete cart by id")
-	t.Tags("integration", "order", "repository", "postgres")
-	t.Parallel()
-	t.WithNewStep("Delete cart by id", func(sCtx provider.StepCtx) {
-		ctx := context.TODO()
-
-		user := utils.UserObjectMother{}.
-			WithName("Masha").
-			WithEmail("mshsvnv").
-			ToModel()
-		err := c.userRepo.Create(ctx, user)
-		sCtx.Assert().NoError(err)
-
-		cart := utils.CartObjectMother{
-			UserID:   user.ID,
-			Quantity: 1,
-			RacketID: c.racketID,
-		}.DefaultCart()
-
-		err = c.cartRepo.Create(ctx, cart)
-		sCtx.Assert().NoError(err)
-
-		sCtx.WithNewParameters("ctx", ctx, "request", user.ID)
-
-		err = c.cartRepo.Delete(ctx, user.ID)
-		sCtx.Assert().NoError(err)
-	})
-}

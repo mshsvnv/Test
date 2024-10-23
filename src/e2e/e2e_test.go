@@ -98,7 +98,6 @@ func (s *E2ESuite) TestE2E(t provider.T) {
 		sCtx.Assert().NotEmpty(cart)
 		sCtx.Assert().Equal(cart.Cart.Quantity, 1)
 		sCtx.Assert().Equal(cart.Cart.TotalPrice, float32(300))
-
 	})
 }
 

@@ -8,6 +8,7 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
+	repo "src/internal/repository"
 	"src/internal/service"
 	"src/internal/service/utils"
 )
@@ -16,6 +17,7 @@ type AuthSuite struct {
 	suite.Suite
 
 	authService service.IAuthService
+	userRepo    repo.IUserRepository
 	userID      int
 }
 
@@ -33,6 +35,10 @@ func (s *AuthSuite) TestAuthServiceRegister1(t provider.T) {
 		token, err := s.authService.Register(ctx, req)
 
 		sCtx.Assert().NotEmpty(token)
+		sCtx.Assert().Nil(err)
+
+		user, _ := s.userRepo.GetUserByEmail(ctx, req.Email)
+		err = s.userRepo.Delete(ctx, user.ID)
 		sCtx.Assert().Nil(err)
 	})
 }

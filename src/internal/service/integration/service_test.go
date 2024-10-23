@@ -34,7 +34,8 @@ func TestRunner(t *testing.T) {
 				signingKey,
 				accessTokenTTL,
 			),
-			userID: ids["userID"],
+			userRepo: mypostgres.NewUserRepository(db),
+			userID:   ids["userID"],
 		},
 		&UserSuite{
 			userService: service.NewUserService(
