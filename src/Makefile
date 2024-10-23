@@ -25,7 +25,6 @@ allure:
 report: test allure
 
 ci-unit:
-	go clean -testcache
 	export ALLURE_OUTPUT_PATH="${GITHUB_WORKSPACE}" && \
 	export ALLURE_OUTPUT_FOLDER="unit-allure" && \
 	go test -v -tags=unit ./... --race
@@ -36,7 +35,7 @@ local-unit:
 	go test -v -tags=unit ./... --race
 
 ci-integration:
-	go clean -testcache
+	docker compose up -d
 	export ALLURE_OUTPUT_PATH="${GITHUB_WORKSPACE}" && \
 	export ALLURE_OUTPUT_FOLDER="integration-allure" && \
  	export DB_INIT_PATH="${GITHUB_WORKSPACE}/src/sql/init/init.sql" && \
@@ -44,9 +43,11 @@ ci-integration:
 
 local-integration:
 	go clean -testcache
+	docker compose up -d
 	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && \
  	export DB_INIT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test/src/sql/init/init.sql" && \
 	go test -v -tags=integration ./... --race
+	docker compose down
 
 ci-e2e:
 	docker compose up -d
@@ -54,9 +55,10 @@ ci-e2e:
 	export ALLURE_OUTPUT_FOLDER="e2e-allure" && \
 	go test -v -tags=e2e ./... --race
 	docker compose down
-	docker image rm testing-backend:latest bitnami/postgresql:16 alpine:latest
+	docker image rm backend:latest bitnami/postgresql:16 alpine:latest
 
 local-e2e:
+	go clean -testcache
 	docker compose up -d
 	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && \
 	go test -v -tags=e2e ./... --race
@@ -64,7 +66,6 @@ local-e2e:
 
 rm-docker:
 	docker compose down
-	# docker image rm testing-backend:latest
 
 ci-concat-reports:
 	mkdir ../allure-results

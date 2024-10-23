@@ -148,6 +148,7 @@ func (u UserObjectMother) ToModel() *model.User {
 		Name:     u.Name,
 		Surname:  u.Surname,
 		Password: u.Password,
+		Email:    u.Email,
 		Role:     u.Role,
 	}
 }

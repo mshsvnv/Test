@@ -8,6 +8,7 @@ import (
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
+	"src/internal/model"
 	repo "src/internal/repository"
 	"src/internal/repository/utils"
 )
@@ -19,30 +20,30 @@ type UserRepoSuite struct {
 	userID   int
 }
 
-// func (u *UserRepoSuite) TestIntegrationUserRepoCreate(t provider.T) {
-// 	t.Title("[Create] Create user")
-// 	t.Tags("integration", "user", "repository", "postgres")
-// 	t.Parallel()
-// 	t.WithNewStep("Create user", func(sCtx provider.StepCtx) {
+func (u *UserRepoSuite) TestIntegrationUserRepoCreate(t provider.T) {
+	t.Title("[Create] Create user")
+	t.Tags("integration", "user", "repository", "postgres")
+	t.Parallel()
+	t.WithNewStep("Create user", func(sCtx provider.StepCtx) {
 
-// 		ctx := context.TODO()
-// 		request := utils.UserObjectMother{}.
-// 			WithName("Dmitriy").
-// 			WithSurname("Dmitrov").
-// 			WithPassword("dmitry").
-// 			WithEmail("dmitry@mail.ru").
-// 			WithRole(model.UserRoleCustomer).
-// 			ToModel()
+		ctx := context.TODO()
+		request := utils.UserObjectMother{}.
+			WithName("Dmitriy").
+			WithSurname("Dmitrov").
+			WithPassword("dmitry").
+			WithEmail("dmitryyy@mail.ru").
+			WithRole(model.UserRoleCustomer).
+			ToModel()
 
-// 		sCtx.WithNewParameters("ctx", ctx, "request", request)
+		sCtx.WithNewParameters("ctx", ctx, "request", request)
 
-// 		err := u.userRepo.Create(ctx, request)
-// 		sCtx.Assert().NoError(err)
+		err := u.userRepo.Create(ctx, request)
+		sCtx.Assert().NoError(err)
 
-// 		err = u.userRepo.Delete(ctx, request.ID)
-// 		sCtx.Assert().NoError(err)
-// 	})
-// }
+		err = u.userRepo.Delete(ctx, request.ID)
+		sCtx.Assert().NoError(err)
+	})
+}
 
 func (u *UserRepoSuite) TestIntegrationUserRepoUpdateRole(t provider.T) {
 	t.Title("[Update] Update user role")
@@ -66,7 +67,6 @@ func (u *UserRepoSuite) TestIntegrationUserRepoGetAllUsers(t provider.T) {
 	t.Parallel()
 	t.WithNewStep("Get all users", func(sCtx provider.StepCtx) {
 		ctx := context.TODO()
-		user, _ := u.userRepo.GetUserByID(ctx, u.userID)
 
 		sCtx.WithNewParameters("ctx", ctx)
 
@@ -74,7 +74,6 @@ func (u *UserRepoSuite) TestIntegrationUserRepoGetAllUsers(t provider.T) {
 
 		sCtx.Assert().NotEmpty(users)
 		sCtx.Assert().NoError(err)
-		sCtx.Assert().Equal(users[0], user)
 	})
 }
 

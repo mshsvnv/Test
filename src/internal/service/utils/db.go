@@ -2,12 +2,7 @@ package utils
 
 import (
 	"context"
-	"os"
 	"time"
-
-	"github.com/testcontainers/testcontainers-go"
-	container "github.com/testcontainers/testcontainers-go/modules/postgres"
-	"github.com/testcontainers/testcontainers-go/wait"
 
 	"src/internal/model"
 	"src/internal/repository"
@@ -16,39 +11,11 @@ import (
 	"src/pkg/utils"
 )
 
-const (
-	pgImage    = "docker.io/postgres:16-alpine"
-	dbName     = "tests"
-	dbUsername = "postgres"
-	dbPassword = "admin"
-)
+const connString = "postgresql://postgres:admin@localhost:5434/tests"
 
 var ids map[string]int
 
-func NewTestStorage() (*postgres.Postgres, *container.PostgresContainer, map[string]int) {
-
-	ctr, err := container.Run(
-		context.TODO(),
-		pgImage,
-		container.WithInitScripts(os.Getenv("DB_INIT_PATH")),
-		container.WithDatabase(dbName),
-		container.WithUsername(dbUsername),
-		container.WithPassword(dbPassword),
-		testcontainers.WithWaitStrategy(
-			wait.ForLog("database system is ready to accept connections").
-				WithOccurrence(2).
-				WithStartupTimeout(5*time.Second)),
-	)
-
-	if err != nil {
-		panic(err)
-	}
-
-	connString, err := ctr.ConnectionString(context.TODO(), "sslmode=disable")
-	if err != nil {
-		panic(err)
-	}
-
+func NewTestStorage() (*postgres.Postgres, map[string]int) {
 	conn, err := postgres.New(connString)
 	if err != nil {
 		panic(err)
@@ -60,68 +27,12 @@ func NewTestStorage() (*postgres.Postgres, *container.PostgresContainer, map[str
 	ids["orderID"] = initOrderRepository(mypostgres.NewOrderRepository(conn))
 	ids["cartID"] = initCartRepository(mypostgres.NewCartRepository(conn))
 
-	return conn, ctr, ids
+	return conn, ids
 }
 
-// func NewTestStorage() (*postgres.Postgres, *container.PostgresContainer, map[string]int, error) {
-//     ctx := context.TODO()
-//     dockerEnv := os.Getenv("DOCKER_ENV") // Assuming this environment variable is set for Docker environment
-
-//     req := testcontainers.ContainerRequest{
-//         Image:        pgImage,
-//         InitScripts:  []string{os.Getenv("DB_INIT_PATH")},
-//         Database:     dbName,
-//         Username:     dbUsername,
-//         Password:     dbPassword,
-//         Env:          map[string]string{"POSTGRES_DB": dbName, "POSTGRES_USER": dbUsername, "POSTGRES_PASSWORD": dbPassword},
-//         WaitingFor:   wait.ForLog("database system is ready to accept connections").WithOccurrence(2).WithStartupTimeout(5*time.Second),
-//     }
-
-//     ctr, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
-//         ContainerRequest: req,
-//         Started:          true,
-//     })
-
-//     if err != nil {
-//         return nil, nil, nil, err
-//     }
-
-//     defer func() {
-//         if ctr != nil {
-//             _ = ctr.Terminate(ctx)
-//         }
-//     }()
-
-//     host, err := ctr.Host(ctx)
-//     if err != nil {
-//         return nil, nil, nil, err
-//     }
-
-//     port, err := ctr.MappedPort(ctx, "5432")
-//     if err != nil {
-//         return nil, nil, nil, err
-//     }
-
-//     connString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", dbUsername, dbPassword, host, port.Port(), dbName)
-
-//     conn, err := postgres.New(connString)
-//     if err != nil {
-//         return nil, nil, nil, err
-//     }
-
-//     ids := map[string]int{}
-//     ids["userID"] = initUserRepository(mypostgres.NewUserRepository(conn))
-//     ids["racketID"] = initRacketRepository(mypostgres.NewRacketRepository(conn))
-//     ids["orderID"] = initOrderRepository(mypostgres.NewOrderRepository(conn))
-//     ids["cartID"] = initCartRepository(mypostgres.NewCartRepository(conn))
-
-//     return conn, ctr, ids, nil
-// }
-
-func DropTestStorage(testDB *postgres.Postgres, ctr *container.PostgresContainer) {
+func DropTestStorage(testDB *postgres.Postgres) {
 	defer func() {
 		testDB.Close()
-		ctr.Terminate(context.TODO())
 	}()
 
 	err := mypostgres.NewUserRepository(testDB).Delete(context.TODO(), ids["userID"])

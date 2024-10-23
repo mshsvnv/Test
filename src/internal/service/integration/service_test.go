@@ -20,8 +20,8 @@ var accessTokenTTL time.Duration = time.Duration(12 * time.Hour.Hours())
 
 func TestRunner(t *testing.T) {
 
-	db, ctr, ids := utils.NewTestStorage()
-	defer utils.DropTestStorage(db, ctr)
+	db, ids := utils.NewTestStorage()
+	defer utils.DropTestStorage(db)
 
 	t.Parallel()
 
