@@ -50,7 +50,7 @@ local-integration:
 	docker compose down
 
 ci-e2e:
-	docker compose up -d
+	# docker compose up -d
 	export ALLURE_OUTPUT_PATH="${GITHUB_WORKSPACE}" && \
 	export ALLURE_OUTPUT_FOLDER="e2e-allure" && \
 	go test -v -tags=e2e ./... --race
@@ -68,10 +68,10 @@ rm-docker:
 	docker compose down
 
 ci-concat-reports:
-	mkdir ../allure-results
+	mkdir -p ../allure-results
 	cp unit-allure/* ../allure-results/
-	# cp integration-allure/* ../allure-results/
-	# cp e2e-allure/* allure-results/
+	cp integration-allure/* ../allure-results/
+	cp e2e-allure/* allure-results/
 	cp environment.properties allure-results
 
 .PHONY: create_db delete_db test allure report
