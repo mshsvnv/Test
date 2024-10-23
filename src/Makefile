@@ -48,6 +48,24 @@ local-integration:
  	export DB_INIT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test/src/sql/init/init.sql" && \
 	go test -v -tags=integration ./... --race
 
+ci-e2e:
+	docker compose up -d
+	export ALLURE_OUTPUT_PATH="${GITHUB_WORKSPACE}" && \
+	export ALLURE_OUTPUT_FOLDER="e2e-allure" && \
+	go test -v -tags=e2e ./... --race
+	docker compose down
+	docker image rm testing-backend:latest bitnami/postgresql:16 alpine:latest
+
+local-e2e:
+	docker compose up -d
+	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && \
+	go test -v -tags=e2e ./... --race
+	docker compose down
+
+rm-docker:
+	docker compose down
+	# docker image rm testing-backend:latest
+
 ci-concat-reports:
 	mkdir ../allure-results
 	cp unit-allure/* ../allure-results/

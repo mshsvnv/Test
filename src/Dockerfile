@@ -1,6 +1,4 @@
-FROM golang:latest
-
-WORKDIR /app
+FROM go_env:latest
 
 COPY . .
 
