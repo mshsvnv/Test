@@ -1,6 +1,8 @@
 package config
 
 import (
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/spf13/viper"
@@ -44,6 +46,7 @@ type PostgresConfig struct {
 func NewConfig() (*Config, error) {
 	var err error
 	var config Config
+	backendType := os.Getenv("BACKEND_TYPE")
 
 	viper.SetConfigFile(configPath)
 
@@ -54,6 +57,25 @@ func NewConfig() (*Config, error) {
 	err = viper.Unmarshal(&config)
 	if err != nil {
 		return nil, err
+	}
+
+	if backendType == "docker" {
+		backendPort, err := strconv.Atoi(os.Getenv("BACKEND_PORT"))
+		if err != nil {
+			return nil, err
+		}
+		postgresPort, err := strconv.Atoi(os.Getenv("POSTGRESQL_PORT"))
+		if err != nil {
+			return nil, err
+		}
+
+		config.HTTP = HTTPConfig{Port: backendPort}
+
+		config.Database.Postgres.Host = os.Getenv("POSTGRESQL_HOST")
+		config.Database.Postgres.Port = postgresPort
+		config.Database.Postgres.User = os.Getenv("POSTGRESQL_USERNAME")
+		config.Database.Postgres.Password = os.Getenv("POSTGRESQL_PASSWORD")
+		config.Database.Postgres.Database = os.Getenv("POSTGRESQL_DATABASE")
 	}
 
 	return &config, nil

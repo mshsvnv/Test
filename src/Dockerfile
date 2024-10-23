@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM go_env:latest
 
 COPY . .
 

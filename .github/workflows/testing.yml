@@ -28,6 +28,11 @@ jobs:
               run: cd src && make ci-concat-reports
               if: always()
               continue-on-error: true
+            
+            - name: Docker down
+              run: cd src && make rm-docker -i
+              if: always()
+              continue-on-error: true
       
             - name: Load test report history
               uses: actions/checkout@v3
