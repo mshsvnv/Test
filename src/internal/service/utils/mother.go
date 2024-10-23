@@ -178,7 +178,7 @@ func (r RacketObjectMother) IncorrectFieldToSort() *dto.ListRacketsReq {
 	return &dto.ListRacketsReq{
 		Pagination: &postgres.Pagination{
 			Filter: postgres.FilterOptions{
-				Column: "pricee",
+				Column: "lol",
 			},
 			Sort: postgres.SortOptions{
 				Direction: postgres.ASC,
