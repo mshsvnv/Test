@@ -55,7 +55,7 @@ ci-e2e:
 	export ALLURE_OUTPUT_FOLDER="e2e-allure" && \
 	go test -v -tags=e2e ./... --race
 	docker compose down
-	docker image rm backend:latest bitnami/postgresql:16 alpine:latest
+	# docker image rm backend:latest bitnami/postgresql:16 alpine:latest
 
 local-e2e:
 	go clean -testcache
