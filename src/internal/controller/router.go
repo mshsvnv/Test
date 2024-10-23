@@ -27,6 +27,7 @@ func NewRouter(handler *gin.Engine) *Controller {
 	v2 := handler.Group("/api/v2")
 	{
 		v2.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.NewHandler(), ginSwagger.InstanceName("v2")))
+		v2.GET("/healthcheck", healthCheck)
 	}
 
 	return &Controller{
