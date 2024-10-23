@@ -1,4 +1,5 @@
 //go:build integration
+
 package service_test
 
 import (
@@ -21,7 +22,7 @@ type RacketSuite struct {
 // CreateRacket
 func (s *RacketSuite) TestRacketServiceCreateRacket1(t provider.T) {
 	t.Title("[Integration CreateRacket] wrong amount")
-	t.Tags("integration",  "racket", "service", "create_racket")
+	t.Tags("integration", "racket", "service", "create_racket")
 	t.Parallel()
 	t.WithNewStep("Incorrect: wrong amount", func(sCtx provider.StepCtx) {
 
@@ -39,7 +40,7 @@ func (s *RacketSuite) TestRacketServiceCreateRacket1(t provider.T) {
 
 func (s *RacketSuite) TestRacketServiceCreateRacket2(t provider.T) {
 	t.Title("[Integration CreateRacket] correct request")
-	t.Tags("integration",  "racket", "service", "create_racket")
+	t.Tags("integration", "racket", "service", "create_racket")
 	t.Parallel()
 	t.WithNewStep("Success: correct request", func(sCtx provider.StepCtx) {
 
@@ -58,7 +59,7 @@ func (s *RacketSuite) TestRacketServiceCreateRacket2(t provider.T) {
 // UpdateRacket
 func (s *RacketSuite) TestRacketServiceUpdateRacket1(t provider.T) {
 	t.Title("[Integration UpdateRacket] wrong ID")
-	t.Tags("integration",  "racket", "service", "update_racket")
+	t.Tags("integration", "racket", "service", "update_racket")
 	t.Parallel()
 	t.WithNewStep("Incorrect: wrong ID", func(sCtx provider.StepCtx) {
 
@@ -75,7 +76,7 @@ func (s *RacketSuite) TestRacketServiceUpdateRacket1(t provider.T) {
 
 func (s *RacketSuite) TestRacketServiceUpdateRacket2(t provider.T) {
 	t.Title("[Integration UpdateRacket] correct request")
-	t.Tags("integration",  "racket", "service", "update_racket")
+	t.Tags("integration", "racket", "service", "update_racket")
 	t.Parallel()
 	t.WithNewStep("Success: correct request", func(sCtx provider.StepCtx) {
 
@@ -93,7 +94,7 @@ func (s *RacketSuite) TestRacketServiceUpdateRacket2(t provider.T) {
 // GetRacketByID
 func (s *RacketSuite) TestRacketServiceGetRacketByID1(t provider.T) {
 	t.Title("[Integration GetRacketByID] wrong id")
-	t.Tags("integration",  "racket", "service", "get_racket_by_id")
+	t.Tags("integration", "racket", "service", "get_racket_by_id")
 	t.Parallel()
 	t.WithNewStep("Incorrect: wrong id", func(sCtx provider.StepCtx) {
 
@@ -112,7 +113,7 @@ func (s *RacketSuite) TestRacketServiceGetRacketByID1(t provider.T) {
 
 func (s *RacketSuite) TestRacketServiceGetRacketByID2(t provider.T) {
 	t.Title("[Integration GetRacketByID] correct id")
-	t.Tags("integration",  "racket", "service", "get_racket_by_id")
+	t.Tags("integration", "racket", "service", "get_racket_by_id")
 	t.Parallel()
 	t.WithNewStep("Success: correct id", func(sCtx provider.StepCtx) {
 
@@ -130,19 +131,19 @@ func (s *RacketSuite) TestRacketServiceGetRacketByID2(t provider.T) {
 
 // GetAllRackets
 func (s *RacketSuite) TestRacketServiceGetAllRackets1(t provider.T) {
-	t.Title("[Integration GetAllRackets] no rackets")
-	t.Tags("integration",  "racket", "service", "get_all_rackets")
+	t.Title("[Integration GetAllRackets] Correct")
+	t.Tags("integration", "racket", "service", "get_all_rackets")
 	t.Parallel()
-	t.WithNewStep("Incorrect: no rackets", func(sCtx provider.StepCtx) {
+	t.WithNewStep("Correct", func(sCtx provider.StepCtx) {
 
 		ctx := context.TODO()
-		req := utils.RacketObjectMother{}.IncorrectFieldToSort()
+		req := utils.RacketObjectMother{}.CorrectFieldToSort()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
 		rackets, err := s.racketService.GetAllRackets(ctx, req)
 
-		sCtx.Assert().Nil(rackets)
-		sCtx.Assert().Error(err)
+		sCtx.Assert().NotEmpty(rackets)
+		sCtx.Assert().Nil(err)
 	})
 }

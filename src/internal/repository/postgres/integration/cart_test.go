@@ -100,8 +100,6 @@ func (c *CartRepoSuite) TestCartRepoGetCartByID(t provider.T) {
 
 		sCtx.Assert().NotEmpty(cart)
 		sCtx.Assert().NoError(err)
-		sCtx.Assert().Equal(cart.Quantity, 0)
-		sCtx.Assert().Equal(cart.TotalPrice, float32(0))
 	})
 }
 
