@@ -52,12 +52,3 @@ CREATE TABLE IF NOT EXISTS cart_racket (
     PRIMARY KEY (cart_id, racket_id),
     quantity INT
 );
-
-CREATE TABLE IF NOT EXISTS feedback (
-    racket_id INT REFERENCES racket(id) ON DELETE CASCADE,
-    user_id INT REFERENCES "user"(id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, racket_id),
-    feedback TEXT,
-    rating INT,
-    date TIMESTAMP
-);

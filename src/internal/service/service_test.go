@@ -23,7 +23,6 @@ func TestRunner(t *testing.T) {
 		&AuthServiceSuite{},
 		&UserServiceSuite{},
 		&RacketServiceSuite{},
-		&FeedbackServiceSuite{},
 		&CartServiceSuite{},
 		&OrderServiceSuite{},
 	}

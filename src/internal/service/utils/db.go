@@ -63,6 +63,61 @@ func NewTestStorage() (*postgres.Postgres, *container.PostgresContainer, map[str
 	return conn, ctr, ids
 }
 
+// func NewTestStorage() (*postgres.Postgres, *container.PostgresContainer, map[string]int, error) {
+//     ctx := context.TODO()
+//     dockerEnv := os.Getenv("DOCKER_ENV") // Assuming this environment variable is set for Docker environment
+
+//     req := testcontainers.ContainerRequest{
+//         Image:        pgImage,
+//         InitScripts:  []string{os.Getenv("DB_INIT_PATH")},
+//         Database:     dbName,
+//         Username:     dbUsername,
+//         Password:     dbPassword,
+//         Env:          map[string]string{"POSTGRES_DB": dbName, "POSTGRES_USER": dbUsername, "POSTGRES_PASSWORD": dbPassword},
+//         WaitingFor:   wait.ForLog("database system is ready to accept connections").WithOccurrence(2).WithStartupTimeout(5*time.Second),
+//     }
+
+//     ctr, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
+//         ContainerRequest: req,
+//         Started:          true,
+//     })
+
+//     if err != nil {
+//         return nil, nil, nil, err
+//     }
+
+//     defer func() {
+//         if ctr != nil {
+//             _ = ctr.Terminate(ctx)
+//         }
+//     }()
+
+//     host, err := ctr.Host(ctx)
+//     if err != nil {
+//         return nil, nil, nil, err
+//     }
+
+//     port, err := ctr.MappedPort(ctx, "5432")
+//     if err != nil {
+//         return nil, nil, nil, err
+//     }
+
+//     connString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", dbUsername, dbPassword, host, port.Port(), dbName)
+
+//     conn, err := postgres.New(connString)
+//     if err != nil {
+//         return nil, nil, nil, err
+//     }
+
+//     ids := map[string]int{}
+//     ids["userID"] = initUserRepository(mypostgres.NewUserRepository(conn))
+//     ids["racketID"] = initRacketRepository(mypostgres.NewRacketRepository(conn))
+//     ids["orderID"] = initOrderRepository(mypostgres.NewOrderRepository(conn))
+//     ids["cartID"] = initCartRepository(mypostgres.NewCartRepository(conn))
+
+//     return conn, ctr, ids, nil
+// }
+
 func DropTestStorage(testDB *postgres.Postgres, ctr *container.PostgresContainer) {
 	defer func() {
 		testDB.Close()

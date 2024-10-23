@@ -155,14 +155,14 @@ func initCartRepository(repo repository.ICartRepository) int {
 
 	cart := &model.Cart{
 		UserID:     ids["userID"],
-		TotalPrice: 100,
-		Quantity:   1,
-		Lines: []*model.CartLine{
-			{
-				RacketID: ids["racketID"],
-				Quantity: 1,
-			},
-		},
+		TotalPrice: 0,
+		Quantity:   0,
+		// Lines: []*model.CartLine{
+		// 	{
+		// 		RacketID: ids["racketID"],
+		// 		Quantity: 1,
+		// 	},
+		// },
 	}
 
 	err := repo.Create(context.TODO(), cart)

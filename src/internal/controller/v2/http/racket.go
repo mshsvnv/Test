@@ -16,28 +16,20 @@ import (
 const multiFormSizeDefault = 10000000
 
 type RacketController struct {
-	l               logging.Interface
-	racketService   service.IRacketService
-	feedbackService service.IFeedbackService
-	userService     service.IUserService
+	l             logging.Interface
+	racketService service.IRacketService
+	userService   service.IUserService
 }
 
 func NewRacketController(
 	l logging.Interface,
 	racketService service.IRacketService,
-	feedbackService service.IFeedbackService,
 	userService service.IUserService) *RacketController {
 	return &RacketController{
-		l:               l,
-		racketService:   racketService,
-		feedbackService: feedbackService,
-		userService:     userService,
+		l:             l,
+		racketService: racketService,
+		userService:   userService,
 	}
-}
-
-type RacketFeedbacksRes struct {
-	Racket    *model.Racket     `json:"racket"`
-	Feedbacks []*model.Feedback `json:"feedbacks"`
 }
 
 type RacketRes struct {
@@ -102,16 +94,8 @@ func (r *RacketController) GetRacketByID(c *gin.Context) {
 		return
 	}
 
-	feedbacks, err := r.feedbackService.GetFeedbacksByRacketID(c, racketID)
-	if err != nil {
-		r.l.Errorf("%s", err.Error())
-		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, RacketFeedbacksRes{
-		Racket:    racket,
-		Feedbacks: feedbacks,
+	c.JSON(http.StatusOK, RacketRes{
+		Racket: racket,
 	})
 }
 

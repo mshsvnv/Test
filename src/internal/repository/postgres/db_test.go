@@ -17,7 +17,6 @@ func TestRunner(t *testing.T) {
 	suites := []runner.TestSuite{
 		&UserRepoSuite{},
 		&RacketRepoSuite{},
-		&FeedbackRepoSuite{},
 		&CartRepoSuite{},
 		&OrderRepoSuite{},
 	}

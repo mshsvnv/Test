@@ -29,9 +29,17 @@ func TestRunner(t *testing.T) {
 			racketRepo: mypostgres.NewRacketRepository(db),
 			racketID:   ids["racketID"],
 		},
-		// &FeedbackRepoSuite{},
-		// &CartRepoSuite{},
-		// &OrderRepoSuite{},
+		&CartRepoSuite{
+			cartRepo: mypostgres.NewCartRepository(db),
+			userRepo: mypostgres.NewUserRepository(db),
+			cartID:   ids["cartID"],
+			racketID: ids["racketID"],
+		},
+		&OrderRepoSuite{
+			orderRepo: mypostgres.NewOrderRepository(db),
+			orderID:   ids["orderID"],
+			userID:    ids["userID"],
+		},
 	}
 	wg.Add(len(suites))
 

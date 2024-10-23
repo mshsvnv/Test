@@ -36,18 +36,18 @@ func TestRunner(t *testing.T) {
 			),
 			userID: ids["userID"],
 		},
-		// &UserSuite{
-		// 	userService: service.NewUserService(
-		// 		utils.NewMockLogger(),
-		// 		mypostgres.NewUserRepository(db),
-		// 	),
-		// },
-		// &RacketSuite{
-		// 	racketService: service.NewRacketService(
-		// 		utils.NewMockLogger(),
-		// 		mypostgres.NewRacketRepository(db),
-		// 	),
-		// },
+		&UserSuite{
+			userService: service.NewUserService(
+				utils.NewMockLogger(),
+				mypostgres.NewUserRepository(db),
+			),
+		},
+		&RacketSuite{
+			racketService: service.NewRacketService(
+				utils.NewMockLogger(),
+				mypostgres.NewRacketRepository(db),
+			),
+		},
 	}
 	wg.Add(len(suites))
 

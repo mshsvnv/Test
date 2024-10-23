@@ -9,7 +9,6 @@ import (
 
 	"src/config"
 	"src/internal/controller"
-
 	mypostgres "src/internal/repository/postgres"
 	"src/internal/service"
 	"src/pkg/logging"
@@ -49,21 +48,19 @@ func main() {
 	racketRepo := mypostgres.NewRacketRepository(db)
 	cartRepo := mypostgres.NewCartRepository(db)
 	orderRepo := mypostgres.NewOrderRepository(db)
-	feedbackRepo := mypostgres.NewFeedbackRepository(db)
 
 	userService := service.NewUserService(l, userRepo)
 	racketService := service.NewRacketService(l, racketRepo)
 	cartService := service.NewCartService(l, cartRepo, racketRepo)
 	authService := service.NewAuthService(l, userRepo, cfg.Auth.SigningKey, cfg.Auth.AccessTokenTTL)
 	orderService := service.NewOrderService(l, orderRepo, cartRepo, racketRepo)
-	feedbackService := service.NewFeedbackService(l, feedbackRepo)
 
 	// Create controller
 	handler := gin.New()
 	con := controller.NewRouter(handler)
 
 	// Set routes
-	con.SetV2Routes(l, authService, userService, racketService, cartService, orderService, feedbackService)
+	con.SetV2Routes(l, authService, userService, racketService, cartService, orderService)
 
 	// Create router
 	router := httpserver.New(handler, httpserver.Port(cfg.HTTP.Port))

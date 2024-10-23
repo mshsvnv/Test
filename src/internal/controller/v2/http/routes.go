@@ -25,12 +25,11 @@ func setRacketRoute(
 	handler *gin.RouterGroup,
 	l logging.Interface,
 	racketService service.IRacketService,
-	feedbackService service.IFeedbackService,
 	authService service.IAuthService,
 	userService service.IUserService) {
 
 	authController := NewAuthController(l, authService, userService)
-	racketController := NewRacketController(l, racketService, feedbackService, userService)
+	racketController := NewRacketController(l, racketService, userService)
 
 	handler.GET("/rackets", racketController.ListsAllRackets)
 	handler.GET("/rackets/:id", racketController.GetRacketByID)
@@ -93,24 +92,6 @@ func setOrderRoute(
 	handler.PATCH("/orders/:id", authController.AdminIdentity, orderController.UpdateOrder)
 }
 
-// feedback
-func setFeedbackRoute(
-	handler *gin.RouterGroup,
-	l logging.Interface,
-	authService service.IAuthService,
-	feedbackService service.IFeedbackService,
-	userService service.IUserService) {
-
-	authController := NewAuthController(l, authService, userService)
-	feedbackController := NewFeedbackController(l, feedbackService)
-
-	handler.GET("/feedbacks/rackets/:id", feedbackController.GetFeedbacksByRacketID)
-
-	handler.GET("/feedbacks", authController.UserIdentity, feedbackController.GetFeedbacksByUserID)
-	handler.POST("/feedbacks", authController.UserIdentity, feedbackController.CreateFeedback)
-	handler.DELETE("/feedbacks/:id", authController.UserIdentity, feedbackController.DeleteFeedback)
-}
-
 func SetRoutes(
 	handler *gin.RouterGroup,
 	l logging.Interface,
@@ -119,7 +100,6 @@ func SetRoutes(
 	racketService service.IRacketService,
 	cartService service.ICartService,
 	orderService service.IOrderService,
-	feedbackService service.IFeedbackService,
 ) {
 
 	setAuthRoute(
@@ -142,16 +122,7 @@ func SetRoutes(
 		handler,
 		l,
 		racketService,
-		feedbackService,
 		authService,
-		userService,
-	)
-
-	setFeedbackRoute(
-		handler,
-		l,
-		authService,
-		feedbackService,
 		userService,
 	)
 

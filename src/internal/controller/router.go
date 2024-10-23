@@ -56,7 +56,6 @@ func (c *Controller) SetV2Routes(
 	racketService service.IRacketService,
 	cartService service.ICartService,
 	orderService service.IOrderService,
-	feedbackService service.IFeedbackService,
 ) {
 	routesv2.SetRoutes(
 		c.routerGroups["v2"],
@@ -66,6 +65,5 @@ func (c *Controller) SetV2Routes(
 		racketService,
 		cartService,
 		orderService,
-		feedbackService,
 	)
 }
