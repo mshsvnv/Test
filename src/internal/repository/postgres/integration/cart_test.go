@@ -65,34 +65,6 @@ func (c *CartRepoSuite) TestCartRepoAddRacket(t provider.T) {
 	})
 }
 
-// func (c *CartRepoSuite) TestCartRepoRemoveRacket(t provider.T) {
-// 	t.Title("[RemoveRacket] Remove racket to cart")
-// 	t.Tags("integration", "order", "repository", "postgres")
-// 	t.Parallel()
-// 	t.WithNewStep("Remove racket to cart", func(sCtx provider.StepCtx) {
-// 		ctx := context.TODO()
-
-// 		reqAdd := utils.CartObjectMother{
-// 			UserID:   c.cartID,
-// 			RacketID: c.racketID,
-// 			Quantity: 1,
-// 		}.AddCartRacketReq()
-// 		err := c.cartRepo.AddRacket(ctx, reqAdd)
-// 		sCtx.Assert().NoError(err)
-
-// 		reqRemove := utils.CartObjectMother{
-// 			UserID:   c.cartID,
-// 			RacketID: c.racketID,
-// 			Quantity: 1,
-// 		}.RemoveRacketReq()
-
-// 		sCtx.WithNewParameters("ctx", ctx, "request", reqRemove)
-
-// 		err = c.cartRepo.RemoveRacket(ctx, reqRemove)
-// 		sCtx.Assert().NoError(err)
-// 	})
-// }
-
 func (c *CartRepoSuite) TestCartRepoGetCartByID(t provider.T) {
 	t.Title("[GetCartByID] Get cart by id")
 	t.Tags("integration", "order", "repository", "postgres")

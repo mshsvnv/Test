@@ -7,13 +7,15 @@ import (
 	"sync"
 	"testing"
 
+	"math/rand"
+	"time"
+
 	"github.com/gavv/httpexpect/v2"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 
 	"src/e2e"
-	"src/internal/dto"
 	"src/internal/model"
 )
 
@@ -33,6 +35,39 @@ type CartRes struct {
 	Cart *model.Cart `json:"cart"`
 }
 
+type RegisterReq struct {
+	Name     string `json:"name"`
+	Surname  string `json:"surname"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func generateRandomString(length int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = charset[rand.Intn(len(charset))]
+	}
+	return string(b)
+}
+
+func generateRandomRegisterReq() *RegisterReq {
+	rand.Seed(time.Now().UnixNano())
+
+	name := generateRandomString(5)
+	surname := generateRandomString(6)
+	email := generateRandomString(8) + "@mail.ru"
+	password := generateRandomString(8)
+
+	req := &RegisterReq{
+		Name:     name,
+		Surname:  surname,
+		Email:    email,
+		Password: password,
+	}
+	return req
+}
+
 func (s *E2ESuite) BeforeAll(t provider.T) {
 	s.e = *httpexpect.WithConfig(httpexpect.Config{
 		Client:   &http.Client{},
@@ -47,15 +82,10 @@ func (s *E2ESuite) BeforeAll(t provider.T) {
 func (s *E2ESuite) TestE2E(t provider.T) {
 	t.Title("[E2E] E2E Test")
 	t.Tags("e2e")
-	t.Parallel()
+	// t.Parallel()
 	t.WithNewStep("E2E Test", func(sCtx provider.StepCtx) {
 
-		registerReq := &dto.RegisterReq{
-			Name:     "Klim",
-			Surname:  "Klimov",
-			Email:    "klim@mail.ru",
-			Password: "klim",
-		}
+		registerReq := generateRandomRegisterReq()
 
 		accessToken := s.e.POST("/auth/register").
 			WithJSON(registerReq).
@@ -98,6 +128,7 @@ func (s *E2ESuite) TestE2E(t provider.T) {
 		sCtx.Assert().NotEmpty(cart)
 		sCtx.Assert().Equal(cart.Cart.Quantity, 1)
 		sCtx.Assert().Equal(cart.Cart.TotalPrice, float32(300))
+
 	})
 }
 

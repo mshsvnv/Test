@@ -41,7 +41,7 @@ ci-integration:
 	export ALLURE_OUTPUT_PATH="${GITHUB_WORKSPACE}" && \
 	export ALLURE_OUTPUT_FOLDER="integration-allure" && \
  	export DB_INIT_PATH="${GITHUB_WORKSPACE}/src/sql/init/init.sql" && \
-	go test -v -tags=integration ./... --race
+	go test -v -tags=integration ./... --race --parallel 6
 
 local-integration:
 	go clean -testcache
@@ -49,7 +49,7 @@ local-integration:
 	docker compose up -d
 	export ALLURE_OUTPUT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test" && \
  	export DB_INIT_PATH="/c/Users/mshsv/OneDrive/Рабочий стол/studying/7_sem/Test/src/sql/init/init.sql" && \
-	go test -v -tags=integration ./... --race
+	go test -v -tags=integration ./... --race --parallel 6
 	docker compose down
 
 ci-e2e:
