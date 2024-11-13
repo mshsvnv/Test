@@ -1,0 +1,11 @@
+scrape_configs:
+
+  - job_name: 'echo-server'
+    scrape_interval: 1s
+    static_configs:
+      - targets: ['echo-server:8081']
+
+  - job_name: 'gin-server'
+    scrape_interval: 1s
+    static_configs:
+      - targets: [ 'gin-server:8081' ]
