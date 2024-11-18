@@ -76,20 +76,20 @@ func (_m *IUserService) GetUserByID(ctx context.Context, id int) (*model.User, e
 	return r0, r1
 }
 
-// UpdateRole provides a mock function with given fields: ctx, req
-func (_m *IUserService) UpdateRole(ctx context.Context, req *dto.UpdateRoleReq) (*model.User, error) {
+// Update provides a mock function with given fields: ctx, req
+func (_m *IUserService) Update(ctx context.Context, req *dto.UpdateReq) (*model.User, error) {
 	ret := _m.Called(ctx, req)
 
 	if len(ret) == 0 {
-		panic("no return value specified for UpdateRole")
+		panic("no return value specified for Update")
 	}
 
 	var r0 *model.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *dto.UpdateRoleReq) (*model.User, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, *dto.UpdateReq) (*model.User, error)); ok {
 		return rf(ctx, req)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, *dto.UpdateRoleReq) *model.User); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, *dto.UpdateReq) *model.User); ok {
 		r0 = rf(ctx, req)
 	} else {
 		if ret.Get(0) != nil {
@@ -97,7 +97,7 @@ func (_m *IUserService) UpdateRole(ctx context.Context, req *dto.UpdateRoleReq) 
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, *dto.UpdateRoleReq) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, *dto.UpdateReq) error); ok {
 		r1 = rf(ctx, req)
 	} else {
 		r1 = ret.Error(1)

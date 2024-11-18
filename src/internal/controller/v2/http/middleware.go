@@ -13,6 +13,7 @@ const (
 	authorizationHeader = "Authorization"
 	userCtx             = "userID"
 	adminCtx            = "adminID"
+	keySecret           = "keySecret"
 )
 
 func (a *AuthController) Identity(c *gin.Context) {
@@ -137,4 +138,19 @@ func getUserID(c *gin.Context) (int, error) {
 	}
 
 	return idInt, nil
+}
+
+func getKeySecret(c *gin.Context) (string, error) {
+
+	curKeySecret, ok := c.Get(keySecret)
+	if !ok {
+		return "", fmt.Errorf("%s", "userID not found")
+	}
+
+	curKeySecretString, ok := curKeySecret.(string)
+	if !ok {
+		return "", fmt.Errorf("%s", "userID is of invalid type")
+	}
+
+	return curKeySecretString, nil
 }

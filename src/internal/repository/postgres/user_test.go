@@ -46,7 +46,7 @@ func (u *UserRepoSuite) TestUserRepoCreate(t provider.T) {
 	})
 }
 
-func (u *UserRepoSuite) TestUserRepoUpdateRole(t provider.T) {
+func (u *UserRepoSuite) TestUserRepoUpdate(t provider.T) {
 	t.Title("[Update] Update user role")
 	t.Tags("user", "repository", "postgres")
 	t.Parallel()
@@ -55,13 +55,13 @@ func (u *UserRepoSuite) TestUserRepoUpdateRole(t provider.T) {
 		request := utils.UserObjectMother{}.DefaultCustomer(1)
 
 		u.userMockRepo.
-			On("UpdateRole", ctx, request).
+			On("Update", ctx, request).
 			Return(nil).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", request)
 
-		err := u.userMockRepo.UpdateRole(ctx, request)
+		err := u.userMockRepo.Update(ctx, request)
 
 		sCtx.Assert().NoError(err)
 	})

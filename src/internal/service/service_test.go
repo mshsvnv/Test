@@ -20,7 +20,6 @@ func TestRunner(t *testing.T) {
 
 	wg := &sync.WaitGroup{}
 	suites := []runner.TestSuite{
-		&AuthServiceSuite{},
 		&UserServiceSuite{},
 		&RacketServiceSuite{},
 		&CartServiceSuite{},

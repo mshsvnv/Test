@@ -144,7 +144,7 @@ func (s *UserServiceSuite) TestUserServiceGetUpdateUser1(t provider.T) {
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		user, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).UpdateRole(ctx, req)
+		user, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).Update(ctx, req)
 
 		sCtx.Assert().Nil(user)
 		sCtx.Assert().Error(err)
@@ -171,13 +171,13 @@ func (s *UserServiceSuite) TestUserServiceGetUpdateUser2(t provider.T) {
 			Once()
 
 		userMockRepo.
-			On("UpdateRole", ctx, userAdmin).
+			On("Update", ctx, userAdmin).
 			Return(nil).
 			Once()
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		user, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).UpdateRole(ctx, req)
+		user, err := service.NewUserService(utils.NewMockLogger(), userMockRepo).Update(ctx, req)
 
 		sCtx.Assert().NotNil(user)
 		sCtx.Assert().Nil(err)

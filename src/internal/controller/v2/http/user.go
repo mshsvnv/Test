@@ -139,7 +139,7 @@ func (u *UserController) GetAllUsers(c *gin.Context) {
 	})
 }
 
-type UpdateRoleReq struct {
+type UpdateReq struct {
 	Role model.UserRole `json:"role"`
 }
 
@@ -150,7 +150,7 @@ type UpdateRoleReq struct {
 //	@Tags			Admin
 //
 //	@Param			id	path		int								true	"Идентефикатор пользователя"
-//	@Param			req	body		UpdateRoleReq					true	"Роль пользователя"
+//	@Param			req	body		UpdateReq					true	"Роль пользователя"
 //
 //	@Success		200	{object}	UserRes							"Информация о всех пользователях"
 //	@Failure		400	{object}	http.StatusBadRequest			"Некорректное тело запроса"
@@ -159,7 +159,7 @@ type UpdateRoleReq struct {
 //	@Router			/users/{id} [put]
 func (u *UserController) UpdateUser(c *gin.Context) {
 
-	var req UpdateRoleReq
+	var req UpdateReq
 	if err := c.ShouldBindJSON(&req); c.Request.Body == nil || err != nil {
 		u.l.Infof(err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -168,7 +168,7 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 
 	userID, _ := strconv.Atoi(c.Param("id"))
 
-	user, err := u.userService.UpdateRole(c, &dto.UpdateRoleReq{
+	user, err := u.userService.Update(c, &dto.UpdateReq{
 		ID:   userID,
 		Role: req.Role,
 	})

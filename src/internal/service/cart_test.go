@@ -1,4 +1,5 @@
 //go:build unit
+
 package service_test
 
 import (
@@ -450,7 +451,7 @@ func (s *CartServiceSuite) TestCartServiceUpdateRacket3(t provider.T) {
 }
 
 // GetCartByID
-func (s *AuthServiceSuite) TestCartServiceGetCartByID1(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceGetCartByID1(t provider.T) {
 	t.Title("[GetCartByID] no existed cart")
 	t.Tags("cart", "service", "get_cart_by_id")
 	t.Parallel()
@@ -484,7 +485,7 @@ func (s *AuthServiceSuite) TestCartServiceGetCartByID1(t provider.T) {
 	})
 }
 
-func (s *AuthServiceSuite) TestCartServiceGetCartByID2(t provider.T) {
+func (s *CartServiceSuite) TestCartServiceGetCartByID2(t provider.T) {
 	t.Title("[GetCartByID] existed cart")
 	t.Tags("cart", "service", "get_cart_by_id")
 	t.Parallel()

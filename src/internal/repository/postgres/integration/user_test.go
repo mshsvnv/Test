@@ -45,7 +45,7 @@ func (u *UserRepoSuite) TestIntegrationUserRepoCreate(t provider.T) {
 	})
 }
 
-func (u *UserRepoSuite) TestIntegrationUserRepoUpdateRole(t provider.T) {
+func (u *UserRepoSuite) TestIntegrationUserRepoUpdate(t provider.T) {
 	t.Title("[Update] Update user role")
 	t.Tags("integration", "user", "repository", "postgres")
 	t.Parallel()
@@ -55,7 +55,7 @@ func (u *UserRepoSuite) TestIntegrationUserRepoUpdateRole(t provider.T) {
 
 		sCtx.WithNewParameters("ctx", ctx, "request", request)
 
-		err := u.userRepo.UpdateRole(ctx, request)
+		err := u.userRepo.Update(ctx, request)
 
 		sCtx.Assert().NoError(err)
 	})

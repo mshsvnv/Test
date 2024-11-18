@@ -86,7 +86,7 @@ func (s *UserSuite) TestUserServiceGetUpdateUser1(t provider.T) {
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		user, err := s.userService.UpdateRole(ctx, req)
+		user, err := s.userService.Update(ctx, req)
 
 		sCtx.Assert().Nil(user)
 		sCtx.Assert().Error(err)
@@ -105,7 +105,7 @@ func (s *UserSuite) TestUserServiceGetUpdateUser2(t provider.T) {
 
 		sCtx.WithNewParameters("ctx", ctx, "request", req)
 
-		user, err := s.userService.UpdateRole(ctx, req)
+		user, err := s.userService.Update(ctx, req)
 
 		sCtx.Assert().NotNil(user)
 		sCtx.Assert().Nil(err)

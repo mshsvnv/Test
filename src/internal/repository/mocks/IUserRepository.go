@@ -140,12 +140,12 @@ func (_m *IUserRepository) GetUserByID(ctx context.Context, id int) (*model.User
 	return r0, r1
 }
 
-// UpdateRole provides a mock function with given fields: ctx, user
-func (_m *IUserRepository) UpdateRole(ctx context.Context, user *model.User) error {
+// Update provides a mock function with given fields: ctx, user
+func (_m *IUserRepository) Update(ctx context.Context, user *model.User) error {
 	ret := _m.Called(ctx, user)
 
 	if len(ret) == 0 {
-		panic("no return value specified for UpdateRole")
+		panic("no return value specified for Update")
 	}
 
 	var r0 error

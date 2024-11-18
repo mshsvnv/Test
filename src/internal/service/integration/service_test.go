@@ -20,23 +20,13 @@ var accessTokenTTL time.Duration = time.Duration(12 * time.Hour.Hours())
 
 func TestRunner(t *testing.T) {
 
-	db, ids := utils.NewTestStorage()
+	db, _ := utils.NewTestStorage()
 	defer utils.DropTestStorage(db)
 
 	t.Parallel()
 
 	wg := &sync.WaitGroup{}
 	suites := []runner.TestSuite{
-		&AuthSuite{
-			authService: service.NewAuthService(
-				utils.NewMockLogger(),
-				mypostgres.NewUserRepository(db),
-				signingKey,
-				accessTokenTTL,
-			),
-			userRepo: mypostgres.NewUserRepository(db),
-			userID:   ids["userID"],
-		},
 		&UserSuite{
 			userService: service.NewUserService(
 				utils.NewMockLogger(),

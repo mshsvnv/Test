@@ -20,9 +20,9 @@ type tokenClaims struct {
 }
 
 type IAuthService interface {
-	Login(ctx context.Context, req *dto.LoginReq) (string, error)
+	Login(ctx context.Context, req *dto.LoginReq) error
 	Register(ctx context.Context, req *dto.RegisterReq) (string, error)
-	generateToken(userID int) (string, error)
+	GenerateToken(userID int) (string, error)
 	ParseToken(token string) (int, error)
 }
 
@@ -73,17 +73,17 @@ func (s *AuthService) Register(ctx context.Context, req *dto.RegisterReq) (strin
 		return "", fmt.Errorf("create fail, error %s", err)
 	}
 
-	return s.generateToken(user.ID)
+	return s.GenerateToken(user.ID)
 }
 
-func (s *AuthService) Login(ctx context.Context, req *dto.LoginReq) (string, error) {
+func (s *AuthService) Login(ctx context.Context, req *dto.LoginReq) error {
 
 	s.logger.Infof("login email %s", req.Email)
 	user, err := s.repo.GetUserByEmail(ctx, req.Email)
 
 	if err != nil {
 		s.logger.Errorf("get user by email fail, error %s", err.Error())
-		return "", fmt.Errorf("get user by email fail, error %s", err)
+		return fmt.Errorf("get user by email fail, error %s", err)
 	}
 
 	err = bcrypt.CompareHashAndPassword(
@@ -92,13 +92,13 @@ func (s *AuthService) Login(ctx context.Context, req *dto.LoginReq) (string, err
 
 	if err != nil {
 		s.logger.Errorf("wrong password, error %s", err.Error())
-		return "", fmt.Errorf("wrong password, error %s", err)
+		return fmt.Errorf("wrong password, error %s", err)
 	}
 
-	return s.generateToken(user.ID)
+	return nil
 }
 
-func (s *AuthService) generateToken(userID int) (string, error) {
+func (s *AuthService) GenerateToken(userID int) (string, error) {
 	expiresAt := &jwt.NumericDate{
 		time.Now().Add(s.accessTokenTTL),
 	}

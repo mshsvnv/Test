@@ -3,14 +3,15 @@ package http
 import (
 	"io"
 	"net/http"
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+
 	"src/internal/dto"
 	"src/internal/model"
 	"src/internal/service"
 	"src/pkg/logging"
 	"src/pkg/storage/postgres"
-	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 const multiFormSizeDefault = 10000000

@@ -129,15 +129,15 @@ func (u UserObjectMother) DefaultUsers() []*model.User {
 	}
 }
 
-func (u UserObjectMother) IncorrectUserIDToUpdate() *dto.UpdateRoleReq {
-	return &dto.UpdateRoleReq{
+func (u UserObjectMother) IncorrectUserIDToUpdate() *dto.UpdateReq {
+	return &dto.UpdateReq{
 		ID:   0,
 		Role: model.UserRoleAdmin,
 	}
 }
 
-func (u UserObjectMother) CorrectUserToUpdate() *dto.UpdateRoleReq {
-	return &dto.UpdateRoleReq{
+func (u UserObjectMother) CorrectUserToUpdate() *dto.UpdateReq {
+	return &dto.UpdateReq{
 		ID:   1, //ids["userID"],
 		Role: model.UserRoleAdmin,
 	}

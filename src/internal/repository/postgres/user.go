@@ -54,10 +54,14 @@ func (r *UserRepository) Create(ctx context.Context, user *model.User) error {
 	return nil
 }
 
-func (r *UserRepository) UpdateRole(ctx context.Context, user *model.User) error {
+func (r *UserRepository) Update(ctx context.Context, user *model.User) error {
 
 	query := r.Builder.
 		Update(userTable).
+		Set(nameField, user.Name).
+		Set(surnameField, user.Surname).
+		Set(passwordField, user.Password).
+		Set(emailField, user.Email).
 		Set(roleField, user.Role).
 		Where(squirrel.Eq{emailField: user.Email})
 
