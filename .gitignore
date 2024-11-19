@@ -1,1 +1,6 @@
 .vscode
+.env
+out.log
+*allure-results/*
+*allure-reports/*
+summary/
