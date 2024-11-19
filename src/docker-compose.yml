@@ -40,7 +40,7 @@ services:
       #      DATABASE_URL: "postgresql://admin:postgres@postgres-master:5432/course"
       TZ: "Europe/Moscow"
     ports:
-      - "8085:8081"
+      - "7777:8081"
 
   check_back:
     image: alpine

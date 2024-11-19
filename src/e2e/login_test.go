@@ -16,7 +16,7 @@ func TestLogin(t *testing.T) {
 
 	clnt := &http.Client{}
 	expectLogin = httpexpect.WithConfig(httpexpect.Config{
-		BaseURL:  "http://localhost:8085/api/v2/auth",
+		BaseURL:  "http://localhost:7777/api/v2/auth",
 		Client:   clnt,
 		Reporter: httpexpect.NewRequireReporter(nil),
 	})
