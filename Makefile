@@ -27,6 +27,7 @@ run-docker:
 
 rm-docker:
 	docker compose down
+	docker image rm test-backend bitnami/postgresql:16 alpine
 
 run-e2e: run-docker
 	go test -v e2e/login_test.go
