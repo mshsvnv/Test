@@ -16,7 +16,7 @@ func TestReset(t *testing.T) {
 
 	clnt := &http.Client{}
 	expectReset = httpexpect.WithConfig(httpexpect.Config{
-		BaseURL:  "http://localhost:7777/api/v2/auth",
+		BaseURL:  "http://localhost:8111/api/v2/auth",
 		Client:   clnt,
 		Reporter: httpexpect.NewRequireReporter(nil),
 	})

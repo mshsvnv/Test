@@ -28,7 +28,10 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "http://localhost:8081/api/v2/healthcheck"]
+      test: curl --fail http://localhost:8081/api/v2/healthcheck || exit 1
+      interval: 5s
+      retries: 5
+      timeout: 10s
     environment:
       POSTGRESQL_HOST: postgres
       POSTGRESQL_PORT: 5432
@@ -40,7 +43,7 @@ services:
       #      DATABASE_URL: "postgresql://admin:postgres@postgres-master:5432/course"
       TZ: "Europe/Moscow"
     ports:
-      - "7777:8081"
+      - "8111:8081"
 
   check_back:
     image: alpine
