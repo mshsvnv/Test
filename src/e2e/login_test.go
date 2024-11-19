@@ -16,7 +16,7 @@ func TestLogin(t *testing.T) {
 
 	clnt := &http.Client{}
 	expectLogin = httpexpect.WithConfig(httpexpect.Config{
-		BaseURL:  "http://localhost:8044/api/v2/auth",
+		BaseURL:  "http://localhost:8085/api/v2/auth",
 		Client:   clnt,
 		Reporter: httpexpect.NewRequireReporter(nil),
 	})
@@ -40,14 +40,12 @@ func Login(ctx *godog.ScenarioContext) {
 	var response *httpexpect.Response
 
 	recepientEmail := "stepaha78@gmail.com"
-	recepientPassword := "admin"
-	recepientCode := "123456"
 
 	ctx.When(`^User send "([^"]*)" request to "([^"]*)"$`, func(method, endpoint string) error {
 		response = expectLogin.Request(method, endpoint).
 			WithJSON(map[string]string{
 				"email":    recepientEmail,
-				"password": recepientPassword,
+				"password": "admin",
 			}).
 			Expect()
 		return nil
@@ -69,7 +67,7 @@ func Login(ctx *godog.ScenarioContext) {
 		response = expectLogin.Request(method, endpoint).
 			WithJSON(map[string]string{
 				"email": recepientEmail,
-				"code":  recepientCode,
+				"code":  "123456",
 			}).
 			Expect()
 		return nil

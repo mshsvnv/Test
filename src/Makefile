@@ -30,4 +30,4 @@ rm-docker:
 
 run-e2e: run-docker
 	go test -v e2e/login_test.go
-	# go test -v e2e/reset_test.go
+	go test -v e2e/reset_test.go

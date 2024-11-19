@@ -11,9 +11,7 @@ Feature: User reset password with OTP
           "msg": "OTP code to \"Reset Password\" was sent to your email"
         }
         """
-
-  Scenario: Verify received OTP code for reset
-    When User send "POST" request to "/reset_password/verify"
+    And User send "POST" request to "/reset_password/verify"
     Then the response code on /reset_password/verify should be 200
     And the response on /reset_password/verify should match json:
         """

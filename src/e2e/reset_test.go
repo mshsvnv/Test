@@ -16,7 +16,7 @@ func TestReset(t *testing.T) {
 
 	clnt := &http.Client{}
 	expectReset = httpexpect.WithConfig(httpexpect.Config{
-		BaseURL:  "http://localhost:8082/api/v2/auth",
+		BaseURL:  "http://localhost:8085/api/v2/auth",
 		Client:   clnt,
 		Reporter: httpexpect.NewRequireReporter(nil),
 	})
@@ -40,58 +40,48 @@ func Reset(ctx *godog.ScenarioContext) {
 	var response *httpexpect.Response
 
 	recepientEmail := "stepaha78@gmail.com"
-	recepientPassword := "admin"
 
 	ctx.When(`^User send "([^"]*)" request to "([^"]*)"$`, func(method, endpoint string) error {
 		response = expectReset.Request(method, endpoint).
 			WithJSON(map[string]string{
 				"email":        recepientEmail,
-				"old_password": recepientPassword,
+				"old_password": "admin",
 			}).
 			Expect()
 		return nil
 	})
 
-	ctx.Then(`^the response code should be (\d+)$`, func(statusCode int) error {
+	ctx.Then(`^the response code on /reset_password should be (\d+)$`, func(statusCode int) error {
 		response.Status(statusCode)
 		return nil
 	})
 
-	ctx.Step(`^the response should match json:$`, func(expectedJSON *godog.DocString) error {
+	ctx.Step(`^the response on /reset_password should match json:$`, func(expectedJSON *godog.DocString) error {
 		response.JSON().Object().IsEqual(map[string]interface{}{
-			"msg": "OTP code to \"Login\" was sent to your email",
+			"msg": "OTP code to \"Reset Password\" was sent to your email",
 		})
 		return nil
 	})
-}
 
-func VerifyOTPReset(ctx *godog.ScenarioContext) {
-
-	var response *httpexpect.Response
-
-	recepientEmail := "stepaha78@gmail.com"
-	// recepientCode := "123456"
-	// recepientPasswordNew := "admin"
-
-	ctx.When(`^User send "([^"]*)" request to "([^"]*)"$`, func(method, endpoint string) error {
+	ctx.Step(`^User send "([^"]*)" request to "([^"]*)"$`, func(method, endpoint string) error {
 		response = expectReset.Request(method, endpoint).
 			WithJSON(map[string]string{
-				"new_password": recepientEmail,
-				"code":         recepientEmail,
+				"new_password": "admin",
+				"code":         "123456",
 				"email":        recepientEmail,
 			}).
 			Expect()
 		return nil
 	})
 
-	ctx.Then(`^the response code should be (\d+)$`, func(statusCode int) error {
+	ctx.Then(`^the response code on /reset_password/verify should be (\d+)$`, func(statusCode int) error {
 		response.Status(statusCode)
 		return nil
 	})
 
-	ctx.Step(`^the response should match json:$`, func(expectedJSON *godog.DocString) error {
+	ctx.Step(`^the response on /reset_password/verify should match json:$`, func(expectedJSON *godog.DocString) error {
 		response.JSON().Object().IsEqual(map[string]interface{}{
-			"access_token": "your_access_token",
+			"msg": "Your password has been already updated!",
 		})
 		return nil
 	})
@@ -99,5 +89,4 @@ func VerifyOTPReset(ctx *godog.ScenarioContext) {
 
 func InitializeResetScenario(ctx *godog.ScenarioContext) {
 	Reset(ctx)
-	VerifyOTPReset(ctx)
 }
