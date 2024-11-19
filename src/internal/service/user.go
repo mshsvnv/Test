@@ -14,8 +14,9 @@ import (
 //go:generate mockery --name=IUserService
 type IUserService interface {
 	GetUserByID(ctx context.Context, id int) (*model.User, error)
+	GetUserByEmail(ctx context.Context, email string) (*model.User, error)
 	GetAllUsers(ctx context.Context) ([]*model.User, error)
-	Update(ctx context.Context, req *dto.UpdateReq) (*model.User, error)
+	UpdateRole(ctx context.Context, req *dto.UpdateReq) (*model.User, error)
 	UpdatePassword(ctx context.Context, req *dto.UpdatePasswordReq) (*model.User, error)
 }
 
@@ -33,14 +34,14 @@ func NewUserService(
 	}
 }
 
-func (s *UserService) Update(ctx context.Context, req *dto.UpdateReq) (*model.User, error) {
+func (s *UserService) UpdateRole(ctx context.Context, req *dto.UpdateReq) (*model.User, error) {
 
-	s.logger.Infof("update role id %s", req.ID)
-	user, err := s.repo.GetUserByID(ctx, req.ID)
+	s.logger.Infof("update role email %s", req.Email)
+	user, err := s.repo.GetUserByEmail(ctx, req.Email)
 
 	if err != nil {
-		s.logger.Errorf("get user by id fail, error %s", err.Error())
-		return nil, fmt.Errorf("get user by id fail, error %s", err)
+		s.logger.Errorf("get user by email fail, error %s", err.Error())
+		return nil, fmt.Errorf("get user by email fail, error %s", err)
 	}
 
 	user.Role = req.Role
@@ -57,15 +58,18 @@ func (s *UserService) Update(ctx context.Context, req *dto.UpdateReq) (*model.Us
 
 func (s *UserService) UpdatePassword(ctx context.Context, req *dto.UpdatePasswordReq) (*model.User, error) {
 
-	s.logger.Infof("update password id %s", req.ID)
-	user, err := s.repo.GetUserByID(ctx, req.ID)
+	s.logger.Infof("update password email %s", req.Email)
+	user, err := s.repo.GetUserByEmail(ctx, req.Email)
 
 	if err != nil {
 		s.logger.Errorf("get user by id fail, error %s", err.Error())
 		return nil, fmt.Errorf("get user by id fail, error %s", err)
 	}
 
+	fmt.Printf("New password %s\n", req.Password)
+	fmt.Printf("Before %s\n", user.Password)
 	user.Password = utils.HashAndSalt([]byte(req.Password))
+	fmt.Printf("After %s\n", user.Password)
 
 	err = s.repo.Update(ctx, user)
 
@@ -98,6 +102,19 @@ func (s *UserService) GetUserByID(ctx context.Context, id int) (*model.User, err
 	if err != nil {
 		s.logger.Errorf("get user by id fail, error %s", err.Error())
 		return nil, fmt.Errorf("get user by id fail, error %s", err)
+	}
+
+	return user, nil
+}
+
+func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*model.User, error) {
+
+	s.logger.Infof("get user by email %d", email)
+	user, err := s.repo.GetUserByEmail(ctx, email)
+
+	if err != nil {
+		s.logger.Errorf("get user by email fail, error %s", err.Error())
+		return nil, fmt.Errorf("get user by email fail, error %s", err)
 	}
 
 	return user, nil

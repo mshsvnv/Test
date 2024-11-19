@@ -150,7 +150,7 @@ type UpdateReq struct {
 //	@Tags			Admin
 //
 //	@Param			id	path		int								true	"Идентефикатор пользователя"
-//	@Param			req	body		UpdateReq					true	"Роль пользователя"
+//	@Param			req	body		UpdateReq						true	"Роль пользователя"
 //
 //	@Success		200	{object}	UserRes							"Информация о всех пользователях"
 //	@Failure		400	{object}	http.StatusBadRequest			"Некорректное тело запроса"
@@ -167,10 +167,11 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 	}
 
 	userID, _ := strconv.Atoi(c.Param("id"))
+	user, _ := u.userService.GetUserByID(c, userID)
 
-	user, err := u.userService.Update(c, &dto.UpdateReq{
-		ID:   userID,
-		Role: req.Role,
+	user2, err := u.userService.UpdateRole(c, &dto.UpdateReq{
+		Email: user.Email,
+		Role:  req.Role,
 	})
 	if err != nil {
 		u.l.Infof(err.Error())
@@ -179,7 +180,7 @@ func (u *UserController) UpdateUser(c *gin.Context) {
 	}
 
 	var userRes User
-	utils.Copy(&userRes, user)
+	utils.Copy(&userRes, user2)
 
 	c.JSON(http.StatusOK, UserRes{
 		User: userRes,

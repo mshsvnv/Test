@@ -81,7 +81,7 @@ func (r *RacketController) ListsAllRackets(c *gin.Context) {
 //	@Description	Метод для получения информации о конкретной ракетке
 //	@Tags			All
 //	@Param			id	path		int								true	"Идентификатор ракетки"
-//	@Success		200	{object}	RacketFeedbacksRes				"Список ракеток благополучно получен"
+//	@Success		200	{object}	RacketRes						"Список ракеток благополучно получен"
 //	@Failure		500	{object}	http.StatusInternalServerError	"Внутренняя ошибка получения списка ракеток"
 //	@Router			/rackets/{id} [get]
 func (r *RacketController) GetRacketByID(c *gin.Context) {

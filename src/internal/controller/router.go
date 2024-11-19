@@ -9,8 +9,8 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
+	docsv2 "src/docs/v2"
 	routesv2 "src/internal/controller/v2/http"
-
 	"src/internal/service"
 	"src/pkg/logging"
 )
@@ -23,6 +23,8 @@ type Controller struct {
 func NewRouter(handler *gin.Engine) *Controller {
 	handler.Use(gin.Logger())
 	handler.Use(gin.Recovery())
+
+	docsv2.SwaggerInfov2.BasePath = "/api/v2"
 
 	v2 := handler.Group("/api/v2")
 	{

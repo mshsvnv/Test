@@ -3,15 +3,16 @@ package service
 import (
 	"context"
 	"fmt"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
+
 	"src/internal/dto"
 	"src/internal/model"
 	repo "src/internal/repository"
 	"src/pkg/logging"
 	"src/pkg/utils"
-	"time"
-
-	"github.com/golang-jwt/jwt/v5"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type tokenClaims struct {
@@ -100,11 +101,11 @@ func (s *AuthService) Login(ctx context.Context, req *dto.LoginReq) error {
 
 func (s *AuthService) GenerateToken(userID int) (string, error) {
 	expiresAt := &jwt.NumericDate{
-		time.Now().Add(s.accessTokenTTL),
+		Time: time.Now().Add(s.accessTokenTTL),
 	}
 
 	issuedAt := &jwt.NumericDate{
-		time.Now(),
+		Time: time.Now(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{

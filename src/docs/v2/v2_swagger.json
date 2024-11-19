@@ -1,0 +1,1311 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "# _В основе лежит мой курсовой проект 😎_",
+        "title": "Интернет-магазин теннисных ракеток",
+        "contact": {},
+        "version": "2.0"
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Метод для входа в личный кабинет пользователя",
+                "produces": [
+                    "image/jpeg",
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Вход в личный кабинет пользователя",
+                "parameters": [
+                    {
+                        "description": "Вход пользователя",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно авторизовался",
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "401": {
+                        "description": "Вход неуспешен",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login/verify": {
+            "post": {
+                "description": "Метод для проверки дополнительного кода при авторизации",
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Проверка дополнительного кода при авторизации",
+                "parameters": [
+                    {
+                        "description": "Вход пользователя",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginVerifyReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно авторизовался",
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "401": {
+                        "description": "Вход неуспешен",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "Метод для регистрации в интернет-магазине",
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Вход в аккаунт пользователя",
+                "parameters": [
+                    {
+                        "description": "Регистрация пользователя",
+                        "name": "dto.RegisterReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RegisterReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно авторизовался",
+                        "schema": {
+                            "$ref": "#/definitions/dto.RegisterRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка регистрации пользователя",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/reset_password": {
+            "post": {
+                "description": "Метод для смены пароля авторизованного пользователя",
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Смена пароля авторизованного пользователя",
+                "parameters": [
+                    {
+                        "description": "Вход пользователя",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пароль успешно изменен",
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "401": {
+                        "description": "Вход неуспешен",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/reset_password/verify": {
+            "post": {
+                "description": "Метод для проверки дополнительного кода при смене пароля",
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Проверка дополнительного кода при смене пароля",
+                "parameters": [
+                    {
+                        "description": "Вход пользователя",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.VerifyResetPasswordReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно авторизовался",
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "401": {
+                        "description": "Вход неуспешен",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для получения содержимого корзины",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Получение содержимого корзины",
+                "responses": {
+                    "200": {
+                        "description": "Корзина благополучно получена",
+                        "schema": {
+                            "$ref": "#/definitions/http.CartRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка получения корзины",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для добавления ракетки в корзину",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Добавление ракетки в корзину",
+                "parameters": [
+                    {
+                        "description": "Информация для добавления ракетки в корзину",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.AddRacketCartReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Корзина благополучно изменена",
+                        "schema": {
+                            "$ref": "#/definitions/http.CartRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка изменения корзины",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/rackets/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод изменения количества ракеток в корзине",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Изменения количества ракеток в корзине",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Индентефикатор ракетки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Информация для удаления ракетки из корзины",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.UpdateRacketCartReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Корзина благополучно изменена",
+                        "schema": {
+                            "$ref": "#/definitions/http.CartRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка удаления из корзины",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для удаления ракетки в корзину",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Удаление ракетки из корзины",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Индентефикатор ракетки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Корзина благополучно изменена",
+                        "schema": {
+                            "$ref": "#/definitions/http.CartRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка удаления из корзины",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для получения заказов в инетрнет-магазине",
+                "tags": [
+                    "Admin \u0026 User"
+                ],
+                "summary": "Получение заказов в инетрнет-магазине",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Значение для фильтрации",
+                        "name": "pattern",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Поле для фильтрации и сортировки",
+                        "name": "field",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Направление сортировки",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список заказов",
+                        "schema": {
+                            "$ref": "#/definitions/http.OrdersRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка при изменении статуса заказа",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для создания заказа",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Создание заказа",
+                "parameters": [
+                    {
+                        "description": "Информация о заказе",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.PlaceOrderReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация об успешности создания заказа",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка при размещении заказа",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для получения заказа по идентефикатору",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Получение заказа по идентефикатору",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Идентефикатор заказа",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Внутренняя ошибка при изменении статуса заказа",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для изменения статуса заказа",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Изменение статуса заказа",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Идентефикатор заказа",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Информация о новом статусе",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.UpdateOrderReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация об изменении статуса заказа",
+                        "schema": {
+                            "$ref": "#/definitions/http.OrderRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка при изменении статуса заказа",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/profile": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для получения информации об авторизованном пользователе",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Получение информации об авторизованном пользователе",
+                "responses": {
+                    "200": {
+                        "description": "Информация о конеретном пользователе",
+                        "schema": {
+                            "$ref": "#/definitions/http.UserRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Пользователь не авторизован",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusUnauthorized"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка получения информации о пользователе",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/rackets": {
+            "get": {
+                "description": "Метод для получения списка всех ракеток в магазине",
+                "tags": [
+                    "All"
+                ],
+                "summary": "Получение списка всех ракеток в магазине",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Значение для фильтрации",
+                        "name": "pattern",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Поле для фильтрации и сортировки",
+                        "name": "field",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Направление сортировки",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список ракеток благополучно получен",
+                        "schema": {
+                            "$ref": "#/definitions/http.RacketsRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка получения списка ракеток",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для добавления ракетки в интернет-магазин",
+                "consumes": [
+                    "multipart/form-data",
+                    "application/json"
+                ],
+                "produces": [
+                    "image/jpeg",
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Добавление ракетки в магазин",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "name": "avaliable",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "name": "balance",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "name": "brand",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "name": "head_size",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "name": "price",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "quantity",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "name": "weight",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "Изображение ракетки",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ракетка благополучна добавлена",
+                        "schema": {
+                            "$ref": "#/definitions/http.RacketRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка добавления ракетки",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/rackets/{id}": {
+            "get": {
+                "description": "Метод для получения информации о конкретной ракетке",
+                "tags": [
+                    "All"
+                ],
+                "summary": "Получение информации о конкретной ракетке",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Идентификатор ракетки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список ракеток благополучно получен",
+                        "schema": {
+                            "$ref": "#/definitions/http.RacketRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка получения списка ракеток",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для изменения статуса ракетки в интернет-магазин",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Изменение статуса ракетки",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Индентефикатор ракетки",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Информация о ракетке на изменение",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.UpdateRacketReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ракетка благополучна изменена",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка добавления ракетки",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для получения информации информации о всех пользователех",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Получение информации о всех пользователех",
+                "responses": {
+                    "200": {
+                        "description": "Информация о всех пользователях",
+                        "schema": {
+                            "$ref": "#/definitions/http.UsersRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка получения списка пользователей",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для получения информации о конкретном пользователе",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Получение информации о конкретном пользователе",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Идентификатор пользователя",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация о конеретном пользователе",
+                        "schema": {
+                            "$ref": "#/definitions/http.UserRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка получения списка ракеток",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Метод для Изменение роли пользователя",
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Изменение роли пользователя",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Идентефикатор пользователя",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Роль пользователя",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http.UpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация о всех пользователях",
+                        "schema": {
+                            "$ref": "#/definitions/http.UserRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Некорректное тело запроса",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusBadRequest"
+                        }
+                    },
+                    "500": {
+                        "description": "Внутренняя ошибка получения списка пользователей",
+                        "schema": {
+                            "$ref": "#/definitions/http.StatusInternalServerError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.LoginReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LoginRes": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.LoginVerifyReq": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RegisterReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RegisterRes": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.VerifyResetPasswordReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "old_password": {
+                    "type": "string"
+                },
+                "string": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.AddRacketCartReq": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                },
+                "racket_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "http.Cart": {
+            "type": "object",
+            "properties": {
+                "lines": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.CartLine"
+                    }
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "total_price": {
+                    "type": "number"
+                }
+            }
+        },
+        "http.CartRes": {
+            "type": "object",
+            "properties": {
+                "cart": {
+                    "$ref": "#/definitions/http.Cart"
+                }
+            }
+        },
+        "http.OrderRes": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "$ref": "#/definitions/model.Order"
+                }
+            }
+        },
+        "http.OrdersRes": {
+            "type": "object",
+            "properties": {
+                "orders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Order"
+                    }
+                }
+            }
+        },
+        "http.PlaceOrderReq": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "delivery_date": {
+                    "type": "string",
+                    "format": "2006-01-02T15:07:00Z"
+                },
+                "recepient_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.RacketRes": {
+            "type": "object",
+            "properties": {
+                "racket": {
+                    "$ref": "#/definitions/model.Racket"
+                }
+            }
+        },
+        "http.RacketsRes": {
+            "type": "object",
+            "properties": {
+                "rackets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Racket"
+                    }
+                }
+            }
+        },
+        "http.StatusBadRequest": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Incorrect request body"
+                }
+            }
+        },
+        "http.StatusInternalServerError": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Internal error"
+                }
+            }
+        },
+        "http.StatusUnauthorized": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "Cant login user"
+                }
+            }
+        },
+        "http.UpdateOrderReq": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.UpdateRacketCartReq": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "http.UpdateRacketReq": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "http.UpdateReq": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.UserRes": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/http.User"
+                }
+            }
+        },
+        "http.UsersRes": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/http.User"
+                    }
+                }
+            }
+        },
+        "model.CartLine": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Order": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "creation_date": {
+                    "type": "string",
+                    "format": "2006-01-02T15:04:05"
+                },
+                "delivery_date": {
+                    "type": "string",
+                    "format": "2006-01-02T15:04:05"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "lines": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.OrderLine"
+                    }
+                },
+                "recepient_name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "total_price": {
+                    "type": "number"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.OrderLine": {
+            "type": "object",
+            "properties": {
+                "quantity": {
+                    "type": "integer"
+                },
+                "racket_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.Racket": {
+            "type": "object",
+            "properties": {
+                "avaliable": {
+                    "type": "boolean"
+                },
+                "balance": {
+                    "type": "number"
+                },
+                "brand": {
+                    "type": "string"
+                },
+                "headsize": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "weight": {
+                    "type": "number"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

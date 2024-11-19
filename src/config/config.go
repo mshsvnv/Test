@@ -78,5 +78,7 @@ func NewConfig() (*Config, error) {
 		config.Database.Postgres.Database = os.Getenv("POSTGRESQL_DATABASE")
 	}
 
+	
+
 	return &config, nil
 }

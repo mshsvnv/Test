@@ -22,8 +22,8 @@ func setAuthRoute(
 	auth.POST("/login", authController.Login)
 	auth.POST("/login/verify", authController.VerifyLogin)
 
-	// auth.POST("/reset_password", authController.ResetPassword)
-	// auth.POST("/reset_password/verify", authController.VerifyResetPassword)
+	auth.POST("/reset_password", authController.ResetPassword)
+	auth.POST("/reset_password/verify", authController.VerifyResetPassword)
 }
 
 func setRacketRoute(

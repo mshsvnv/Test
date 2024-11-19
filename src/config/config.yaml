@@ -7,7 +7,7 @@ auth:
   accessTokenTTL: 12h
 
 http:
-  port: 8081
+  port: 8082
 
 database:
   postgres:
@@ -15,4 +15,9 @@ database:
     port: 5432
     user: 'postgres'
     password: 'admin'
-    database: 'Shop'
+    database: 'tests'
+
+2fa:
+  email: ""
+  password: ""
+  port: 587

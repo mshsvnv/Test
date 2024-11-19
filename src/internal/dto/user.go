@@ -25,8 +25,8 @@ type ResetPasswordReq struct {
 
 type VerifyResetPasswordReq struct {
 	Email       string `json:"email"`
-	NewPassword string `json:"old_password"`
-	Code        string `json:"string"`
+	NewPassword string `json:"new_password"`
+	Code        string `json:"code"`
 }
 
 type RegisterReq struct {
@@ -41,11 +41,11 @@ type RegisterRes struct {
 }
 
 type UpdateReq struct {
-	ID   int            `json:"id"`
-	Role model.UserRole `json:"role"`
+	Email string         `json:"email"`
+	Role  model.UserRole `json:"role"`
 }
 
 type UpdatePasswordReq struct {
-	ID       int            `json:"id"`
-	Password model.UserRole `json:"password"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }

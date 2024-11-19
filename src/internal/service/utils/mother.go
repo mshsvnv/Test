@@ -114,20 +114,6 @@ func (o UserObjectMother) DefaultUsers() []*model.User {
 	}
 }
 
-func (o UserObjectMother) IncorrectUserIDToUpdate() *dto.UpdateReq {
-	return &dto.UpdateReq{
-		ID:   0,
-		Role: model.UserRoleAdmin,
-	}
-}
-
-func (o UserObjectMother) CorrectUserToUpdate() *dto.UpdateReq {
-	return &dto.UpdateReq{
-		ID:   ids["userID"],
-		Role: model.UserRoleAdmin,
-	}
-}
-
 type RacketObjectMother struct {
 }
 

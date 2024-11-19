@@ -1,0 +1,839 @@
+basePath: /api/v1
+definitions:
+  dto.LoginReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.LoginRes:
+    properties:
+      access_token:
+        type: string
+    type: object
+  dto.LoginVerifyReq:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+    type: object
+  dto.RegisterReq:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      surname:
+        type: string
+    type: object
+  dto.RegisterRes:
+    properties:
+      access_token:
+        type: string
+    type: object
+  dto.VerifyResetPasswordReq:
+    properties:
+      email:
+        type: string
+      old_password:
+        type: string
+      string:
+        type: string
+    type: object
+  http.AddRacketCartReq:
+    properties:
+      quantity:
+        type: integer
+      racket_id:
+        type: integer
+    type: object
+  http.Cart:
+    properties:
+      lines:
+        items:
+          $ref: '#/definitions/model.CartLine'
+        type: array
+      quantity:
+        type: integer
+      total_price:
+        type: number
+    type: object
+  http.CartRes:
+    properties:
+      cart:
+        $ref: '#/definitions/http.Cart'
+    type: object
+  http.OrderRes:
+    properties:
+      order:
+        $ref: '#/definitions/model.Order'
+    type: object
+  http.OrdersRes:
+    properties:
+      orders:
+        items:
+          $ref: '#/definitions/model.Order'
+        type: array
+    type: object
+  http.PlaceOrderReq:
+    properties:
+      address:
+        type: string
+      delivery_date:
+        format: "2006-01-02T15:07:00Z"
+        type: string
+      recepient_name:
+        type: string
+    type: object
+  http.RacketRes:
+    properties:
+      racket:
+        $ref: '#/definitions/model.Racket'
+    type: object
+  http.RacketsRes:
+    properties:
+      rackets:
+        items:
+          $ref: '#/definitions/model.Racket'
+        type: array
+    type: object
+  http.StatusBadRequest:
+    properties:
+      error:
+        example: Incorrect request body
+        type: string
+    type: object
+  http.StatusInternalServerError:
+    properties:
+      error:
+        example: Internal error
+        type: string
+    type: object
+  http.StatusUnauthorized:
+    properties:
+      error:
+        example: Cant login user
+        type: string
+    type: object
+  http.UpdateOrderReq:
+    properties:
+      status:
+        type: string
+    type: object
+  http.UpdateRacketCartReq:
+    properties:
+      quantity:
+        type: integer
+    type: object
+  http.UpdateRacketReq:
+    properties:
+      quantity:
+        type: integer
+    type: object
+  http.UpdateReq:
+    properties:
+      role:
+        type: string
+    type: object
+  http.User:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+      surname:
+        type: string
+    type: object
+  http.UserRes:
+    properties:
+      user:
+        $ref: '#/definitions/http.User'
+    type: object
+  http.UsersRes:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/http.User'
+        type: array
+    type: object
+  model.CartLine:
+    properties:
+      id:
+        type: integer
+      price:
+        type: number
+      quantity:
+        type: integer
+    type: object
+  model.Order:
+    properties:
+      address:
+        type: string
+      creation_date:
+        format: 2006-01-02T15:04:05
+        type: string
+      delivery_date:
+        format: 2006-01-02T15:04:05
+        type: string
+      id:
+        type: integer
+      lines:
+        items:
+          $ref: '#/definitions/model.OrderLine'
+        type: array
+      recepient_name:
+        type: string
+      status:
+        type: string
+      total_price:
+        type: number
+      user_id:
+        type: integer
+    type: object
+  model.OrderLine:
+    properties:
+      quantity:
+        type: integer
+      racket_id:
+        type: integer
+    type: object
+  model.Racket:
+    properties:
+      avaliable:
+        type: boolean
+      balance:
+        type: number
+      brand:
+        type: string
+      headsize:
+        type: number
+      id:
+        type: integer
+      image:
+        items:
+          type: integer
+        type: array
+      price:
+        type: integer
+      quantity:
+        type: integer
+      weight:
+        type: number
+    type: object
+info:
+  contact: {}
+  description: "# _В основе лежит мой курсовой проект \U0001F60E_"
+  title: Интернет-магазин теннисных ракеток
+  version: "2.0"
+paths:
+  /auth/login:
+    post:
+      description: Метод для входа в личный кабинет пользователя
+      parameters:
+      - description: Вход пользователя
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginReq'
+      produces:
+      - image/jpeg
+      - application/json
+      responses:
+        "200":
+          description: Пользователь успешно авторизовался
+          schema:
+            $ref: '#/definitions/dto.LoginRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "401":
+          description: Вход неуспешен
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+      summary: Вход в личный кабинет пользователя
+      tags:
+      - Auth
+  /auth/login/verify:
+    post:
+      description: Метод для проверки дополнительного кода при авторизации
+      parameters:
+      - description: Вход пользователя
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginVerifyReq'
+      responses:
+        "200":
+          description: Пользователь успешно авторизовался
+          schema:
+            $ref: '#/definitions/dto.LoginRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "401":
+          description: Вход неуспешен
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+      summary: Проверка дополнительного кода при авторизации
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      description: Метод для регистрации в интернет-магазине
+      parameters:
+      - description: Регистрация пользователя
+        in: body
+        name: dto.RegisterReq
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterReq'
+      responses:
+        "200":
+          description: Пользователь успешно авторизовался
+          schema:
+            $ref: '#/definitions/dto.RegisterRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "500":
+          description: Внутренняя ошибка регистрации пользователя
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      summary: Вход в аккаунт пользователя
+      tags:
+      - Auth
+  /auth/reset_password:
+    post:
+      description: Метод для смены пароля авторизованного пользователя
+      parameters:
+      - description: Вход пользователя
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginReq'
+      responses:
+        "200":
+          description: Пароль успешно изменен
+          schema:
+            $ref: '#/definitions/dto.LoginRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "401":
+          description: Вход неуспешен
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+      summary: Смена пароля авторизованного пользователя
+      tags:
+      - Auth
+  /auth/reset_password/verify:
+    post:
+      description: Метод для проверки дополнительного кода при смене пароля
+      parameters:
+      - description: Вход пользователя
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/dto.VerifyResetPasswordReq'
+      responses:
+        "200":
+          description: Пользователь успешно авторизовался
+          schema:
+            $ref: '#/definitions/dto.LoginRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "401":
+          description: Вход неуспешен
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+      summary: Проверка дополнительного кода при смене пароля
+      tags:
+      - Auth
+  /cart:
+    get:
+      description: Метод для получения содержимого корзины
+      responses:
+        "200":
+          description: Корзина благополучно получена
+          schema:
+            $ref: '#/definitions/http.CartRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+        "500":
+          description: Внутренняя ошибка получения корзины
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Получение содержимого корзины
+      tags:
+      - User
+    post:
+      description: Метод для добавления ракетки в корзину
+      parameters:
+      - description: Информация для добавления ракетки в корзину
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/http.AddRacketCartReq'
+      responses:
+        "200":
+          description: Корзина благополучно изменена
+          schema:
+            $ref: '#/definitions/http.CartRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+        "500":
+          description: Внутренняя ошибка изменения корзины
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Добавление ракетки в корзину
+      tags:
+      - User
+  /cart/rackets/{id}:
+    delete:
+      description: Метод для удаления ракетки в корзину
+      parameters:
+      - description: Индентефикатор ракетки
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Корзина благополучно изменена
+          schema:
+            $ref: '#/definitions/http.CartRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+        "500":
+          description: Внутренняя ошибка удаления из корзины
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Удаление ракетки из корзины
+      tags:
+      - User
+    put:
+      description: Метод изменения количества ракеток в корзине
+      parameters:
+      - description: Индентефикатор ракетки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Информация для удаления ракетки из корзины
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateRacketCartReq'
+      responses:
+        "200":
+          description: Корзина благополучно изменена
+          schema:
+            $ref: '#/definitions/http.CartRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+        "500":
+          description: Внутренняя ошибка удаления из корзины
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Изменения количества ракеток в корзине
+      tags:
+      - User
+  /orders:
+    get:
+      description: Метод для получения заказов в инетрнет-магазине
+      parameters:
+      - description: Значение для фильтрации
+        in: query
+        name: pattern
+        type: string
+      - description: Поле для фильтрации и сортировки
+        in: query
+        name: field
+        type: string
+      - description: Направление сортировки
+        in: query
+        name: sort
+        type: string
+      responses:
+        "200":
+          description: Список заказов
+          schema:
+            $ref: '#/definitions/http.OrdersRes'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+        "500":
+          description: Внутренняя ошибка при изменении статуса заказа
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Получение заказов в инетрнет-магазине
+      tags:
+      - Admin & User
+    post:
+      description: Метод для создания заказа
+      parameters:
+      - description: Информация о заказе
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/http.PlaceOrderReq'
+      responses:
+        "200":
+          description: Информация об успешности создания заказа
+          schema:
+            type: string
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+        "500":
+          description: Внутренняя ошибка при размещении заказа
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Создание заказа
+      tags:
+      - User
+  /orders/{id}:
+    get:
+      description: Метод для получения заказа по идентефикатору
+      parameters:
+      - description: Идентефикатор заказа
+        in: query
+        name: id
+        required: true
+        type: string
+      responses:
+        "500":
+          description: Внутренняя ошибка при изменении статуса заказа
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Получение заказа по идентефикатору
+      tags:
+      - Admin
+    patch:
+      description: Метод для изменения статуса заказа
+      parameters:
+      - description: Идентефикатор заказа
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Информация о новом статусе
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateOrderReq'
+      responses:
+        "200":
+          description: Информация об изменении статуса заказа
+          schema:
+            $ref: '#/definitions/http.OrderRes'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+        "500":
+          description: Внутренняя ошибка при изменении статуса заказа
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Изменение статуса заказа
+      tags:
+      - Admin
+  /profile:
+    get:
+      description: Метод для получения информации об авторизованном пользователе
+      responses:
+        "200":
+          description: Информация о конеретном пользователе
+          schema:
+            $ref: '#/definitions/http.UserRes'
+        "401":
+          description: Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/http.StatusUnauthorized'
+        "500":
+          description: Внутренняя ошибка получения информации о пользователе
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Получение информации об авторизованном пользователе
+      tags:
+      - User
+  /rackets:
+    get:
+      description: Метод для получения списка всех ракеток в магазине
+      parameters:
+      - description: Значение для фильтрации
+        in: query
+        name: pattern
+        type: string
+      - description: Поле для фильтрации и сортировки
+        in: query
+        name: field
+        type: string
+      - description: Направление сортировки
+        in: query
+        name: sort
+        type: string
+      responses:
+        "200":
+          description: Список ракеток благополучно получен
+          schema:
+            $ref: '#/definitions/http.RacketsRes'
+        "500":
+          description: Внутренняя ошибка получения списка ракеток
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      summary: Получение списка всех ракеток в магазине
+      tags:
+      - All
+    post:
+      consumes:
+      - multipart/form-data
+      - application/json
+      description: Метод для добавления ракетки в интернет-магазин
+      parameters:
+      - in: formData
+        name: avaliable
+        type: boolean
+      - in: formData
+        name: balance
+        type: number
+      - in: formData
+        name: brand
+        type: string
+      - in: formData
+        name: head_size
+        type: number
+      - in: formData
+        name: price
+        type: number
+      - in: formData
+        name: quantity
+        type: integer
+      - in: formData
+        name: weight
+        type: number
+      - description: Изображение ракетки
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - image/jpeg
+      - application/json
+      responses:
+        "200":
+          description: Ракетка благополучна добавлена
+          schema:
+            $ref: '#/definitions/http.RacketRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "500":
+          description: Внутренняя ошибка добавления ракетки
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Добавление ракетки в магазин
+      tags:
+      - Admin
+  /rackets/{id}:
+    get:
+      description: Метод для получения информации о конкретной ракетке
+      parameters:
+      - description: Идентификатор ракетки
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Список ракеток благополучно получен
+          schema:
+            $ref: '#/definitions/http.RacketRes'
+        "500":
+          description: Внутренняя ошибка получения списка ракеток
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      summary: Получение информации о конкретной ракетке
+      tags:
+      - All
+    patch:
+      description: Метод для изменения статуса ракетки в интернет-магазин
+      parameters:
+      - description: Индентефикатор ракетки
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Информация о ракетке на изменение
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateRacketReq'
+      responses:
+        "200":
+          description: Ракетка благополучна изменена
+          schema:
+            type: string
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "500":
+          description: Внутренняя ошибка добавления ракетки
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Изменение статуса ракетки
+      tags:
+      - Admin
+  /users:
+    get:
+      description: Метод для получения информации информации о всех пользователех
+      responses:
+        "200":
+          description: Информация о всех пользователях
+          schema:
+            $ref: '#/definitions/http.UsersRes'
+        "500":
+          description: Внутренняя ошибка получения списка пользователей
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Получение информации о всех пользователех
+      tags:
+      - Admin
+  /users/{id}:
+    get:
+      description: Метод для получения информации о конкретном пользователе
+      parameters:
+      - description: Идентификатор пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Информация о конеретном пользователе
+          schema:
+            $ref: '#/definitions/http.UserRes'
+        "500":
+          description: Внутренняя ошибка получения списка ракеток
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Получение информации о конкретном пользователе
+      tags:
+      - Admin
+    put:
+      description: Метод для Изменение роли пользователя
+      parameters:
+      - description: Идентефикатор пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Роль пользователя
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/http.UpdateReq'
+      responses:
+        "200":
+          description: Информация о всех пользователях
+          schema:
+            $ref: '#/definitions/http.UserRes'
+        "400":
+          description: Некорректное тело запроса
+          schema:
+            $ref: '#/definitions/http.StatusBadRequest'
+        "500":
+          description: Внутренняя ошибка получения списка пользователей
+          schema:
+            $ref: '#/definitions/http.StatusInternalServerError'
+      security:
+      - BearerAuth: []
+      summary: Изменение роли пользователя
+      tags:
+      - Admin
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

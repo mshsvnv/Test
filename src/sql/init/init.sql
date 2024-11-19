@@ -52,3 +52,7 @@ CREATE TABLE IF NOT EXISTS cart_racket (
     PRIMARY KEY (cart_id, racket_id),
     quantity INT
 );
+
+
+INSERT INTO "user"(name, surname, email, password, role) 
+VALUES('admin', 'admin', 'stepaha78@gmail.com', '$2a$10$TvqHCkE9vzttMir6vS.quOGAA9W3o/K/z7G8.EvQU8hQjLjKiY1qS', 'admin', 'Admin');
