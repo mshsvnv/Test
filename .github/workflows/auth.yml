@@ -21,7 +21,7 @@ jobs:
           echo $ENV > .env
 
       - name: Run E2E tests
-        run: make run-e2e
+        run: cd src && make run-e2e
 
       - name: Remove env
-        run: make rm-docker
+        run: cd src && make rm-docker
