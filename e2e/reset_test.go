@@ -2,10 +2,12 @@ package e2e_test
 
 import (
 	"net/http"
+	"os"
 	"testing"
 
 	"github.com/cucumber/godog"
 	"github.com/gavv/httpexpect/v2"
+	"github.com/joho/godotenv"
 )
 
 var (
@@ -13,6 +15,11 @@ var (
 )
 
 func TestReset(t *testing.T) {
+
+	err := godotenv.Load()
+	if err != nil {
+		t.Fatalf("error loading .env file: %v", err)
+	}
 
 	clnt := &http.Client{}
 	expectReset = httpexpect.WithConfig(httpexpect.Config{
@@ -39,7 +46,7 @@ func Reset(ctx *godog.ScenarioContext) {
 
 	var response *httpexpect.Response
 
-	recepientEmail := "stepaha78@gmail.com"
+	recepientEmail := os.Getenv("RECEPIENT_EMAIL_ADDRESS")
 
 	ctx.When(`^User send "([^"]*)" request to "([^"]*)"$`, func(method, endpoint string) error {
 		response = expectReset.Request(method, endpoint).
