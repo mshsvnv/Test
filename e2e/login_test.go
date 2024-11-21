@@ -92,10 +92,5 @@ func Login(ctx *godog.ScenarioContext) {
 }
 
 func InitializeLoginScenario(ctx *godog.ScenarioContext) {
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	return
-	// }
-
 	Login(ctx)
 }

@@ -96,10 +96,5 @@ func Reset(ctx *godog.ScenarioContext) {
 }
 
 func InitializeResetScenario(ctx *godog.ScenarioContext) {
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	return
-	// }
-
 	Reset(ctx)
 }
