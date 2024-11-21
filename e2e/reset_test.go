@@ -44,7 +44,7 @@ func TestReset(t *testing.T) {
 
 func Reset(ctx *godog.ScenarioContext) {
 
-	// godotenv.Load()
+	godotenv.Load()
 	var response *httpexpect.Response
 
 	recepientEmail := os.Getenv("RECEPIENT_EMAIL_ADDRESS")
@@ -96,10 +96,10 @@ func Reset(ctx *godog.ScenarioContext) {
 }
 
 func InitializeResetScenario(ctx *godog.ScenarioContext) {
-	err := godotenv.Load()
-	if err != nil {
-		return
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	return
+	// }
 
 	Reset(ctx)
 }
