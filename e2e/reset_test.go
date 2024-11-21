@@ -44,7 +44,7 @@ func TestReset(t *testing.T) {
 
 func Reset(ctx *godog.ScenarioContext) {
 
-	godotenv.Load()
+	godotenv.Load("../../.env")
 	var response *httpexpect.Response
 
 	recepientEmail := os.Getenv("RECEPIENT_EMAIL_ADDRESS")

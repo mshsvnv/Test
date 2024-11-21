@@ -39,7 +39,7 @@ func TestLogin(t *testing.T) {
 
 func Login(ctx *godog.ScenarioContext) {
 
-	godotenv.Load()
+	godotenv.Load("../../.env")
 
 	var response *httpexpect.Response
 	recepientEmail := os.Getenv("RECEPIENT_EMAIL_ADDRESS")
