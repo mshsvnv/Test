@@ -16,6 +16,11 @@ var (
 
 func TestLogin(t *testing.T) {
 
+	err := godotenv.Load("../.env")
+	if err != nil {
+		t.Fatalf("error loading .env file: %v", err)
+	}
+
 	clnt := &http.Client{}
 	expectLogin = httpexpect.WithConfig(httpexpect.Config{
 		BaseURL:  "http://localhost:8111/api/v2/auth",
@@ -39,18 +44,16 @@ func TestLogin(t *testing.T) {
 
 func Login(ctx *godog.ScenarioContext) {
 
-	godotenv.Load("../../.env")
-
 	var response *httpexpect.Response
-	recepientEmail := os.Getenv("RECEPIENT_EMAIL_ADDRESS")
 
-	// recepientEmail := "stepaha78@gmail.com"
+	recepientEmail := os.Getenv("RECEPIENT_EMAIL_ADDRESS")
+	recepientPassword := os.Getenv("RECEPIENT_PASSWORD")
 
 	ctx.When(`^User send "([^"]*)" request to "([^"]*)"$`, func(method, endpoint string) error {
 		response = expectLogin.Request(method, endpoint).
 			WithJSON(map[string]string{
 				"email":    recepientEmail,
-				"password": "admin",
+				"password": recepientPassword,
 			}).
 			Expect()
 		return nil
@@ -92,5 +95,8 @@ func Login(ctx *godog.ScenarioContext) {
 }
 
 func InitializeLoginScenario(ctx *godog.ScenarioContext) {
+
+	godotenv.Load()
+
 	Login(ctx)
 }

@@ -16,10 +16,10 @@ var (
 
 func TestReset(t *testing.T) {
 
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	t.Fatalf("error loading .env file: %v", err)
-	// }
+	err := godotenv.Load("../.env")
+	if err != nil {
+		t.Fatalf("error loading .env file: %v", err)
+	}
 
 	clnt := &http.Client{}
 	expectReset = httpexpect.WithConfig(httpexpect.Config{
@@ -44,16 +44,16 @@ func TestReset(t *testing.T) {
 
 func Reset(ctx *godog.ScenarioContext) {
 
-	godotenv.Load("../../.env")
 	var response *httpexpect.Response
 
 	recepientEmail := os.Getenv("RECEPIENT_EMAIL_ADDRESS")
+	recepientPassword := os.Getenv("RECEPIENT_PASSWORD")
 
 	ctx.When(`^User send "([^"]*)" request to "([^"]*)"$`, func(method, endpoint string) error {
 		response = expectReset.Request(method, endpoint).
 			WithJSON(map[string]string{
 				"email":        recepientEmail,
-				"old_password": "admin",
+				"old_password": recepientPassword,
 			}).
 			Expect()
 		return nil
