@@ -16,10 +16,10 @@ var (
 
 func TestReset(t *testing.T) {
 
-	err := godotenv.Load()
-	if err != nil {
-		t.Fatalf("error loading .env file: %v", err)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	t.Fatalf("error loading .env file: %v", err)
+	// }
 
 	clnt := &http.Client{}
 	expectReset = httpexpect.WithConfig(httpexpect.Config{
@@ -44,6 +44,7 @@ func TestReset(t *testing.T) {
 
 func Reset(ctx *godog.ScenarioContext) {
 
+	// godotenv.Load()
 	var response *httpexpect.Response
 
 	recepientEmail := os.Getenv("RECEPIENT_EMAIL_ADDRESS")
@@ -95,5 +96,10 @@ func Reset(ctx *godog.ScenarioContext) {
 }
 
 func InitializeResetScenario(ctx *godog.ScenarioContext) {
+	err := godotenv.Load()
+	if err != nil {
+		return
+	}
+
 	Reset(ctx)
 }
